@@ -1,0 +1,40 @@
+/* Background */
+body {
+  background-image: radial-gradient(circle at 100% 100%, #666, #777, #333);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* Glow */
+.glow {
+  text-shadow: 0 0 4px #fff, 0 0 10px #ead591;
+}
+
+
+/* Navigation bar */
+ul.nav {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #2b2b2b;
+  box-shadow: 4px 4px hsla(0, 0%, 0%, 0.75);
+}
+
+ul.nav li {
+  float: left;
+}
+
+ul.nav li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-family: monospace;
+  font-size: large;
+}
+
+ul.nav li a:hover {
+  background-color: #111;
+}
