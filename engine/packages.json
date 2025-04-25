@@ -1,0 +1,10 @@
+{
+  "packageGroup": "Engine",
+  "packageDirectory": "../../engine/",
+  "packages": [
+    "vector2.js",
+    "draw.js",
+    "gamewindow.js",
+    "input.js"
+  ]
+}

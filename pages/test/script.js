@@ -1,17 +1,20 @@
-const canvas = document.createElement("canvas");
-document.body.appendChild(canvas);
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-canvas.style = "position:absolute;top:0px;left:0px"
-const ctx = canvas.getContext("2d");
+let mainWindow = new GameWindow();
+let playerPos = new Vector2(100, 100);
 
+mainWindow.update = function () {
+    Fill("teal");
 
+    FillCircle(playerPos, 20, "white");
 
-ctx.fillStyle = "red";
-ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+    if (keyboard.held("ArrowUp")) playerPos.y--;
+    if (keyboard.held("ArrowDown")) playerPos.y++;
+    if (keyboard.held("ArrowLeft")) playerPos.x--;
+    if (keyboard.held("ArrowRight")) playerPos.x++;
 
-ctx.fillStyle = "black";
-ctx.font = "100px mono";
-ctx.fillText("text", 100, 100);
-
-console.log("Hello World!");
+    if(gamepads[0] != undefined) {
+      playerPos.x -= gamepads[0].value("left");
+      playerPos.x += gamepads[0].value("right");
+      playerPos.y -= gamepads[0].value("up");
+      playerPos.y += gamepads[0].value("down");
+    }
+}
