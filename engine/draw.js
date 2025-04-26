@@ -145,3 +145,18 @@ function FillRegularPolygon(pos, corners, size, style) {
 
     ctx.fill();
 }
+
+function StrokeText(pos, text, size, style, lineWidth, font = "") {
+  ctx.strokeStyle = style;
+  ctx.lineWidth = lineWidth;
+  ctx.font = size + "px " + font;
+
+  ctx.strokeText(text, pos.x, pos.y);
+}
+
+function FillText(pos, text, size, style, lineWidth, font = "") {
+  ctx.fillStyle = style;
+  ctx.font = size + "px " + font;
+
+  ctx.fillText(text, pos.x, pos.y);
+}

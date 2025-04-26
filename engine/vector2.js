@@ -50,6 +50,10 @@ class Vector2 {
     normal() {
         return new Vector2(-this.y, this.x);
     }
+    eq(v) {
+      this.x = v.x;
+      this.y = v.y;
+    }
 }
 
 Vector2.add = function(v1, v2) {

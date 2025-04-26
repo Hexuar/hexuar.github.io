@@ -35,6 +35,7 @@ window.addEventListener('keyup', function (e) {
 // Mouse
 let displayCursor = true;
 let mouse = new InputDevice();
+mouse.pos = new Vector2(-100000, -100000);
 
 document.addEventListener('mousedown', function (e) {
   mouse[e.button] = { pressed: true, held: true, released: false };
