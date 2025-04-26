@@ -19,7 +19,7 @@ function StrokeArc(pos, radius, startAngle, endAngle, style, lineWidth) {
 
 function FillArc(pos, radius, startAngle, endAngle, style) {
     ctx.fillStyle = style;
-    
+
     ctx.beginPath();
     ctx.arc(pos.x, pos.y, radius, startAngle, endAngle);
     ctx.fill();
@@ -44,7 +44,7 @@ function FillCircle(pos, radius, style) {
 
 function StrokeTriangle(posA, posB, posC, style, lineWidth) {
     ctx.strokeStyle = style;
-    
+
     ctx.beginPath();
     ctx.moveTo(posA.x, posA.y);
     ctx.lineTo(posB.x, posB.y);
@@ -55,7 +55,7 @@ function StrokeTriangle(posA, posB, posC, style, lineWidth) {
 
 function FillTriangle(posA, posB, posC, style) {
     ctx.fillStyle = style;
-    
+
     ctx.beginPath();
     ctx.moveTo(posA.x, posA.y);
     ctx.lineTo(posB.x, posB.y);
@@ -67,7 +67,7 @@ function FillTriangle(posA, posB, posC, style) {
 function StrokeRectangle(pos, size, style, lineWidth) {
     ctx.lineWidth = lineWidth;
     ctx.strokeStyle = style;
-    
+
     ctx.beginPath();
     ctx.strokeRect(pos.x, pos.y, size.x, size.y);
 }

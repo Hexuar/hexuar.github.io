@@ -18,8 +18,8 @@ function UpdateGameWindows() {
     GameWindowList.forEach(gameWindow => {
 
         if(gameWindow.fullScreen) {
-            gameWindow.canvas.width = window.innerWidth;
-            gameWindow.canvas.height = window.innerHeight;
+            if(gameWindow.canvas.width != window.innerWidth) gameWindow.canvas.width = window.innerWidth;
+            if(gameWindow.canvas.height != window.innerHeight) gameWindow.canvas.height = window.innerHeight;
         }
 
         window.canvas = gameWindow.canvas;

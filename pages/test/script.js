@@ -2,19 +2,25 @@ let mainWindow = new GameWindow();
 let playerPos = new Vector2(100, 100);
 
 mainWindow.update = function () {
-    Fill("teal");
+  //Fill("teal");
 
-    FillCircle(playerPos, 20, "white");
+  FillCircle(playerPos, 20, "red");
 
-    if (keyboard.held("ArrowUp")) playerPos.y--;
-    if (keyboard.held("ArrowDown")) playerPos.y++;
-    if (keyboard.held("ArrowLeft")) playerPos.x--;
-    if (keyboard.held("ArrowRight")) playerPos.x++;
+  if (keyboard.held("ArrowUp")) playerPos.y--;
+  if (keyboard.held("ArrowDown")) playerPos.y++;
+  if (keyboard.held("ArrowLeft")) playerPos.x--;
+  if (keyboard.held("ArrowRight")) playerPos.x++;
 
-    if(gamepads[0] != undefined) {
-      playerPos.x -= gamepads[0].value("left");
-      playerPos.x += gamepads[0].value("right");
-      playerPos.y -= gamepads[0].value("up");
-      playerPos.y += gamepads[0].value("down");
-    }
+  if(gamepads[0] != undefined) {
+    playerPos.x -= gamepads[0].value("left");
+    playerPos.x += gamepads[0].value("right");
+    playerPos.y -= gamepads[0].value("up");
+    playerPos.y += gamepads[0].value("down");
+
+    playerPos.x += gamepads[0].value("l2");
+    playerPos.y += gamepads[0].value("l3");
+
+    playerPos.add(gamepads[0].leftStick);
+    playerPos.add(gamepads[0].rightStick);
+  }
 }

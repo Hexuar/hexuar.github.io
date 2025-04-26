@@ -58,6 +58,8 @@ document.addEventListener('contextmenu', function (e) {
 window.addEventListener("gamepadconnected", (e) => {
   const gp = navigator.getGamepads()[e.gamepad.index];
   gamepads[gp.index] = new InputDevice();
+  gamepads[gp.index].leftStick = new Vector2(0,0);
+  gamepads[gp.index].rightStick = new Vector2(0,0);
   console.log(
     "Gamepad connected at index %d: %s. %d buttons, %d axes.",
     gp.index,
@@ -110,10 +112,15 @@ function HandleGamepadButtons(buttons, gamepadIndex) {
     if(i < gamepadButtonMaps[0].length) buttonName = gamepadButtonMaps[0][i];
     else buttonName = i;
 
-    //if(buttonValue != 0) console.log(i + " " + buttonName + " " + buttonValue)
-
     gamepads[gamepadIndex][buttonName] = { pressed: buttonValue != 0, held: buttonValue != 0, released: false, value: buttonValue };
   }
+}
+
+function HandleGamepadAxes(axes, gamePadIndex) {
+  gamepads[gamePadIndex].leftStick = new Vector2(axes[0]||0, axes[1]||0);
+  gamepads[gamePadIndex].rightStick = new Vector2(axes[2]||0, axes[3]||0);
+  gamepads[gamePadIndex]["l2"].value = axes[4] ? (axes[4]+1)/2 : 0;
+  gamepads[gamePadIndex]["l3"].value = axes[5] ? (axes[5]+1)/2: 0;
 }
 
 
@@ -136,6 +143,7 @@ function UpdateInput() {
     for (let i = 0; i < navigator.getGamepads().length; i++) {
       const gamepad = navigator.getGamepads()[i];
       HandleGamepadButtons(gamepad.buttons, i);
+      HandleGamepadAxes(gamepad.axes, i);
     }
   }
 
