@@ -1,6 +1,7 @@
-function StrokeLine(posA, posB, style, lineWidth) {
-    ctx.lineWidth = lineWidth;
+function StrokeLine(posA, posB, style, lineWidth, lineCap) {
     ctx.strokeStyle = style;
+    ctx.lineWidth = lineWidth;
+    ctx.lineCap = lineCap;
 
     ctx.beginPath();
     ctx.moveTo(posA.x, posA.y);
@@ -8,9 +9,10 @@ function StrokeLine(posA, posB, style, lineWidth) {
     ctx.stroke();
 }
 
-function StrokeArc(pos, radius, startAngle, endAngle, style, lineWidth) {
-    ctx.lineWidth = lineWidth;
+function StrokeArc(pos, radius, startAngle, endAngle, style, lineWidth, lineCap) {
     ctx.strokeStyle = style;
+    ctx.lineWidth = lineWidth;
+    ctx.lineCap = lineCap;
 
     ctx.beginPath();
     ctx.arc(pos.x, pos.y, radius, startAngle, endAngle);
@@ -25,9 +27,10 @@ function FillArc(pos, radius, startAngle, endAngle, style) {
     ctx.fill();
 }
 
-function StrokeCircle(pos, radius, style, lineWidth) {
-    ctx.lineWidth = lineWidth;
+function StrokeCircle(pos, radius, style, lineWidth, lineCap) {
     ctx.strokeStyle = style;
+    ctx.lineWidth = lineWidth;
+    ctx.lineCap = lineCap;
 
     ctx.beginPath();
     ctx.arc(pos.x, pos.y, radius, 0, 2 * Math.PI);
@@ -64,9 +67,10 @@ function FillTriangle(posA, posB, posC, style) {
     ctx.fill();
 }
 
-function StrokeRectangle(pos, size, style, lineWidth) {
-    ctx.lineWidth = lineWidth;
+function StrokeRectangle(pos, size, style, lineWidth, lineCap) {
     ctx.strokeStyle = style;
+    ctx.lineWidth = lineWidth;
+    ctx.lineCap = lineCap;
 
     ctx.beginPath();
     ctx.strokeRect(pos.x, pos.y, size.x, size.y);
@@ -84,9 +88,10 @@ function Fill(style) {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
-function StrokePolygon(points, style, lineWidth) {
+function StrokePolygon(points, style, lineWidth, lineCap) {
     ctx.strokeStyle = style;
     ctx.lineWidth = lineWidth;
+    ctx.lineCap = lineCap;
 
     ctx.beginPath();
     ctx.moveTo(points[0].x, points[0].y);
@@ -111,9 +116,10 @@ function FillPolygon(points, style) {
     ctx.fill();
 }
 
-function StrokeRegularPolygon(pos, corners, size, style, lineWidth) {
+function StrokeRegularPolygon(pos, corners, size, style, lineWidth, lineCap) {
     ctx.strokeStyle = style;
     ctx.lineWidth = lineWidth;
+    ctx.lineCap = lineCap;
 
     let a = 2 * Math.PI / corners;
 
@@ -146,15 +152,16 @@ function FillRegularPolygon(pos, corners, size, style) {
     ctx.fill();
 }
 
-function StrokeText(pos, text, size, style, lineWidth, font = "") {
+function StrokeText(pos, text, size, style, lineWidth, lineCap, font = "monospace") {
   ctx.strokeStyle = style;
   ctx.lineWidth = lineWidth;
+  ctx.lineCap = lineCap;
   ctx.font = size + "px " + font;
 
   ctx.strokeText(text, pos.x, pos.y);
 }
 
-function FillText(pos, text, size, style, lineWidth, font = "") {
+function FillText(pos, text, size, style, font = "monospace") {
   ctx.fillStyle = style;
   ctx.font = size + "px " + font;
 

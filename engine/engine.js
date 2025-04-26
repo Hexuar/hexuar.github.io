@@ -5,10 +5,6 @@ function loadScript(path) {
   script.type = "text/javascript";
   document.body.appendChild(script);
 
-  script.onload = function() {
-    console.log(script.src);
-  };
-
   console.log(path);
 }
 
