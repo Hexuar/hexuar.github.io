@@ -1,7 +1,13 @@
 class Vector2 {
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
+    constructor(x = 0, y = 0) {
+        if(x instanceof Vector2) {
+            this.x += x.x;
+            this.y += x.y;
+        }
+        else {
+            this.x = x;
+            this.y = y;
+        }
     }
     add(v) {
         if(v instanceof Vector2) {

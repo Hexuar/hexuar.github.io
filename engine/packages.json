@@ -4,7 +4,7 @@
   "packages": [
     "vector2.js",
     "draw.js",
-    "input.js",
-    "canvas.js"
+    "canvas.js",
+    "input.js"
   ]
 }
