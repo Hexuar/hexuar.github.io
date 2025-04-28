@@ -29,6 +29,7 @@ class Vector2 {
             this.x -= v;
             this.y -= v;
         }
+        return this;
     }
     multiply(v) {
         if(v instanceof Vector2) {
@@ -39,6 +40,7 @@ class Vector2 {
             this.x *= v;
             this.y *= v;
         }
+        return this;
     }
     divide(v) {
         if(v instanceof Vector2) {
@@ -49,6 +51,7 @@ class Vector2 {
             this.x /= v;
             this.y /= v;
         }
+        return this;
     }
     dot(v) {
         return this.x * v.x + this.y * v.y;
@@ -59,6 +62,15 @@ class Vector2 {
     eq(v) {
       this.x = v.x;
       this.y = v.y;
+    }
+    pow(v) {
+      return new Vector2(Math.pow(this.x, 2), Math.pow(this.y, 2));
+    }
+    lengthSquared() {
+      return Math.pow(this.x, 2) + Math.pow(this.y, 2);
+    }
+    length() {
+      return Math.sqrt(this.lengthSquared());
     }
 }
 
