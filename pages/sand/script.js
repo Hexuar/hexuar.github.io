@@ -25,12 +25,12 @@ function Fill(color = "black") {
 }
 
 class World {
-    constructor(width, height, resolution, spacing) {
-        this.width = width;
-        this.height = height;
+    constructor(resolution, spacing) {
+        this.width = innerWidth / resolution;
+        this.height = innerHeight / resolution;
         this.resolution = resolution;
         this.spacing = spacing;
-        this.matrix = Array2D(width, height);
+        this.matrix = Array2D(this.width, this.height);
     }
 
     Update() {
@@ -75,7 +75,7 @@ class World {
 
 
 
-const world = new World(128,128,5,0);
+const world = new World(8,0);
 
 
 function Update() {
@@ -84,7 +84,7 @@ function Update() {
     for(var i = 0; i < 20; i++) {
         world.matrix[Math.floor(Math.random()*world.width)][0] = Math.random() * 255;
     }
-    
+
 
     world.Update();
     world.Draw();

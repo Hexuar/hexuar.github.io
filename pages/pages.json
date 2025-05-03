@@ -7,17 +7,17 @@
   {
     "id": "map_renderer",
     "title": "Map Renderer",
-    "description": "Renders the Europa Universalis map."
+    "description": "Renders the Europa Universalis IV map."
   },
   {
     "id": "sand",
     "title": "Sand",
-    "description": "A simple sand simulation"
+    "description": "A simple sand simulation."
   },
   {
     "id": "clock",
     "title": "Clock",
-    "description": "A test of time."
+    "description": "Testing time with an unorthodox clock design."
   },
   {
     "id": "blank",
