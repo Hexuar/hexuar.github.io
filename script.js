@@ -1,27 +1,46 @@
+const pageList = document.getElementById("pageList");
+
 class Page {
-  constructor(id, name) {
+  constructor(id, title, description) {
     this.id = id;
-    this.name = name;
+    this.title = title;
+    this.description = description;
+
+    this.addToPageList();
   }
 
   addToPageList() {
     let li = document.createElement("li");
-    let a = document.createElement("a");
-    a.href = "./pages/" + this.id + "/index.html";
-    let node = document.createTextNode(this.name);
 
-    a.appendChild(node);
-    li.appendChild(a);
+    let div = document.createElement("div");
+    div.className = "page-element"
+    div.href = "./pages/" + this.id + "/index.html";
+    div.onclick = function() {
+      location.href = this.href;
+    }
+
+    let title = document.createElement("h4");
+    title.className = "page-element";
+    let titleText = document.createTextNode(this.title);
+    title.appendChild(titleText);
+    div.appendChild(title)
+
+    let description = document.createElement("p");
+    description.className = "page-element";
+    let descriptionText = document.createTextNode(this.description);
+    description.appendChild(descriptionText);
+    div.appendChild(description)
+
+    li.appendChild(div);
     pageList.appendChild(li);
   }
 }
 
-
-
-
-const pageList = document.getElementById("pageList");
-const pages = [new Page("test", "Test Page")];
-
-pages.forEach(page => {
-  page.addToPageList();
-});
+// Load all pages
+fetch("./pages/pages.json")
+  .then(result => data = result.json())
+  .then(data => {
+    data.forEach(page => {
+      new Page(page.id, page.title, page.description);
+    });
+  })

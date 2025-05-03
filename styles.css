@@ -3,11 +3,44 @@ body {
   background-image: radial-gradient(circle at 100% 100%, #666, #777, #333);
   background-repeat: no-repeat;
   background-attachment: fixed;
+  font-family: monospace;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 /* Glow */
 .glow {
   text-shadow: 0 0 4px #fff, 0 0 10px #ead591;
+}
+
+
+/* Pages */
+div.page-list {
+    text-align: center;
+    border: 2px dashed rgba(0, 0, 0, 0.2);
+    margin: 10px;
+    margin-left: 100px;
+    margin-right: 100px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+ul.page-list {
+    list-style-type: none;
+    padding: 0;
+
+}
+
+div.page-element {
+    border: 5px inset rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    padding-left: 10px;
+}
+h4.page-element {
+    margin: 5px;
+    margin-left: 0px;
+}
+p.page-element {
+    margin: 5px;
 }
 
 
@@ -31,7 +64,6 @@ ul.nav li a {
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  font-family: monospace;
   font-size: large;
 }
 
