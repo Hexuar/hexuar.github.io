@@ -40,5 +40,11 @@
     "title": "Dungeon Generator",
     "description": "Generates dungeons with a random walk algorithm.",
     "created": "2024-11-25"
+  },
+  {
+    "id": "solar_system",
+    "title": "Solar System",
+    "description": "A scaled down solar system to explore.",
+    "created": "2024-07-16"
   }
 ]
