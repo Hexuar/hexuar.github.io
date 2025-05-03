@@ -1,0 +1,6 @@
+#runeInput {
+    box-sizing: border-box; 
+    width: 100%; 
+    resize: vertical; 
+    min-height: 16px;
+}

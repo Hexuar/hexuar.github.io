@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+
+        <div name="download">
+            <input type="text" id="fileNameInput" value="runes" size="4">
+            <select id="fileTypeSelect">
+                <option value="jpg">JPG</option>
+                <option value="png">PNG</option>
+                <option value="svg">SVG</option>
+            </select>
+            <button onclick="DownloadSVG(document.getElementById('fileTypeSelect').value)">Download</button>
+        </div>
+
+        <div name="control">
+            <select id="runeSetSelect">
+                <option value="younger_futhark">Younger Futhark</option>
+                <option value="elder_futhark">Elder Futhark</option>
+                <option value="medieval">Medieval</option>
+            </select>
+            <button onclick="
+                let input = document.getElementById('runeInput');
+                let runeSet = document.getElementById('runeSetSelect');
+                input.value = Transcribe(input.value, runeSet.value);
+                document.getElementById('runeString.textPath').textContent = input.value;
+            ">Transcribe</button>
+            <button onclick="
+                let gui = document.getElementById('gui');
+                if(gui.style.display != 'none') gui.style.display = 'none';
+                else gui.style.display = '';
+            ">Toggle GUI</button>
+        </div>
+
+        <div name="input">
+            <textarea id="runeInput" oninput="document.getElementById('runeString.textPath').textContent = this.value;">ᛚᛅᚾᛏᛁᚱ᛬ᚱᛁᛋᚦᛁ᛬ᛋᛏᛁᚾ᛬ᚦᛅᚾᛋᛁ᛬ᛁᚠᛏᛦ᛬ᚬᛋᚴᛅᛦ᛬ᚴᛅᛏᛏ᛬ᛋᛁᚾ ᛬</textarea>
+        </div>
+
+        <div name="canvas" id="SVGcanvas" style="position: relative;">
+        </div>
+
+        <div name="scripts">
+            <script src="lib/vector2.js"></script>
+            <script src="lib/math.js"></script>
+            <script src="lib/svg.js"></script>
+            <script src="lib/draw.js"></script>
+            <script src="lib/input.js"></script>
+
+            <script src="svgrunes.js"></script>
+            <script src="download.js"></script>
+            <script src="runic.js"></script>
+            <script src="gui.js"></script>
+            <script src="script.js"></script>
+        </div>
+    </body>
+</html>

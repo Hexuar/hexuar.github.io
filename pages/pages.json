@@ -28,5 +28,17 @@
     "title": "Blank",
     "description": "A blank page.",
     "created": "2025-05-03"
+  },
+  {
+    "id": "runic",
+    "title": "Runestone Creator",
+    "description": "Creates downloadable runestones.",
+    "created": "2024-06-24"
+  },
+  {
+    "id": "dungeon_generator",
+    "title": "Dungeon Generator",
+    "description": "Generates dungeons with a random walk algorithm.",
+    "created": "2024-11-25"
   }
 ]
