@@ -1,0 +1,342 @@
+<script src="https://koda.nu/simple.js">
+
+/////////////////////////// VECTORS //////////////////////////////
+
+// with added 'toString' && 'draw' functions
+
+/*
+Simple 2D JavaScript Vector Class
+
+Hacked from evanw's lightgl.js
+https://github.com/evanw/lightgl.js/blob/master/src/vector.js
+*/
+
+function Vector(x, y) {
+	this.x = x || 0;
+	this.y = y || 0;
+}
+
+/* INSTANCE METHODS */
+
+Vector.prototype = {
+	negative: function() {
+		this.x = -this.x;
+		this.y = -this.y;
+		return this;
+	},
+	add: function(v) {
+		if (v instanceof Vector) {
+			this.x += v.x;
+			this.y += v.y;
+		} else {
+			this.x += v;
+			this.y += v;
+		}
+		return this;
+	},
+	subtract: function(v) {
+		if (v instanceof Vector) {
+			this.x -= v.x;
+			this.y -= v.y;
+		} else {
+			this.x -= v;
+			this.y -= v;
+		}
+		return this;
+	},
+	multiply: function(v) {
+		if (v instanceof Vector) {
+			this.x *= v.x;
+			this.y *= v.y;
+		} else {
+			this.x *= v;
+			this.y *= v;
+		}
+		return this;
+	},
+	divide: function(v) {
+		if (v instanceof Vector) {
+			if(v.x != 0) this.x /= v.x;
+			if(v.y != 0) this.y /= v.y;
+		} else {
+			if(v != 0) {
+				this.x /= v;
+				this.y /= v;
+			}
+		}
+		return this;
+	  },
+	  equals: function(v) {
+		return this.x == v.x && this.y == v.y;
+	  },
+	  dot: function(v) {
+		return this.x * v.x + this.y * v.y;
+	  },
+	  cross: function(v) {
+		return this.x * v.y - this.y * v.x
+	  },
+	  length: function() {
+		return Math.sqrt(this.dot(this));
+	  },
+	  normalize: function() {
+		return this.divide(this.length());
+	  },
+	  min: function() {
+		return Math.min(this.x, this.y);
+	  },
+	  max: function() {
+		return Math.max(this.x, this.y);
+	  },
+	  toAngles: function() {
+		return -Math.atan2(-this.y, this.x);
+	  },
+	  angleTo: function(a) {
+		return Math.acos(this.dot(a) / (this.length() * a.length()));
+	  },
+	  toArray: function(n) {
+	  	return [this.x, this.y].slice(0, n || 2);
+	  },
+	  clone: function() {
+	  	return new Vector(this.x, this.y);
+	  },
+	  set: function(x, y) {
+	  	this.x = x; this.y = y;
+	  	return this;
+	  },
+  	  toString: function() {
+  		return "{"+this.x+", "+this.y+"}";
+	  },
+  	  draw: function(color = "black", size = 2) {
+        line(0, 0, this.x, this.y, size, color);
+        var vector1 = new Vector(this.x, this.y);
+        var vector = vector1.subtract(new Vector(cos(this.toAngles())*size*5,sin(this.toAngles())*size*5));
+        triangle(this.x, this.y, vector.x+(size*2.5*sin(-this.toAngles())), vector.y+(size*2.5*cos(-this.toAngles())), vector.x-(size*2.5*sin(-this.toAngles())), vector.y-(size*2.5*cos(-this.toAngles())), color)
+      }
+  };
+
+  /* STATIC METHODS */
+  Vector.negative = function(v) {
+  	return new Vector(-v.x, -v.y);
+  };
+  Vector.add = function(a, b) {
+	if (b instanceof Vector) return new Vector(a.x + b.x, a.y + b.y);
+	else return new Vector(a.x + b, a.y + b);
+  };
+  Vector.subtract = function(a, b) {
+	if (b instanceof Vector) return new Vector(a.x - b.x, a.y - b.y);
+	else return new Vector(a.x - b, a.y - b);
+  };
+  Vector.multiply = function(a, b) {
+    if (b instanceof Vector) return new Vector(a.x * b.x, a.y * b.y);
+	else return new Vector(a.x * b, a.y * b);
+  };
+  Vector.divide = function(a, b) {
+	if (b instanceof Vector) return new Vector(a.x / b.x, a.y / b.y);
+	else return new Vector(a.x / b, a.y / b);
+  };
+  Vector.equals = function(a, b) {
+	return a.x == b.x && a.y == b.y;
+   };
+  Vector.dot = function(a, b) {
+	return a.x * b.x + a.y * b.y;
+  };
+  Vector.cross = function(a, b) {
+	return a.x * b.y - a.y * b.x;
+  };
+
+
+///////////////////////////////(vectors)///////////////////////////////////
+/////////////////////////////// CLASSES ///////////////////////////////////
+
+  // Debug
+  var Debug = new class
+  {
+    constructor() {
+      this.logList = [];
+    }
+
+    // Log
+    Log(string) {
+      this.logList.push(string);
+    }
+    DrawLog() {
+      this.logList.forEach((element, index, array) => {
+        text(0, 10+(10*index), 10, element, "black");
+      })
+      this.logList = [];
+    }
+  }
+
+  // Mouse Func
+  mouse.Lheld = false;
+  mouse.Lpressed = false;
+  mouse.Lreleased = false;
+  mouse.Rheld = false;
+  mouse.Rpressed = false;
+  mouse.Rreleased = false;
+
+  function mouseFunc() {
+    mouse.pos = new Vector(mouse.x, mouse.y);
+
+    // Left
+    mouse.Lpressed = false;
+    mouse.Lreleased = false;
+    if(mouse.left && !mouse.Lheld) {
+      mouse.Lpressed = true;
+      mouse.Lheld = true;
+    }
+    if(!mouse.left && mouse.Lheld) {
+      mouse.Lreleased = true;
+      mouse.Lheld = false;
+    }
+
+    // Right
+    mouse.Rpressed = false;
+    mouse.Rreleased = false;
+    if(mouse.right && !mouse.Rheld) {
+      mouse.Rpressed = true;
+      mouse.Rheld = true;
+    }
+    if(!mouse.right && mouse.Rheld) {
+      mouse.Rreleased = true;
+      mouse.Rheld = false;
+    }
+  }
+
+  // Color
+  var Color = class {
+    constructor(r = 0, g = 0, b = 0) {
+      this.r = r;
+      this.g = g;
+      this.b = b;
+    }
+    getColor() {
+      return mixColor(this.r, this.g, this.b);
+    }
+  }
+
+
+  // Planet
+  var G = 6.67408;
+  var planetList = [];
+  var Planet = class {
+    constructor(pos = new Vector(), radius = 10, velocity = new Vector(), mass = 1, color = new Color()) {
+      this.pos = pos;
+      this.radius = radius;
+      this.acceleration = new Vector();
+      this.velocity = velocity;
+      this.mass = mass;
+      this.color = color;
+
+      planetList.push(this);
+    }
+    draw() {
+      circle(this.pos.x, this.pos.y, this.radius, this.color.getColor());
+    }
+  }
+
+
+///////////////////////////////(classes)///////////////////////////////////
+
+  var forceScale = 0.001;
+
+  function planetLoop() {
+    planetList.forEach((planet, index) => {
+
+      // Draw
+      planet.draw();
+
+      // Loop For All Others
+      planetList.forEach((planet2, index2) => {
+        if(index != index2) {
+
+          var d = distance(planet.pos.x, planet.pos.y, planet2.pos.x, planet2.pos.y);
+
+          // Set Acceleration
+          var R = d / 2;
+          var a = Math.atan2(planet2.pos.y - planet.pos.y, planet2.pos.x - planet.pos.x);
+          var A = (G * (planet.mass * planet2.mass) / R * R ) / planet.mass;
+          planet.acceleration.add(new Vector(cos(a) * A, sin(a) * A));
+
+          // Collide
+          if(d < planet.radius + planet2.radius) {
+            planet.velocity.x = ( planet.mass * planet.velocity.x + planet2.mass * planet2.velocity.x) / (planet.mass + planet2.mass);
+            planet.velocity.y = ( planet.mass * planet.velocity.y + planet2.mass * planet2.velocity.y) / (planet.mass + planet2.mass);
+            planet.acceleration = new Vector();
+            planet.radius += planet2.radius;
+            planet.mass += planet2.mass;
+            planet.color.r = ( planet.color.r + planet2.color.r ) / 2;
+            planet.color.g = ( planet.color.g + planet2.color.g ) / 2;
+            planet.color.b = ( planet.color.b + planet2.color.b ) / 2;
+            planetList.splice(index2, 1);
+          }
+
+        }
+      });
+
+      // Movement
+      planet.acceleration.multiply(forceScale);
+      planet.velocity.add(planet.acceleration);
+      planet.pos.add(planet.velocity);
+
+    });
+  }
+
+
+  var radius = 10;
+  var force = new Vector();
+  var mass = 1;
+  var origin = new Vector();
+
+  function update() {
+    clearScreen();
+    mouseFunc();
+
+    translate(origin.x, origin.y);
+
+    // DRAW
+    Debug.Log("Radius: " + radius);
+    Debug.Log("Force: " + force);
+    Debug.Log("Mass: " + mass);
+
+    // INPUT
+    if(mouse.Lpressed) new Planet(mouse.pos, radius, new Vector(force.x, force.y), mass, new Color(random(256), random(256), random(256)));
+    // radius
+    if(keyboard.left && radius > 0) radius--;
+    if(keyboard.right) radius++;
+    // mass
+    if(keyboard.down && mass > 0) mass--;
+    if(keyboard.up) mass++;
+    //force
+    if(keyboard.w) force.y--;
+    if(keyboard.a) force.x--;
+    if(keyboard.s) force.y++;
+    if(keyboard.d) force.x++;
+
+    planetLoop();
+    Debug.DrawLog();
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>

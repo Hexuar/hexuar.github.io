@@ -1,0 +1,630 @@
+<script src="https://koda.nu/simple.js">
+
+
+
+  ////////////////////////////// MISC ////////////////////////////////
+
+  // RGBA
+  function mixRGBA(red, green, blue, alpha)
+  {
+    return "rgba(" + red + "," + green + "," + blue + "," + alpha.toFixed(3) + ")";
+  }
+
+  /////////////////////////// VECTORS //////////////////////////////
+
+// with added 'toString' && 'draw' functions
+
+/*
+Simple 2D JavaScript Vector Class
+
+Hacked from evanw's lightgl.js
+https://github.com/evanw/lightgl.js/blob/master/src/vector.js
+*/
+
+function Vector(x, y) {
+	this.x = x || 0;
+	this.y = y || 0;
+}
+
+/* INSTANCE METHODS */
+
+Vector.prototype = {
+	negative: function() {
+		this.x = -this.x;
+		this.y = -this.y;
+		return this;
+	},
+	add: function(v) {
+		if (v instanceof Vector) {
+			this.x += v.x;
+			this.y += v.y;
+		} else {
+			this.x += v;
+			this.y += v;
+		}
+		return this;
+	},
+	subtract: function(v) {
+		if (v instanceof Vector) {
+			this.x -= v.x;
+			this.y -= v.y;
+		} else {
+			this.x -= v;
+			this.y -= v;
+		}
+		return this;
+	},
+	multiply: function(v) {
+		if (v instanceof Vector) {
+			this.x *= v.x;
+			this.y *= v.y;
+		} else {
+			this.x *= v;
+			this.y *= v;
+		}
+		return this;
+	},
+	divide: function(v) {
+		if (v instanceof Vector) {
+			if(v.x != 0) this.x /= v.x;
+			if(v.y != 0) this.y /= v.y;
+		} else {
+			if(v != 0) {
+				this.x /= v;
+				this.y /= v;
+			}
+		}
+		return this;
+	  },
+	  equals: function(v) {
+		return this.x == v.x && this.y == v.y;
+	  },
+	  dot: function(v) {
+		return this.x * v.x + this.y * v.y;
+	  },
+	  cross: function(v) {
+		return this.x * v.y - this.y * v.x
+	  },
+	  length: function() {
+		return Math.sqrt(this.dot(this));
+	  },
+	  normalize: function() {
+		return this.divide(this.length());
+	  },
+	  min: function() {
+		return Math.min(this.x, this.y);
+	  },
+	  max: function() {
+		return Math.max(this.x, this.y);
+	  },
+	  toAngles: function() {
+		return -Math.atan2(-this.y, this.x);
+	  },
+	  angleTo: function(a) {
+		return Math.acos(this.dot(a) / (this.length() * a.length()));
+	  },
+	  toArray: function(n) {
+	  	return [this.x, this.y].slice(0, n || 2);
+	  },
+	  clone: function() {
+	  	return new Vector(this.x, this.y);
+	  },
+	  set: function(x, y) {
+	  	this.x = x; this.y = y;
+	  	return this;
+	  },
+  	  toString: function() {
+  		return "{"+this.x+", "+this.y+"}";
+	  },
+  	  draw: function(color = "black", size = 2) {
+        line(0, 0, this.x, this.y, size, color);
+        var vector1 = new Vector(this.x, this.y);
+        var vector = vector1.subtract(new Vector(cos(this.toAngles())*size*5,sin(this.toAngles())*size*5));
+        triangle(this.x, this.y, vector.x+(size*2.5*sin(-this.toAngles())), vector.y+(size*2.5*cos(-this.toAngles())), vector.x-(size*2.5*sin(-this.toAngles())), vector.y-(size*2.5*cos(-this.toAngles())), color)
+      }
+  };
+
+  /* STATIC METHODS */
+  Vector.negative = function(v) {
+  	return new Vector(-v.x, -v.y);
+  };
+  Vector.add = function(a, b) {
+	if (b instanceof Vector) return new Vector(a.x + b.x, a.y + b.y);
+	else return new Vector(a.x + b, a.y + b);
+  };
+  Vector.subtract = function(a, b) {
+	if (b instanceof Vector) return new Vector(a.x - b.x, a.y - b.y);
+	else return new Vector(a.x - b, a.y - b);
+  };
+  Vector.multiply = function(a, b) {
+    if (b instanceof Vector) return new Vector(a.x * b.x, a.y * b.y);
+	else return new Vector(a.x * b, a.y * b);
+  };
+  Vector.divide = function(a, b) {
+	if (b instanceof Vector) return new Vector(a.x / b.x, a.y / b.y);
+	else return new Vector(a.x / b, a.y / b);
+  };
+  Vector.equals = function(a, b) {
+	return a.x == b.x && a.y == b.y;
+   };
+  Vector.dot = function(a, b) {
+	return a.x * b.x + a.y * b.y;
+  };
+  Vector.cross = function(a, b) {
+	return a.x * b.y - a.y * b.x;
+  };
+
+
+///////////////////////////////(vectors)///////////////////////////////////
+  /////////////////////////////// ENGINE ///////////////////////////////
+  var Engine = new class
+  {
+    constructor(){
+      // Variables
+      this.currentScene = "main";
+      this.oldScene;
+
+      // Lists
+      this.sceneList = [];
+      this.gameObjectList = [];
+      this.renderList = [];
+      this.physicsList = [];
+      this.particleList = [];
+      this.particleEmittorList = [];
+      this.colliderList = [];
+
+      // Physics
+      this.physics = {g:9.82, air_friction:0.9};
+    }
+
+    // Main
+    Main() {
+      // Mouse Pos
+  	  mouse.position = new Vector(mouse.x, mouse.y);
+
+      // Functions
+      this.Scenes();
+      this.Draw();
+      this.Physics();
+      this.Particles();
+      Debug.DrawLog();
+    }
+
+    // Clear Lists
+    ClearLists() {
+      this.renderList = [];
+      this.physicsList = [];
+      this.particleList = [];
+      this.particleEmittorList = [];
+      this.colliderList = [];
+    }
+
+    // Scenes
+    Scenes() {
+      this.sceneList.forEach((element, index, array) => {
+        if(element.tag == this.currentScene) {
+          if(element.tag != this.oldScene){
+            element.start();
+          }
+          else element.update();
+          this.oldScene = element.tag;
+        }
+      })
+    }
+
+    // Draw
+    Draw() {
+      this.renderList.forEach((element, index, array) => {
+        var transform = element.parent.transform;
+        if(element.type == "spriteRenderer") picture(transform.position.x + element.transform.position.x, transform.position.y + element.transform.position.y, element.sprite, transform.scale.x * element.transform.scale.x, transform.scale.y * element.transform.scale.y);
+        if(element.type == "shapeRenderer") {
+          if(element.shape == "rectangle") this.drawRectangle(transform.position, transform.scale, element.transform.position, element.transform.scale, element.color);
+          if(element.shape == "circle") this.drawCircle(transform.position, transform.scale, element.transform.position, element.transform.scale, element.color);
+          if(element.shape == "capsule") this.drawCapsule(transform.position, transform.scale, element.transform.position, element.transform.scale, element.color);
+        }
+      });
+    }
+    drawRectangle(position = new Vector(), scale = new Vector(1,1), relPosition = new Vector(), relScale = new Vector(1,1), color) {
+      rectangle(position.x + relPosition.x, position.y + relPosition.y, scale.x * relScale.x, scale.y * relScale.y, color);
+    }
+    drawCircle(position = new Vector(), scale = new Vector(1,1), relPosition = new Vector(), relScale = new Vector(1,1), color) {
+      circle(position.x + ((scale.x * relScale.x)/2) + relPosition.x, position.y + ((scale.x * relScale.x)/2) + relPosition.y, (scale.x * relScale.x)/2, color);
+    }
+
+    // Particles
+    Particles() {
+      for(var i = 0; i < this.particleEmittorList.length; i++) {
+        var emittor = this.particleEmittorList[i];
+
+        var size;
+        if(!isNaN(parseFloat(emittor.size))) size = emittor.size;
+        else size = random(emittor.size.y)+emittor.size.x;
+
+        // Spawning
+        if(random(emittor.particleChance) == 0) {
+          new Particle(Vector.add(emittor.parent.transform.position, emittor.position), size, new Color(emittor.color.r, emittor.color.g, emittor.color.b, emittor.color.a), (random(emittor.spreadAngle*100)+emittor.startAngle*100)/100, emittor.speed, emittor.ageing, emittor.gravity, emittor.gravityScale);
+        }
+
+      }
+
+      for(var i = 0; i < this.particleList.length; i++){
+        var particle = this.particleList[i];
+
+        // Death
+        if(particle.color.a < 0){this.particleList.splice(i,1)}
+
+        // Movement
+        particle.transform.position.x += particle.speed * cos(particle.dir);
+        particle.transform.position.y += particle.speed * sin(particle.dir);
+
+        // Draw
+        particle.color.color = mixRGBA(particle.color.r,particle.color.g,particle.color.b,particle.color.a);
+        circle(particle.transform.position.x, particle.transform.position.y, particle.transform.scale, particle.color.color);
+
+        // Age
+        particle.color.a -= particle.ageing;
+      }
+    }
+
+    // Intersection
+    PointCircleIntersection(point = new Vector(), circlePos = new Vector(), circleSize = 0) {
+      var d = distance(point.x, point.y, circlePos.x + circleSize/2, circlePos.y+circleSize/2)
+      if(d < circleSize/2) return true;
+      return false;
+    }
+
+    // Physics
+    Physics() {
+      this.physicsList.forEach((element, index, array) => {
+        if(element.isKinematic){
+          // Gravity
+          if(element.useGravity) {
+            element.velocity.y += this.physics.g * element.gravityScale;
+          }
+
+          // Velocity
+          element.parent.transform.position.x += element.velocity.x;
+          element.parent.transform.position.y += element.velocity.y;
+
+          // Air Friction
+          element.velocity.x *= this.physics.air_friction;
+          element.velocity.y *= this.physics.air_friction;
+
+          if(element.velocity.x < 0.001 && element.velocity.x > -0.001) element.velocity.x = 0;
+          if(element.velocity.y < 0.001 && element.velocity.y > -0.001) element.velocity.y = 0;
+        }
+      })
+    }
+  }
+
+  // Debug
+  var Debug = new class
+  {
+    constructor() {
+      this.logList = [];
+    }
+
+    // Log
+    Log(string) {
+      this.logList.push(string);
+    }
+    DrawLog() {
+      this.logList.forEach((element, index, array) => {
+        text(0, 10+(10*index), 10, element, "black");
+      })
+      this.logList = [];
+    }
+  }
+
+  // Update
+  function update() {
+    Engine.Main();
+  }
+  //////////////////////////////// (engine) ////////////////////////////////
+  /////////////////////////////// COMPONENTS ///////////////////////////////
+
+  // Scene
+  var Scene = class
+  {
+    constructor(tag, start, update) {
+      this.type = "scene";
+      this.tag = tag;
+      this.start = start;
+      this.update = update
+      Engine.sceneList.push(this);
+    }
+    run() {
+    }
+  }
+
+  // Game Object
+  var GameObject = class
+  {
+    constructor(position = new Vector(), scale = new Vector(1,1), tag){
+      this.components = [];
+      this.transform = new Transform(this, position, scale)
+      this.tag = tag;
+      Engine.gameObjectList.push(this);
+    }
+    getComponent(type, tag) {
+      if(tag != undefined) return this.components.find(x => x.tag === tag && x.type === type);
+      else return this.components.find(x => x.type === type);
+    }
+    getComponents(type, tag) {
+      if(tag!= undefined) return this.components.filter(x => x.tag === tag && x.type === type);
+      else return this.components.filter(x => x.type === type);
+    }
+  }
+
+  // Transform
+  var Transform = class
+  {
+    constructor(parent, position = new Vector(0,0), scale = new Vector(1,1), tag) {
+      this.type = "transform";
+      this.parent = parent;
+      this.position = position;
+      this.scale = scale;
+      this.tag = tag;
+    }
+  }
+
+  // SpriteRenderer
+  this.SpriteRenderer = class
+  {
+    constructor(parent, sprite, position = new Vector(), scale = new Vector(1,1), tag) {
+      this.type = "spriteRenderer";
+      this.parent = parent;
+      this.sprite = sprite;
+      this.transform = new Transform(this, position, scale);
+      this.tag = tag;
+      Engine.renderList.push(this);
+    }
+  }
+
+  // ShapeRenderer
+  var ShapeRenderer = class
+  {
+    constructor(parent, shape, color, position = new Vector(), scale = new Vector(1,1), tag) {
+      this.type = "shapeRenderer";
+      this.parent = parent;
+      this.shape = shape;
+      this.color = color;
+      this.transform = new Transform(this, position, scale);
+      this.tag = tag;
+      Engine.renderList.push(this);
+    }
+  }
+
+  // RigidBody
+  var RigidBody = class
+  {
+    constructor(parent, mass = 1, isKinematic = true, useGravity = true, gravityScale = 1, tag) {
+      this.type = "rigidBody";
+      this.parent = parent;
+      this.mass = mass;
+      this.isKinematic = isKinematic;
+      this.useGravity = useGravity;
+      this.gravityScale = gravityScale;
+      this.tag = tag;
+
+      this.velocity = new Vector();
+
+      Engine.physicsList.push(this);
+    }
+  }
+
+  // Collider
+  var Collider = class
+  {
+    constructor(parent, shape, position = new Vector(), scale = new Vector(1,1), tag) {
+      this.type = "collider";
+      this.parent = parent;
+      this.shape = shape;
+      this.transform = new Transform(this, position, scale);
+      this.tag = tag;
+
+      Engine.colliderList.push(this);
+    }
+    draw(){
+      var parentPos = this.parent.transform.position;
+      var parentScale = this.parent.transform.scale;
+      var pos = this.transform.position;
+      var scale = this.transform.scale;
+      switch(this.shape)
+      {
+        case "circle":
+          circle(parentPos.x + parentScale.x/2 + pos.x, parentPos.y + parentScale.y/2 + pos.y, ((parentScale.x * scale.x)/2)+1, "black");
+          break;
+      }
+    }
+  }
+
+  // Particle Emittor
+  var ParticleEmittor = class
+  {
+    constructor(parent, position, size, particleChance, color, startAngle, spreadAngle, speed, ageing, gravity, gravityScale){
+      this.type = "particleEmitter";
+      this.parent = parent;
+      this.position = position;
+      this.size = size;
+      this.particleChance = particleChance;
+      this.startAngle = startAngle;
+      this.spreadAngle = spreadAngle;
+      this.color = color;
+      this.speed = speed;
+      this.ageing = ageing;
+      this.gravity = gravity;
+      this.gravityScale = gravityScale;
+
+      Engine.particleEmittorList.push(this);
+    }
+  }
+
+  // Particle
+  var Particle = class
+  {
+    constructor(position = new Vector(), scale = new Vector(), color = new Color(0,0,0,1), dir = 0, speed = 0, ageing = 0, gravity = false, gravityScale = 0.1){
+      this.type = "particle";
+      this.transform = new Transform(this, position, scale);
+      this.color = color;
+      this.speed = speed;
+      this.dir = dir;
+      this.ageing = ageing;
+
+      if(gravity) this.rigidBody = new RigidBody(this, undefined, undefined, undefined, gravityScale);
+      Engine.particleList.push(this);
+    }
+  }
+
+  // Color
+  var Color = class
+  {
+    constructor(red, green, blue, alpha) {
+      this.r = red;
+      this.g = green;
+      this.b = blue;
+      this.a = alpha;
+      this.color = mixRGBA(this.r, this.g, this.b, this.a);
+    }
+  }
+  ////////////////////////////// (components) //////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  var Sprites = {
+    tree:"https://art.pixilart.com/thumb/sr28af1c6309843.png"
+  }
+
+  function SceneManager() {
+    if(keyboard.one) Engine.currentScene = "main";
+    if(keyboard.two) Engine.currentScene = "test";
+  }
+
+
+
+  //// SCENE 1
+  new Scene("main",
+  // START
+  function() {
+    Engine.ClearLists();
+    this.speed = 5;
+    this.isRed = false;
+    this.isRedTimer = 0;
+
+    // TestObj
+    this.testObj = new GameObject(new Vector(-16, -16), new Vector(32,32));
+    this.testObj.components.push(new ShapeRenderer(this.testObj, "circle", "green", undefined, undefined, "main"));
+    this.testObj.components.push(new ParticleEmittor(this.testObj, new Vector(this.testObj.transform.scale.x/2, this.testObj.transform.scale.y/2), new Vector(5,10), 0, new Color(0, 128, 0, 0.5), 0, pi*2, 2, 0.01, false, -0.02));
+    this.testObj.components.push(new RigidBody(this.testObj, 1, true, false));
+    this.testObj.components.push(new Collider(this.testObj, "circle"));
+
+    // Clones
+    this.testObj.components.push(new ShapeRenderer(this.testObj, "circle", "green", new Vector(-totalWidth, -totalHeight)));
+    this.testObj.components.push(new ShapeRenderer(this.testObj, "circle", "green", new Vector(0, -totalHeight)));
+    this.testObj.components.push(new ShapeRenderer(this.testObj, "circle", "green", new Vector(totalWidth, -totalHeight)));
+    this.testObj.components.push(new ShapeRenderer(this.testObj, "circle", "green", new Vector(-totalWidth, 0)));
+    this.testObj.components.push(new ShapeRenderer(this.testObj, "circle", "green", new Vector(totalWidth, 0)));
+    this.testObj.components.push(new ShapeRenderer(this.testObj, "circle", "green", new Vector(-totalWidth, totalHeight)));
+    this.testObj.components.push(new ShapeRenderer(this.testObj, "circle", "green", new Vector(0, totalHeight)));
+    this.testObj.components.push(new ShapeRenderer(this.testObj, "circle", "green", new Vector(totalWidth, totalHeight)));
+  },
+
+  // UPDATE
+  function() {
+    clearScreen();
+
+    var rigidBody = this.testObj.getComponent("rigidBody");
+
+    if(this.isRedTimer < 1 && this.isRed == true) this.isRed = false;
+    if(this.isRedTimer > 0) this.isRedTimer --;
+    this.testObj.getComponents("shapeRenderer").forEach((element, index, array) => {
+      var position = Vector.add(element.transform.position, element.parent.transform.position);
+      var scale = element.parent.transform.scale.x;
+      if(Engine.PointCircleIntersection(mouse.position, position, scale) && mouse.left) {
+        this.isRed = true;
+        this.isRedTimer = 100;
+      }
+    });
+
+    if(this.isRed) {
+      this.speed = 10;
+      this.testObj.getComponents("shapeRenderer").forEach((element, index, array) => {
+        element.color = "red";
+      });
+      this.testObj.getComponent("particleEmitter").color = new Color(255, 0, 0, 0.5);
+    }
+    else if(keyboard.shift) {
+      this.speed = 7.5;
+      this.testObj.getComponents("shapeRenderer").forEach((element, index, array) => {
+        element.color = "orange";
+      });
+      this.testObj.getComponent("particleEmitter").color = new Color(255, 128, 0, 0.5);
+    }
+    else {
+      this.speed = 5;
+      this.testObj.getComponents("shapeRenderer").forEach((element, index, array) => {
+        element.color = "green";
+      });
+      this.testObj.getComponent("particleEmitter").color = new Color(0, 128, 0, 0.5);
+    }
+    if(keyboard.w) rigidBody.velocity.y = -this.speed;
+    if(keyboard.a) rigidBody.velocity.x = -this.speed;
+    if(keyboard.s) rigidBody.velocity.y = this.speed;
+    if(keyboard.d) rigidBody.velocity.x = this.speed;
+
+
+    // Portal
+    this.listAll = Engine.gameObjectList.concat(Engine.particleList);
+
+    this.listAll.forEach((element, index, array) => {
+      var pos = element.transform.position;
+      var scale = element.transform.scale;
+      var scalex, scaley;
+
+      if(!isNaN(parseFloat(scale))) {scalex = scale; scaley = scale}
+      else {scalex = scale.x, scaley = scale.y};
+
+      if(pos.y + scaley/2 > totalHeight) pos.y = 0;
+      if(pos.y + scaley/2 < 0) pos.y = totalHeight - scaley/2;
+      if(pos.x + scalex/2 > totalWidth) pos.x = 0;
+      if(pos.x + scalex/2 < 0) pos.x = totalWidth - scalex/2;
+    });
+
+    SceneManager();
+  });
+
+
+  //// SCENE 2
+  new Scene("test",
+  // START
+  function() {
+    Engine.ClearLists();
+    this.testObj = new GameObject(new Vector(200, 200), new Vector(128,128));
+    this.testObj.components.push(new SpriteRenderer(this.testObj, Sprites.tree));
+  },
+
+  // UPDATE
+  function() {
+    clearScreen();
+    SceneManager();
+  });
+
+
+</script>

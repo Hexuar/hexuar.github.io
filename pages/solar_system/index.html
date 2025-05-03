@@ -1,147 +1,144 @@
-<!DOCTYPE html>
-<body>
-    <script src="https://koda.nu/simple.js">
+<script src="https://koda.nu/simple.js">
 
-    const canvas = document.querySelector("canvas");
-    const ctx = canvas.getContext("2d");
+const canvas = document.querySelector("canvas");
+const ctx = canvas.getContext("2d");
 
 
-    function arc(x, y, radius, startAngle, endAngle, lineWidth, color) {
-      ctx.beginPath();
-      ctx.lineWidth = lineWidth;
-      ctx.strokeStyle = color;
-      ctx.arc(x, y, radius, startAngle, endAngle);
-      ctx.stroke();
+function arc(x, y, radius, startAngle, endAngle, lineWidth, color) {
+    ctx.beginPath();
+    ctx.lineWidth = lineWidth;
+    ctx.strokeStyle = color;
+    ctx.arc(x, y, radius, startAngle, endAngle);
+    ctx.stroke();
+}
+
+
+class Vector {
+    constructor(x = 0, y = 0) {
+    this.x = x;
+    this.y = y;
     }
+}
 
 
-    class Vector {
-      constructor(x = 0, y = 0) {
-        this.x = x;
-        this.y = y;
-      }
+planets = [];
+class Body {
+    constructor(distance, size, image, orbiting = {pos:{x:0,y:0}}) {
+    this.distance = distance * distanceFactor;
+    this.size = size * sizeFactor;
+    this.image = image;
+    this.orbiting = orbiting;
+
+    this.speed = 0;
+    if(distance != 0) this.speed = sqrt(sgp / this.distance) / speedFactor;
+    this.angle = random(360)*pi/180;
+
+    this.pos = new Vector();
+    this.pos.x = this.distance * cos(this.angle) + this.orbiting.pos.x;
+    this.pos.y = this.distance * sin(this.angle) + this.orbiting.pos.y;
+
+    planets.push(this);
     }
-
-
-    planets = [];
-    class Body {
-      constructor(distance, size, image, orbiting = {pos:{x:0,y:0}}) {
-        this.distance = distance * distanceFactor;
-        this.size = size * sizeFactor;
-        this.image = image;
-        this.orbiting = orbiting;
-
-        this.speed = 0;
-        if(distance != 0) this.speed = sqrt(sgp / this.distance) / speedFactor;
-        this.angle = random(360)*pi/180;
-
-        this.pos = new Vector();
-        this.pos.x = this.distance * cos(this.angle) + this.orbiting.pos.x;
-        this.pos.y = this.distance * sin(this.angle) + this.orbiting.pos.y;
-
-        planets.push(this);
-      }
-      update() {
-        this.angle += this.speed;
-        this.pos.x = this.distance * cos(this.angle) + this.orbiting.pos.x;
-        this.pos.y = this.distance * sin(this.angle) + this.orbiting.pos.y;
-      }
-      draw() {
-        arc(this.orbiting.pos.x, this.orbiting.pos.y, this.distance, (this.angle - pi/2), this.angle, orbitRingSize, "white")
-        picture(this.pos.x - this.size / 2, this.pos.y - this.size /2, this.image, this.size, this.size);
-      }
+    update() {
+    this.angle += this.speed;
+    this.pos.x = this.distance * cos(this.angle) + this.orbiting.pos.x;
+    this.pos.y = this.distance * sin(this.angle) + this.orbiting.pos.y;
     }
-
-
-    class Rocket {
-      constructor(pos, acceleration) {
-        this.pos = pos;
-        this.velocity = new Vector();
-        this.acceleration = acceleration;
-      }
-      update() {
-        this.pos.x += this.velocity.x;
-        this.pos.y += this.velocity.y;
-
-        sun.orbiting.pos.x = -rocket.pos.x;
-        sun.orbiting.pos.y = -rocket.pos.y;
-      }
-      draw() {
-        picture(0, 0, "https://i.imgur.com/l07KeAm.png", 1000000, 2440000)
-      }
-      lockToBody(body) {
-        this.pos.x = body.pos.x - sun.pos.x;
-        this.pos.y = body.pos.y - sun.pos.y;
-      }
+    draw() {
+    arc(this.orbiting.pos.x, this.orbiting.pos.y, this.distance, (this.angle - pi/2), this.angle, orbitRingSize, "white")
+    picture(this.pos.x - this.size / 2, this.pos.y - this.size /2, this.image, this.size, this.size);
     }
+}
 
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    // Transform
-    translate(totalWidth/2, totalHeight/2);
-    scale(0.00002, 0.00002)
-
-
-    // Physical Constants
-    let solarMass = 1.989 * pow(10, 30);
-    let G = 6.67408 * pow(10, -11);
-    let sgp = solarMass * G;
-    let AU = 1.49597870 * pow(10, 11);
-
-
-    // Constants
-    let speedFactor = 1000000000;
-    let distanceFactor = 0.01;
-    let sizeFactor = 1;
-    let orbitRingSize = 10000;
-
-    // Initiate Celestial Bodies
-    sun = new Body(0, 696000000 / 1, "https://i.imgur.com/ov9baz1.png");
-
-    mercury = new Body(0.3871 * AU, 2440000, "https://i.imgur.com/fmqBvhs.png", sun);
-    venus = new Body(0.7233 * AU, 6050000, "https://i.imgur.com/rK7oXXp.png", sun);
-    earth = new Body(1 * AU, 6380000, "https://i.imgur.com/GcZoFfO.png", sun);
-    mars = new Body(1.5237 * AU, 3396000, "https://i.imgur.com/aDS27yj.png", sun);
-    jupiter = new Body(5.2034 * AU, 71490000, "https://i.imgur.com/q8fVc55.png", sun);
-    saturn = new Body(9.5371 * AU, 60280000 * 2.31, "https://i.imgur.com/IxnJiPE.png", sun);
-    uranus = new Body(19.191 * AU, 25650000 * 1.92, "https://i.imgur.com/lgeuZen.png", sun);
-    neptune = new Body(30.069 * AU, 24760000, "https://i.imgur.com/BkyIAbv.png", sun);
-
-    moon = new Body(384402000, 1737500, "https://i.imgur.com/463bRKt.png", earth);
-
-
-    // Set starting position
-    rocket = new Rocket(new Vector(earth.pos.x, earth.pos.y), 5000);
-
-
-
-    // Update
-    function update() {
-      fill("black");
-
-      // Planet Loop
-      planets.forEach(planet => {
-        planet.update();
-        planet.draw();
-      });
-
-      rocket.update();
-      rocket.draw();
-
-
-      // Input
-      if(keyboard.w) rocket.velocity.y -= rocket.acceleration;
-      if(keyboard.a) rocket.velocity.x -= rocket.acceleration;
-      if(keyboard.s) rocket.velocity.y += rocket.acceleration;
-      if(keyboard.d) rocket.velocity.x += rocket.acceleration;
-
-      if(keyboard.space) rocket.lockToBody(earth);
-
-      if(mouse.left) {scale(1.1, 1.1); orbitRingSize *= (10/11)}
-      if(mouse.right) {scale(0.9, 0.9); orbitRingSize *= (10/9)}
+class Rocket {
+    constructor(pos, acceleration) {
+    this.pos = pos;
+    this.velocity = new Vector();
+    this.acceleration = acceleration;
     }
+    update() {
+    this.pos.x += this.velocity.x;
+    this.pos.y += this.velocity.y;
 
-    </script>
-</body>
+    sun.orbiting.pos.x = -rocket.pos.x;
+    sun.orbiting.pos.y = -rocket.pos.y;
+    }
+    draw() {
+    picture(0, 0, "https://i.imgur.com/l07KeAm.png", 1000000, 2440000)
+    }
+    lockToBody(body) {
+    this.pos.x = body.pos.x - sun.pos.x;
+    this.pos.y = body.pos.y - sun.pos.y;
+    }
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// Transform
+translate(totalWidth/2, totalHeight/2);
+scale(0.00002, 0.00002)
+
+
+// Physical Constants
+let solarMass = 1.989 * pow(10, 30);
+let G = 6.67408 * pow(10, -11);
+let sgp = solarMass * G;
+let AU = 1.49597870 * pow(10, 11);
+
+
+// Constants
+let speedFactor = 1000000000;
+let distanceFactor = 0.01;
+let sizeFactor = 1;
+let orbitRingSize = 10000;
+
+// Initiate Celestial Bodies
+sun = new Body(0, 696000000 / 1, "https://i.imgur.com/ov9baz1.png");
+
+mercury = new Body(0.3871 * AU, 2440000, "https://i.imgur.com/fmqBvhs.png", sun);
+venus = new Body(0.7233 * AU, 6050000, "https://i.imgur.com/rK7oXXp.png", sun);
+earth = new Body(1 * AU, 6380000, "https://i.imgur.com/GcZoFfO.png", sun);
+mars = new Body(1.5237 * AU, 3396000, "https://i.imgur.com/aDS27yj.png", sun);
+jupiter = new Body(5.2034 * AU, 71490000, "https://i.imgur.com/q8fVc55.png", sun);
+saturn = new Body(9.5371 * AU, 60280000 * 2.31, "https://i.imgur.com/IxnJiPE.png", sun);
+uranus = new Body(19.191 * AU, 25650000 * 1.92, "https://i.imgur.com/lgeuZen.png", sun);
+neptune = new Body(30.069 * AU, 24760000, "https://i.imgur.com/BkyIAbv.png", sun);
+
+moon = new Body(384402000, 1737500, "https://i.imgur.com/463bRKt.png", earth);
+
+
+// Set starting position
+rocket = new Rocket(new Vector(earth.pos.x, earth.pos.y), 5000);
+
+
+
+// Update
+function update() {
+    fill("black");
+
+    // Planet Loop
+    planets.forEach(planet => {
+    planet.update();
+    planet.draw();
+    });
+
+    rocket.update();
+    rocket.draw();
+
+
+    // Input
+    if(keyboard.w) rocket.velocity.y -= rocket.acceleration;
+    if(keyboard.a) rocket.velocity.x -= rocket.acceleration;
+    if(keyboard.s) rocket.velocity.y += rocket.acceleration;
+    if(keyboard.d) rocket.velocity.x += rocket.acceleration;
+
+    if(keyboard.space) rocket.lockToBody(earth);
+
+    if(mouse.left) {scale(1.1, 1.1); orbitRingSize *= (10/11)}
+    if(mouse.right) {scale(0.9, 0.9); orbitRingSize *= (10/9)}
+}
+
+</script>

@@ -1,0 +1,44 @@
+<script src="https://koda.nu/simple.js">
+
+  var blobColors = ["salmon","AntiqueWhite", "BurlyWood", "DarkOliveGreen"];
+
+  var blobs = [];
+
+  class Blob {
+    constructor(x, y, size, sizeTarget, speed, color) {
+      this.x = x;
+      this.y = y;
+      this.size = size;
+      this.sizeTarget = sizeTarget;
+      this.speed = speed;
+      this.color = color;
+
+      blobs.push(this);
+    }
+    draw() {
+      ring(this.x, this.y, this.size, 10, "white");
+      circle(this.x, this.y, this.size, this.color);
+    }
+  }
+
+
+  for(var i = 0; i < 500; i++) {
+    new Blob(random(totalWidth), random(totalHeight), random(50)+10, random(100)+10, random(100)/100, randomAlternative(blobColors));
+  }
+
+
+  // Loopar
+  function update() {
+    fill("teal");
+
+
+    // Blob loop
+    blobs.forEach(blob => {
+      blob.draw();
+      if(blob.size < blob.sizeTarget) blob.size += blob.speed;
+      if(blob.size > blob.sizeTarget) blob.size -= blob.speed;
+    });
+
+  }
+
+</script>

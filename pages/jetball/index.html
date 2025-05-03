@@ -1,0 +1,390 @@
+<script src="https://koda.nu/simple.js">
+
+  //RGBA
+  function mixRGBA(red, green, blue, alpha)
+  {
+    return "rgba(" + red + "," + green + "," + blue + "," + alpha.toFixed(3) + ")";
+  }
+
+
+  // Math
+  class Math{
+    constructor(){
+      this.pi = 3.141592;
+    }
+  }
+  var math = new Math;
+
+
+  // Physics
+  class Physics{
+    constructor(){
+      this.g = 0.982;
+      this.airResistance = 0.995;
+      this.friction = 0.9;
+    }
+  }
+  var physics = new Physics;
+
+
+  // Entities
+  var entityList = [];
+
+
+  // Players
+  var playerList = [];
+  class Player{
+    constructor(pos, color, control, name){
+      this.pos = {x:pos.x, y:pos.y};
+      this.size = 20;
+      this.color = color;
+      this.speed = {x:0, y:0}
+      this.ground = false;
+      this.acc = {x:1, y:0.5};
+      this.controlScheme = control;
+      this.name = name;
+      this.bounciness = 0.8;
+    }
+  }
+
+
+
+  // Particles
+  var particleList = [];
+  class Particle{
+    constructor(pos, size, color, dir, speed, ageing){
+      this.pos = {x:pos.x, y:pos.y};
+      this.size = size;
+      this.r = color.R;
+      this.g = color.G;
+      this.b = color.B;
+      this.a = color.A;
+      this.color = mixRGBA(this.r,this.g,this.b,this.a);
+      this.speed = speed;
+      this.dir = dir;
+      this.ageing = ageing;
+    }
+  }
+
+
+
+  // Balls
+  var ballList = [];
+  class Ball{
+    constructor(pos, size, color){
+      this.pos = {x:pos.x, y:pos.y};
+      this.size = {x:size.x, y:size.y};
+      this.color = color;
+      this.speed = {x:0, y:0};
+      this.bounciness = 0.8;
+    }
+  }
+
+
+
+  // Blocks
+  var blockList = [];
+  class Block{
+    constructor(pos, size, color){
+      this.pos = {x: pos.x, y: pos.y};
+      this.size = {x: size.x, y: size.y};
+      this.color = color;
+    }
+  }
+
+
+
+  // Player init
+  var playerCount = prompt("Amount of players:")
+  for(var i = 0; i < playerCount; i++){
+    alert("Player " + (i+1))
+    var name = prompt("Name:")
+    var color = prompt("Color:")
+    var control = prompt("Control Scheme:")
+    var p = new Player({x:random(totalWidth-40)+20, y:random(totalHeight-40)+20}, color, control, name);
+    playerList.push(p);
+  }
+  if(playerCount == 0) {
+    var p = new Player({x:random(totalWidth-40)+20, y:random(totalHeight-40)+20}, "black", "wasd", "[DEBUG]");
+    playerList.push(p);
+  }
+
+
+
+
+// Loop
+  function gameEngine() {
+    blocks();
+    players();
+    particles();
+
+    entityList = ballList.concat(blockList);
+  }
+
+
+
+// Player Loop
+  function players() {
+    for(var i = 0; i < playerList.length; i++){
+      var player = playerList[i];
+
+
+      // Controls
+      if((player.controlScheme == "wasd" && keyboard.a) || (player.controlScheme == "tfgh" && keyboard.f) || (player.controlScheme == "ijkl" && keyboard.j) || (player.controlScheme == "arrows" && keyboard.left)){player.speed.x -= player.acc.x}
+      if((player.controlScheme == "wasd" && keyboard.d) || (player.controlScheme == "tfgh" && keyboard.h) || (player.controlScheme == "ijkl" && keyboard.l) || (player.controlScheme == "arrows" && keyboard.right)){player.speed.x += player.acc.x}
+      if((player.controlScheme == "wasd" && keyboard.w) || (player.controlScheme == "tfgh" && keyboard.t) || (player.controlScheme == "ijkl" && keyboard.i) || (player.controlScheme == "arrows" && keyboard.up)){
+        player.speed.y -= player.acc.y + physics.g
+        var r = random(155)+100;
+        var p1 = new Particle({x:player.pos.x + player.size + 0.2 * player.size, y:player.pos.y + player.size}, random(0.15 * player.size) + 0.1 * player.size, {R:r, G:r, B:r, A:0.5}, (math.pi/2) + (random(200)-100)/100, 1, 0.01);
+        var p2 = new Particle({x:player.pos.x + player.size + 0.2 * player.size, y:player.pos.y + player.size}, random(0.2 * player.size) + 0.15 * player.size, {R:random(55)+200, G:150, B:66, A:0.5}, (math.pi/2) + (random(100)-50)/100, 1, 0.05);
+        var p3 = new Particle({x:player.pos.x - player.size - 0.2 * player.size, y:player.pos.y + player.size}, random(0.15 * player.size) + 0.1 * player.size, {R:r, G:r, B:r, A:0.5}, (math.pi/2) + (random(200)-100)/100, 1, 0.01);
+        var p4 = new Particle({x:player.pos.x - player.size - 0.2 * player.size, y:player.pos.y + player.size}, random(0.2 * player.size) + 0.15 * player.size, {R:random(55)+200, G:150, B:66, A:0.5}, (math.pi/2) + (random(100)-50)/100, 1, 0.05);
+        particleList.push(p1);
+        particleList.push(p2);
+        particleList.push(p3);
+        particleList.push(p4);
+      }
+
+
+      // Boundaries & gravity
+      if(player.pos.y < player.size + 5){player.speed.y = abs(player.speed.y) * player.bounciness}
+      if(player.pos.x < player.size){player.speed.x = abs(player.speed.x) * player.bounciness}
+      if(player.pos.x > totalWidth - player.size){player.speed.x = -abs(player.speed.x) * player.bounciness}
+
+      if(player.pos.y < totalHeight - player.size - 5){player.ground = false}
+      else {player.ground = true}
+      if(player.ground == false){player.speed.y += physics.g}
+      if(player.ground == true){player.speed.y = -abs(player.speed.y) * player.bounciness}
+
+
+      // Speed & Pos
+      player.speed.x *= physics.friction;
+      player.speed.y *= physics.airResistance;
+
+
+      player.pos.x += player.speed.x;
+      player.pos.y += player.speed.y;
+
+
+      // Draw
+      circle(player.pos.x, player.pos.y, player.size, player.color);
+      rectangle(player.pos.x + (player.size -4), player.pos.y, 0.4 * player.size, player.size, player.color)
+      rectangle(player.pos.x - (player.size -4), player.pos.y, -0.4 * player.size, player.size, player.color)
+      text(player.pos.x - player.name.length*4, player.pos.y - player.size -5, 10, player.name)
+    }
+  }
+
+
+
+
+// Ball loop
+  function  balls() {
+    for(var i = 0; i < ballList.length; i++){
+      var  ball =  ballList[i];
+
+      // Gravity
+      if(ball.pos.y < totalWidth - ball.size.x) ball.speed.y += physics.g;
+
+      // Boundaries
+      if(ball.pos.y < ball.size.x + 5){ball.speed.y = abs(ball.speed.y) * ball.bounciness}
+      if(ball.pos.x < ball.size.x){ball.speed.x = abs(ball.speed.x) * ball.bounciness}
+      if(ball.pos.x > totalWidth - ball.size.x){ball.speed.x = -abs(ball.speed.x) * ball.bounciness}
+      if(ball.pos.y > totalHeight - ball.size.x - 5){ball.speed.y = -abs(ball.speed.y) * ball.bounciness}
+
+      // Air Resistance
+      ball.speed.y *= physics.airResistance;
+      ball.speed.x *= physics.airResistance;
+
+      // Movement
+      ball.pos.x += ball.speed.x;
+      ball.pos.y += ball.speed.y;
+
+      for(var j = 0; j < entityList.length; j++){
+      var entity = entityList[j];
+
+        if(i != j){
+          var D = distance(ball.pos, entity.pos)
+
+          if(D < ball.size.x + entity.size.x){
+            ball.speed.x = (ball.pos.x - entity.pos.x) * 0.2;
+            ball.speed.y = (ball.pos.y - entity.pos.y) * 0.2;
+          }
+        }
+      }
+
+
+      // Particles
+      particleList.push(new Particle({x:ball.pos.x + random(ball.size.x*2)-ball.size.x, y:ball.pos.y + random(ball.size.x)}, random((1/3)*ball.size.x)+(1/6)*ball.size.x, {R:0, G:128, B:128, A:0.9}, random(2*math.pi), 0.3, 0.02));
+
+      // Draw
+      circle(ball.pos.x, ball.pos.y, ball.size.x, ball.color);
+    }
+  }
+
+
+
+
+
+// Particle Loop
+  function particles() {
+    for(var i = 0; i < particleList.length; i++){
+      var particle = particleList[i];
+
+      // Death
+      if(particle.a < 0){particleList.splice(i,1)}
+
+      // Movement
+      particle.pos.x += particle.speed * cos(particle.dir);
+      particle.pos.y += particle.speed * sin(particle.dir);
+
+      // Draw
+      particle.color = mixRGBA(particle.r,particle.g,particle.b,particle.a);
+      circle(particle.pos.x, particle.pos.y, particle.size, particle.color);
+
+      // Age
+      particle.a -= particle.ageing;
+    }
+  }
+
+
+
+
+
+// Block Loop
+  function blocks(){
+    for(var i = 0; i < blockList.length; i++){
+      var block = blockList[i];
+
+
+
+
+      // Draw
+      rectangle(block.pos.x, block.pos.y, block.size.x, block.size.y, block.color);
+    }
+  }
+
+
+
+
+  var team1 = {points:0};
+  var team2 = {points:0};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  //////// Levels /////////
+
+  // Loop
+  var currentWorld = 0;
+  function update() {
+    clearScreen();
+
+    // Game Selector
+    switch(currentWorld){
+      case 0:
+        lobby();
+        break;
+      case 1:
+        football();
+        break;
+      default:
+        lobby();
+    }
+  }
+
+
+  // Lobby
+  function lobby() {
+
+    //Imports
+    gameEngine();
+
+    text((totalWidth/2) - 130, 150, 50, "Lobby", "black");
+
+    if(keyboard.one){
+      currentWorld = 1;
+      for(var i = 0; i < 1; i++){
+        ballList.push(new Ball({x:random(totalWidth), y:random(totalHeight)}, {x: 50, y:50}, "teal"));
+      }
+    }
+    if(keyboard.two){currentWorld = 2}
+    if(keyboard.three){currentWorld = 3}
+    if(keyboard.four){currentWorld = 4}
+    if(keyboard.five){currentWorld = 5}
+    if(keyboard.six){currentWorld = 6}
+    if(keyboard.seven){currentWorld = 7}
+    if(keyboard.eight){currentWorld = 8}
+    if(keyboard.nine){currentWorld = 9}
+  }
+
+
+  // Football
+  function football() {
+
+    // Imports
+    gameEngine();
+    balls();
+
+    // Score
+    text((totalWidth/2)-200, 30, 20, "Team 1: " + team1.points + "  Team 2: " + team2.points)
+
+    // Ball Loop
+    for(var i = 0; i < ballList.length; i++){
+      var ball = ballList[i];
+
+      // Detect points
+      if(ball.pos.x < ball.size.x){
+        team2.points++
+        particleList.push(new Particle({x:ball.pos.x + random(ball.size.x*2)-ball.size.x, y:ball.pos.y + random(ball.size.x)}, random((1/4)*ball.size.x)+(1/6)*ball.size.x, {R:200, G:200, B:15, A:0.9}, random(2*math.pi), 0.3, 0.01));
+      }
+      if(ball.pos.x > totalWidth-ball.size.x){
+        team1.points++
+        particleList.push(new Particle({x:ball.pos.x + random(ball.size.x*2)-ball.size.x, y:ball.pos.y + random(ball.size.x)}, random((1/4)*ball.size.x)+(1/6)*ball.size.x, {R:200, G:200, B:15, A:0.9}, random(2*math.pi), 0.3, 0.01));
+      }
+
+
+      // Player Collisions
+      for(var j = 0; j < playerList.length; j++){
+        var player = playerList[j];
+
+        if( distance(ball.pos,player.pos) < ball.size.x + player.size){
+          ball.speed.x = (ball.pos.x - player.pos.x) * (0.3 + player.speed.x/50);
+          ball.speed.y = (ball.pos.y - player.pos.y) * (0.8 + player.speed.y/50);
+        }
+      }
+    }
+
+
+
+    // Exit
+    if(keyboard.enter){
+      currentWorld = 0;
+      ballList.pop(playerList.length);
+    };
+  }
+
+</script>

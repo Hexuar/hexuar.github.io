@@ -1,0 +1,433 @@
+<script src="https://koda.nu/simple.js">
+
+   //RGBA
+
+  function mixRGBA(red, green, blue, alpha)
+  {
+    return "rgba(" + red + "," + green + "," + blue + "," + alpha.toFixed(3) + ")";
+  }
+
+
+  /////////////////////////// VECTORS //////////////////////////////
+
+// with added 'toString' && 'draw' functions
+
+/*
+Simple 2D JavaScript Vector Class
+
+Hacked from evanw's lightgl.js
+https://github.com/evanw/lightgl.js/blob/master/src/vector.js
+*/
+
+function Vector(x, y) {
+	this.x = x || 0;
+	this.y = y || 0;
+}
+
+/* INSTANCE METHODS */
+
+Vector.prototype = {
+	negative: function() {
+		this.x = -this.x;
+		this.y = -this.y;
+		return this;
+	},
+	add: function(v) {
+		if (v instanceof Vector) {
+			this.x += v.x;
+			this.y += v.y;
+		} else {
+			this.x += v;
+			this.y += v;
+		}
+		return this;
+	},
+	subtract: function(v) {
+		if (v instanceof Vector) {
+			this.x -= v.x;
+			this.y -= v.y;
+		} else {
+			this.x -= v;
+			this.y -= v;
+		}
+		return this;
+	},
+	multiply: function(v) {
+		if (v instanceof Vector) {
+			this.x *= v.x;
+			this.y *= v.y;
+		} else {
+			this.x *= v;
+			this.y *= v;
+		}
+		return this;
+	},
+	divide: function(v) {
+		if (v instanceof Vector) {
+			if(v.x != 0) this.x /= v.x;
+			if(v.y != 0) this.y /= v.y;
+		} else {
+			if(v != 0) {
+				this.x /= v;
+				this.y /= v;
+			}
+		}
+		return this;
+	  },
+	  equals: function(v) {
+		return this.x == v.x && this.y == v.y;
+	  },
+	  dot: function(v) {
+		return this.x * v.x + this.y * v.y;
+	  },
+	  cross: function(v) {
+		return this.x * v.y - this.y * v.x
+	  },
+	  length: function() {
+		return Math.sqrt(this.dot(this));
+	  },
+	  normalize: function() {
+		return this.divide(this.length());
+	  },
+	  min: function() {
+		return Math.min(this.x, this.y);
+	  },
+	  max: function() {
+		return Math.max(this.x, this.y);
+	  },
+	  toAngles: function() {
+		return -Math.atan2(-this.y, this.x);
+	  },
+	  angleTo: function(a) {
+		return Math.acos(this.dot(a) / (this.length() * a.length()));
+	  },
+	  toArray: function(n) {
+	  	return [this.x, this.y].slice(0, n || 2);
+	  },
+	  clone: function() {
+	  	return new Vector(this.x, this.y);
+	  },
+	  set: function(x, y) {
+	  	this.x = x; this.y = y;
+	  	return this;
+	  },
+  	  toString: function() {
+  		return "{"+this.x+", "+this.y+"}";
+	  },
+  	  draw: function(color = "black", size = 2) {
+        line(0, 0, this.x, this.y, size, color);
+        var vector1 = new Vector(this.x, this.y);
+        var vector = vector1.subtract(new Vector(cos(this.toAngles())*size*5,sin(this.toAngles())*size*5));
+        triangle(this.x, this.y, vector.x+(size*2.5*sin(-this.toAngles())), vector.y+(size*2.5*cos(-this.toAngles())), vector.x-(size*2.5*sin(-this.toAngles())), vector.y-(size*2.5*cos(-this.toAngles())), color)
+      }
+  };
+
+  /* STATIC METHODS */
+  Vector.negative = function(v) {
+  	return new Vector(-v.x, -v.y);
+  };
+  Vector.add = function(a, b) {
+	if (b instanceof Vector) return new Vector(a.x + b.x, a.y + b.y);
+	else return new Vector(a.x + b, a.y + b);
+  };
+  Vector.subtract = function(a, b) {
+	if (b instanceof Vector) return new Vector(a.x - b.x, a.y - b.y);
+	else return new Vector(a.x - b, a.y - b);
+  };
+  Vector.multiply = function(a, b) {
+    if (b instanceof Vector) return new Vector(a.x * b.x, a.y * b.y);
+	else return new Vector(a.x * b, a.y * b);
+  };
+  Vector.divide = function(a, b) {
+	if (b instanceof Vector) return new Vector(a.x / b.x, a.y / b.y);
+	else return new Vector(a.x / b, a.y / b);
+  };
+  Vector.equals = function(a, b) {
+	return a.x == b.x && a.y == b.y;
+   };
+  Vector.dot = function(a, b) {
+	return a.x * b.x + a.y * b.y;
+  };
+  Vector.cross = function(a, b) {
+	return a.x * b.y - a.y * b.x;
+  };
+
+
+///////////////////////////////(vectors)///////////////////////////////////
+/////////////////////////////// CLASSES ///////////////////////////////////
+
+  // RAYS
+  var rayList = [];
+  Ray = class {
+    constructor(position = new Vector(), angle = 0, size = 1, color = new Color()) { // IOR = index of refraction
+      this.p = position;
+      this.l = new Vector(cos(angle), sin(angle));
+      this.color = color;
+      this.size = size;
+
+      rayList.push(this);
+    }
+    step() {
+      this.p.add(Vector.divide(this.l, 0.5));
+    }
+    reflect(a) {
+      var n = new Vector(cos(a), sin(a));
+      this.l.subtract(Vector.multiply(new Vector(2,2), Vector.multiply(new Vector(Vector.dot(this.l, n),Vector.dot(this.l, n)), n)));
+    }
+  }
+
+  // BOXES
+  var boxList = [];
+  Box = class {
+    constructor(position = new Vector(), size = new Vector(), color = new Color()) {
+      this.p = position;
+      this.s = size;
+      this.color = color;
+      boxList.push(this);
+    }
+  }
+
+  // BALLS
+  var ballList = [];
+  Ball = class {
+    constructor(position = new Vector(), radius = 0, color = new Color()) {
+      this.p = position;
+      this.r = radius;
+      this.color = color;
+      ballList.push(this);
+    }
+  }
+
+  // LIGHT
+  function light(pos, d, size, color = new Color()) {
+    for(var a = 0; a < (2*pi); a+=d){
+      var dir = new Vector(cos(a), sin(a));
+      new Ray(Vector.add(pos, new Vector(0,0)), a, size, new Color(color.r, color.b, color.g));
+    }
+  }
+
+  // Color
+  Color = class {
+    constructor(r = 1, g = 1, b = 1, a = 1) {
+      this.r = r;
+      this.g = g;
+      this.b = b;
+      this.a = a;
+    }
+    get() {
+      return mixColor(this.r * 255, this.g * 255, this.b * 255);
+    }
+    getRGBA() {
+      return mixRGBA(this.r * 255, this.g * 255, this.b * 255, this.a)
+    }
+  }
+
+/////////////////////////////////(classes)//////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // MAIN
+  function main() {
+    rayList.forEach((element, index, array) => {
+      // Kill
+      if(element.p.x < 0 || element.p.x > totalWidth || element.p.y < 0 || element.p.y > totalHeight) array.splice(index, 1);
+
+      // Step
+      element.step();
+
+      // Boxes
+      boxList.forEach((box, index2, array2) => {
+        // Draw
+        rectangle(box.p.x, box.p.y, box.s.x, box.s.y, box.color.get());
+
+        // Collide
+        if(element.p.x > box.p.x && element.p.x < box.p.x + box.s.x && element.p.y > box.p.y && element.p.y < box.p.y + 2) {
+          var a = pi/2;
+        }
+        if(element.p.x > box.p.x && element.p.x < box.p.x + box.s.x && element.p.y < box.p.y + box.s.y && element.p.y > box.p.y + box.s.y - 2 ) {
+          var a = 3*pi/2;
+        }
+        if(element.p.y > box.p.y && element.p.y < box.p.y + box.s.y && element.p.x > box.p.x && element.p.x < box.p.x + 2) {
+          var a = pi;
+        }
+        if(element.p.y > box.p.y && element.p.y < box.p.y + box.s.y && element.p.x < box.p.x + box.s.x && element.p.x > box.p.x + box.s.x - 2 ) {
+          var a = 0;
+        }
+
+        if(a != undefined) {
+          element.reflect(a);
+          //element.color.r *= box.color.r;
+          //element.color.g *= box.color.g;
+          //element.color.b *= box.color.b;
+          element.color.a *= (box.color.r + box.color.g + box.color.b)/3;
+        }
+
+      });
+
+        // Balls
+      ballList.forEach((ball, index3, array3) => {
+        // Draw
+        circle(ball.p.x, ball.p.y, ball.r, ball.color.get());
+
+        // Collide
+        if(distance(ball.p.x, ball.p.y, element.p.x, element.p.y) < ball.r){
+          var n = Vector.subtract(ball.p, element.p);
+          var a = Math.atan2(n.y, n.x);
+          element.reflect(a);
+        }
+      });
+
+      // Draw Light
+      circle(element.p.x, element.p.y, element.size, element.color.getRGBA());
+    });
+  }
+
+
+
+
+
+
+
+  // Mouse Func
+  mouse.Lheld = false;
+  mouse.Lpressed = false;
+  mouse.Lreleased = false;
+  mouse.Rheld = false;
+  mouse.Rpressed = false;
+  mouse.Rreleased = false;
+
+  function mouseFunc() {
+    mouse.pos = new Vector(mouse.x, mouse.y);
+
+    // Left
+    mouse.Lpressed = false;
+    mouse.Lreleased = false;
+    if(mouse.left && !mouse.Lheld) {
+      mouse.Lpressed = true;
+      mouse.Lheld = true;
+    }
+    if(!mouse.left && mouse.Lheld) {
+      mouse.Lreleased = true;
+      mouse.Lheld = false;
+    }
+
+    // Right
+    mouse.Rpressed = false;
+    mouse.Rreleased = false;
+    if(mouse.right && !mouse.Rheld) {
+      mouse.Rpressed = true;
+      mouse.Rheld = true;
+    }
+    if(!mouse.right && mouse.Rheld) {
+      mouse.Rreleased = true;
+      mouse.Rheld = false;
+    }
+  }
+
+
+
+
+
+
+
+
+
+  updatesPerSecond = 1000;
+  var pos = {};
+
+  // create rays
+  light(new Vector(totalWidth/2, totalHeight/2), 0.01);
+
+  var running = false;
+  var smoothing = false;
+  var ballRadius = 20;
+  var color = new Color(0.5, 0.5, 0.5);
+
+  // UPDATE
+  function update() {
+    // Imports
+    mouseFunc();
+
+    // Main
+    if(running) {
+      main();
+    }
+    else if(smoothing){
+      smooth();
+    }
+    else {
+      fill("black");
+
+
+      // Select color
+      if(keyboard.one) color = new Color(0.5, 0.5, 0.5);
+      if(keyboard.two) color = new Color(0.5, 0.0, 0.0);
+      if(keyboard.three) color = new Color(0.0, 0.5, 0.0);
+      if(keyboard.four) color = new Color(0.0, 0.0, 0.5);
+      if(keyboard.five) color = new Color(1, 1, 1);
+
+      // Draw
+      circle(totalWidth/2, totalHeight/2, 2, "white");
+      boxList.forEach((box, index, array) => {
+        rectangle(box.p.x, box.p.y, box.s.x, box.s.y, box.color.get());
+      });
+      ballList.forEach((ball, index, array) => {
+        circle(ball.p.x, ball.p.y, ball.r, ball.color.get());
+      });
+
+      // Start
+      if(keyboard.space) {
+        fill("black");
+        running = true;
+      };
+
+      // Guide lines
+      if(mouse.left && pos.a != undefined) {
+        line(pos.a.x, pos.a.y, pos.a.x, mouse.y, 1, "white");
+        line(pos.a.x, pos.a.y, mouse.x, pos.a.y, 1, "white");
+        line(mouse.x, mouse.y, pos.a.x, mouse.y, 1, "white");
+        line(mouse.x, mouse.y, mouse.x, pos.a.y, 1, "white");
+      }
+
+      ring(mouse.x, mouse.y, ballRadius, 1, "white");
+      //
+    }
+
+    // Shapes
+    if(mouse.Lpressed) {
+      pos.a = mouse.pos;
+    }
+    if(mouse.Lreleased) {
+      pos.b = mouse.pos;
+      var p = new Vector(Math.min(pos.a.x, pos.b.x), Math.min(pos.a.y, pos.b.y));
+      var p2 = new Vector(Math.max(pos.a.x, pos.b.x), Math.max(pos.a.y, pos.b.y));
+      var s = Vector.subtract(p2, p);
+      new Box(p, s, color);
+    }
+    if(mouse.Rpressed) new Ball(mouse.pos, ballRadius, color);
+    if(keyboard.up) ballRadius++;
+    if(keyboard.down && ballRadius > 0) ballRadius--;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
