@@ -43,6 +43,10 @@ p.page-element {
     margin: 5px;
 }
 
+.page-timestamp {
+    margin: 5px;
+    text-align: right;
+}
 
 /* Navigation bar */
 ul.nav {

@@ -1,39 +1,19 @@
 const pageList = document.getElementById("pageList");
+const template = document.querySelector("#pageElement");
 
-class Page {
-    constructor(id, title, description) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
+function AddToPageList(page) {
+    const clone = template.content.cloneNode(true);
 
-        this.addToPageList();
-    }
+    let title = clone.querySelector("#title");
+    title.innerHTML = page.title;
 
-    addToPageList() {
-        let li = document.createElement("li");
+    let description = clone.querySelector("#description");
+    description.innerHTML = page.description;
 
-        let div = document.createElement("div");
-        div.className = "page-element";
-        div.href = "./pages/" + this.id + "/index.html";
-        div.onclick = function () {
-            location.href = this.href;
-        };
+    let timestamp = clone.querySelector("#timestamp");
+    timestamp.innerHTML = page.created;
 
-        let title = document.createElement("h4");
-        title.className = "page-element";
-        let titleText = document.createTextNode(this.title);
-        title.appendChild(titleText);
-        div.appendChild(title);
-
-        let description = document.createElement("p");
-        description.className = "page-element";
-        let descriptionText = document.createTextNode(this.description);
-        description.appendChild(descriptionText);
-        div.appendChild(description);
-
-        li.appendChild(div);
-        pageList.appendChild(li);
-    }
+    pageList.appendChild(clone);
 }
 
 // Load all pages
@@ -41,6 +21,6 @@ fetch("./pages/pages.json")
     .then((result) => (data = result.json()))
     .then((data) => {
         data.forEach((page) => {
-            new Page(page.id, page.title, page.description);
+            AddToPageList(page);
         });
     });

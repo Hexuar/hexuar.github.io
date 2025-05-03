@@ -2,26 +2,31 @@
   {
     "id": "test",
     "title": "Test Page",
-    "description": "A simple test page with a bad physics simulation."
+    "description": "A simple test page with a bad physics simulation.",
+    "created": "2025-04-25"
   },
   {
     "id": "map_renderer",
     "title": "Map Renderer",
-    "description": "Renders the Europa Universalis IV map."
+    "description": "Renders the Europa Universalis IV map.",
+    "created": "2023-07-08"
   },
   {
     "id": "sand",
     "title": "Sand",
-    "description": "A simple sand simulation."
+    "description": "A simple sand simulation.",
+    "created": "2024-11-04"
   },
   {
     "id": "clock",
     "title": "Clock",
-    "description": "Testing time with an unorthodox clock design."
+    "description": "Testing time with an unorthodox clock design.",
+    "created": "2024-08-12"
   },
   {
     "id": "blank",
     "title": "Blank",
-    "description": "A blank page."
+    "description": "A blank page.",
+    "created": "2025-05-03"
   }
 ]
