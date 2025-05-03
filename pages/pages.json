@@ -24,12 +24,6 @@
     "created": "2024-08-12"
   },
   {
-    "id": "blank",
-    "title": "Blank",
-    "description": "A blank page.",
-    "created": "2025-05-03"
-  },
-  {
     "id": "runic",
     "title": "Runestone Creator",
     "description": "Creates downloadable runestones.",
