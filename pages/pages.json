@@ -5,6 +5,21 @@
     "description": "A simple test page with a bad physics simulation."
   },
   {
+    "id": "map_renderer",
+    "title": "Map Renderer",
+    "description": "Renders the Europa Universalis map."
+  },
+  {
+    "id": "sand",
+    "title": "Sand",
+    "description": "A simple sand simulation"
+  },
+  {
+    "id": "clock",
+    "title": "Clock",
+    "description": "A test of time."
+  },
+  {
     "id": "blank",
     "title": "Blank",
     "description": "A blank page."
