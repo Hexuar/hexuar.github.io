@@ -22,6 +22,9 @@ function AddToPageList(page) {
 fetch("./pages/pages.json")
     .then((result) => (data = result.json()))
     .then((data) => {
+        data.sort(function (a, b) {
+            return new Date(b.created) - new Date(a.created);
+        });
         data.forEach((page) => {
             AddToPageList(page);
         });
