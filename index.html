@@ -1,15 +1,12 @@
-<!DOCTYPE html>
+<!doctype html>
 
 <head>
+    <title>Hexuar</title>
 
-    <title> Hexuar </title>
-
-    <link rel="stylesheet" href="styles.css">
-
+    <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
-
     <!-- Navigation Bar  -->
     <ul class="nav">
         <li><a class="glow" href="index.html">Home</a></li>
@@ -21,22 +18,17 @@
     <!-- Page list -->
     <div class="page-list">
         <h1>Pages</h1>
-        <ul id="pageList", class="page-list">
-        </ul>
+        <ul id="pageList" class="page-list"></ul>
     </div>
 
     <template id="pageElement">
         <li>
-            <div class="page-element">
-                <h4 id="title" class="page-element"></h4>
-                <p id="description" class="page-element"></p>
-                <p id="timestamp" class="page-timestamp"></p>
-            </div>
+            <p class="page-title"></p>
+            <p></p>
+            <p class="page-timestamp"></p>
         </li>
     </template>
 
-
     <!-- Scripts -->
     <script src="script.js"></script>
-
 </body>

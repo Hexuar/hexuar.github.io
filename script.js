@@ -4,14 +4,16 @@ const template = document.querySelector("#pageElement");
 function AddToPageList(page) {
     const clone = template.content.cloneNode(true);
 
-    let title = clone.querySelector("#title");
-    title.innerHTML = page.title;
+    let div = clone.querySelector("li");
+    div.href = "./pages/" + page.id + "/index.html";
+    div.onclick = function () {
+        location.href = this.href;
+    };
 
-    let description = clone.querySelector("#description");
-    description.innerHTML = page.description;
-
-    let timestamp = clone.querySelector("#timestamp");
-    timestamp.innerHTML = page.created;
+    let elements = clone.querySelectorAll("p");
+    elements[0].innerHTML = page.title;
+    elements[1].innerHTML = page.description;
+    elements[2].innerHTML = page.created;
 
     pageList.appendChild(clone);
 }

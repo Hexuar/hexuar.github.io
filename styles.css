@@ -1,17 +1,20 @@
-/* Background */
 body {
-  background-image: radial-gradient(circle at 100% 100%, #666, #777, #333);
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  font-family: monospace;
-  color: rgba(255, 255, 255, 0.7);
+    /* Background */
+    background-image: radial-gradient(circle at 100% 100%, #666, #777, #333);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
+    /* Globals */
+    font-family: monospace;
+    color: rgba(255, 255, 255, 0.7);
 }
 
 /* Glow */
 .glow {
-  text-shadow: 0 0 4px #fff, 0 0 10px #ead591;
+    text-shadow:
+        0 0 4px #fff,
+        0 0 10px #ead591;
 }
-
 
 /* Pages */
 div.page-list {
@@ -26,51 +29,46 @@ div.page-list {
 ul.page-list {
     list-style-type: none;
     padding: 0;
-
 }
 
-div.page-element {
+.page-list li {
     border: 5px inset rgba(0, 0, 0, 0.4);
     background-color: rgba(0, 0, 0, 0.4);
     cursor: pointer;
-    padding-left: 10px;
 }
-h4.page-element {
-    margin: 5px;
-    margin-left: 0px;
+.page-list li p.page-title {
+    font-weight: bold;
 }
-p.page-element {
-    margin: 5px;
-}
-
-.page-timestamp {
-    margin: 5px;
+.page-list li p.page-timestamp {
     text-align: right;
+}
+.page-list li p {
+    margin: 5px;
 }
 
 /* Navigation bar */
 ul.nav {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: #2b2b2b;
-  box-shadow: 4px 4px hsla(0, 0%, 0%, 0.75);
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #2b2b2b;
+    box-shadow: 4px 4px hsla(0, 0%, 0%, 0.75);
 }
 
 ul.nav li {
-  float: left;
+    float: left;
 }
 
 ul.nav li a {
-  display: block;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-  font-size: large;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: large;
 }
 
 ul.nav li a:hover {
-  background-color: #111;
+    background-color: #111;
 }
