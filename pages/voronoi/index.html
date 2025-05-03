@@ -1,180 +1,177 @@
 <script src="https://koda.nu/simple.js">
 
-  pointList = [];
-
-  //RGBA
-  function mixRGBA(red, green, blue, alpha)
-  {
-    return "rgba(" + red + "," + green + "," + blue + "," + alpha.toFixed(3) + ")";
-  }
-
-  class Point{
-    constructor(pos){
-      this.pos = {x:pos.x, y:pos.y};
-      this.RGB = {r:random(255), g:random(255), b:random(255)};
-      this.color = mixColor(this.RGB.r, this.RGB.g, this.RGB.b);
-      pointList.push(this);
-    }
-    draw(){
-      circle(this.pos.x, this.pos.y, 5, this.color);
-    }
-  }
-
-  // Create Random Points
-  function createPoints(amount) {
-    for(var i = 0; i < amount; i++){
-      var point = new Point({x:random(totalWidth), y:random(totalHeight)});
-    }
-  }
-
-  // Draw Points
-  function drawPoints() {
-    for(var i = 0; i < pointList.length; i++){
-      var point = pointList[i];
-      point.draw();
-    }
-  }
-
-  // Draw screen
-  function drawScreen() {
-    for(var x = 0; x < totalWidth; x++){
-      for(var y = 0; y < totalHeight; y++){
-
-        var Dmin =  {value:99999999, point:-1}
-
-        for(var i = 0; i < pointList.length; i++){
-
-          var point = pointList[i];
-          var D = distance(x, y, point.pos.x, point.pos.y);
-          if(D < Dmin.value){
-            Dmin.value = D;
-            Dmin.point = i;
-          }
-        }
-
-        point = pointList[Dmin.point];
-        circle(x, y, 1, mixRGBA(point.RGB.r, point.RGB.g, point.RGB.b, 0.4));
-
-      }
-    }
-  }
-
-  // Clear Points
-  function clearPoints(){
-    clearScreen();
     pointList = [];
-  }
 
+    //RGBA
+    function mixRGBA(red, green, blue, alpha)
+    {
+      return "rgba(" + red + "," + green + "," + blue + "," + alpha.toFixed(3) + ")";
+    }
 
-
-  // Character Presets
-  function A(){
-    var center = {x:totalWidth/2, y:totalHeight/2};
-      var point = new Point({x:center.x, y:center.y-size})
-      var size = 100
-
-      for(var i = 0; i < size/10; i++){
-        var point = new Point({x:center.x-(size/5)*i, y:center.y-size+(size/5)*i})
-        var point = new Point({x:center.x+(size/5)*i, y:center.y-size+(size/5)*i})
+    class Point{
+      constructor(pos){
+        this.pos = {x:pos.x, y:pos.y};
+        this.RGB = {r:random(255), g:random(255), b:random(255)};
+        this.color = mixColor(this.RGB.r, this.RGB.g, this.RGB.b);
+        pointList.push(this);
       }
-      for(var i = 1; i <= (size/10)-1; i++){
-        var point = new Point({x:center.x-size+(size/5)*i, y:center.y-size+(size/5)*5})
+      draw(){
+        circle(this.pos.x, this.pos.y, 5, this.color);
       }
-  }
-  function B(){
-    var center = {x:totalWidth/2, y:totalHeight/2};
-      var point = new Point({x:center.x, y:center.y-size})
-      var size = 100
+    }
 
-      for(var i = 0; i < (size/10)+1; i++){
-        var point = new Point({x:center.x-size, y:center.y-size+(size/5)*i})
+    // Create Random Points
+    function createPoints(amount) {
+      for(var i = 0; i < amount; i++){
+        var point = new Point({x:random(totalWidth), y:random(totalHeight)});
       }
+    }
+
+    // Draw Points
+    function drawPoints() {
+      for(var i = 0; i < pointList.length; i++){
+        var point = pointList[i];
+        point.draw();
+      }
+    }
+
+    // Draw screen
+    function drawScreen() {
+      for(var x = 0; x < totalWidth; x++){
+        for(var y = 0; y < totalHeight; y++){
+
+          var Dmin =  {value:99999999, point:-1}
+
+          for(var i = 0; i < pointList.length; i++){
+
+            var point = pointList[i];
+            var D = distance(x, y, point.pos.x, point.pos.y);
+            if(D < Dmin.value){
+              Dmin.value = D;
+              Dmin.point = i;
+            }
+          }
+
+          point = pointList[Dmin.point];
+          circle(x, y, 1, mixRGBA(point.RGB.r, point.RGB.g, point.RGB.b, 0.4));
+
+        }
+      }
+    }
+
+    // Clear Points
+    function clearPoints(){
+      clearScreen();
+      pointList = [];
+    }
+
+
+
+    // Character Presets
+    function A(){
+      var center = {x:totalWidth/2, y:totalHeight/2};
+        var point = new Point({x:center.x, y:center.y-size})
+        var size = 100
+
+        for(var i = 0; i < size/10; i++){
+          var point = new Point({x:center.x-(size/5)*i, y:center.y-size+(size/5)*i})
+          var point = new Point({x:center.x+(size/5)*i, y:center.y-size+(size/5)*i})
+        }
+        for(var i = 1; i <= (size/10)-1; i++){
+          var point = new Point({x:center.x-size+(size/5)*i, y:center.y-size+(size/5)*5})
+        }
+    }
+    function B(){
+      var center = {x:totalWidth/2, y:totalHeight/2};
+        var point = new Point({x:center.x, y:center.y-size})
+        var size = 100
+
+        for(var i = 0; i < (size/10)+1; i++){
+          var point = new Point({x:center.x-size, y:center.y-size+(size/5)*i})
+        }
+        for(var i = 1; i <= (size/20)-1; i++){
+          var point = new Point({x:center.x-size+(size/5)*i, y:center.y-size})
+        }
+        for(var i = 1; i <= (size/20)-1; i++){
+          var point = new Point({x:center.x-size+(size/5)*i, y:center.y+size})
+        }
       for(var i = 1; i <= (size/20)-1; i++){
-        var point = new Point({x:center.x-size+(size/5)*i, y:center.y-size})
+          var point = new Point({x:center.x-size+(size/5)*i, y:center.y})
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    var mouse_pressed = false;
+
+    function update() {
+
+      if((mouse.left && mouse_pressed == false)||(mouse.left && keyboard.ctrl)){
+        clearScreen();
+        var point = new Point({x:mouse.x, y:mouse.y});
+        drawPoints();
+        mouse_pressed = true;
       }
-      for(var i = 1; i <= (size/20)-1; i++){
-        var point = new Point({x:center.x-size+(size/5)*i, y:center.y+size})
+      if(mouse.left == false && mouse.right == false){
+        mouse_pressed = false;
       }
-    for(var i = 1; i <= (size/20)-1; i++){
-        var point = new Point({x:center.x-size+(size/5)*i, y:center.y})
+
+      if(mouse.right && mouse_pressed == false){
+        clearScreen();
+        createPoints(80);
+        drawPoints();
+        mouse_pressed = true;
       }
-  }
 
+      if(keyboard.space){
+        clearScreen();
+        drawScreen();
+      }
 
+      if(keyboard.enter){
+        clearPoints();
+      }
 
+      // Character presets
 
+      if(keyboard.a){
+        clearPoints();
+        A();
+        drawPoints();
+      }
+      if(keyboard.e){
+        clearPoints();
+        B();
+        drawPoints();
+      }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  var mouse_pressed = false;
-
-  function update() {
-
-    if((mouse.left && mouse_pressed == false)||(mouse.left && keyboard.ctrl)){
-      clearScreen();
-      var point = new Point({x:mouse.x, y:mouse.y});
-      drawPoints();
-      mouse_pressed = true;
     }
-    if(mouse.left == false && mouse.right == false){
-      mouse_pressed = false;
-    }
-
-    if(mouse.right && mouse_pressed == false){
-      clearScreen();
-      createPoints(80);
-      drawPoints();
-      mouse_pressed = true;
-    }
-
-    if(keyboard.space){
-      clearScreen();
-      drawScreen();
-    }
-
-    if(keyboard.enter){
-      clearPoints();
-    }
-
-    // Character presets
-
-    if(keyboard.a){
-      clearPoints();
-      A();
-      drawPoints();
-    }
-    if(keyboard.e){
-      clearPoints();
-      B();
-      drawPoints();
-    }
-
-  }
-
-
-
 </script>
