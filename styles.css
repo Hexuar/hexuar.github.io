@@ -34,6 +34,11 @@ ul.page-list {
 .page-list li {
     border: 5px inset rgba(0, 0, 0, 0.4);
     background-color: rgba(0, 0, 0, 0.4);
+    margin-top: 10px;
+}
+.page-list li:hover {
+    border: 5px outset rgba(0, 0, 0, 0.4);
+    background-color: rgba(128, 128, 128, 0.1);
     cursor: pointer;
 }
 .page-list li p.page-title {
