@@ -1,0 +1,33 @@
+<!doctype html>
+
+<head>
+    <title>Hexuar</title>
+
+    <link rel="stylesheet" href="styles.css" />
+
+    <script src="scripts/loadhtml.js"></script>
+</head>
+
+<body>
+    <!-- Navigation bar -->
+    <script>
+        loadHTML("navbar.html");
+    </script>
+
+    <!-- Page list -->
+    <div class="page-list">
+        <h1>JavaScript Creations</h1>
+        <ul id="pageList" class="page-list"></ul>
+    </div>
+
+    <template id="pageElement">
+        <li>
+            <p class="page-title"></p>
+            <p></p>
+            <p class="page-timestamp"></p>
+        </li>
+    </template>
+
+    <!-- Scripts -->
+    <script src="scripts/pages.js"></script>
+</body>

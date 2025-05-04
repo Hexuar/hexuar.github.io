@@ -4,28 +4,13 @@
     <title>Hexuar</title>
 
     <link rel="stylesheet" href="styles.css" />
+
+    <script src="scripts/loadhtml.js"></script>
 </head>
 
 <body>
-    <!-- Navigation Bar  -->
-    <ul class="nav">
-        <li><a class="glow" href="index.html">Home</a></li>
-    </ul>
-
-    <!-- Page list -->
-    <div class="page-list">
-        <h1>Creations</h1>
-        <ul id="pageList" class="page-list"></ul>
-    </div>
-
-    <template id="pageElement">
-        <li>
-            <p class="page-title"></p>
-            <p></p>
-            <p class="page-timestamp"></p>
-        </li>
-    </template>
-
-    <!-- Scripts -->
-    <script src="script.js"></script>
+    <!-- Navigation bar -->
+    <script>
+        loadHTML("navbar.html");
+    </script>
 </body>
