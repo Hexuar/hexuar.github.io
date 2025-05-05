@@ -1,8 +1,8 @@
 [
   {
-    "id": "test",
-    "title": "Test Page",
-    "description": "A simple test page with a bad physics simulation.",
+    "id": "beige_balls",
+    "title": "Beige Balls",
+    "description": "A simple ball collision simulator.",
     "created": "2025-04-25"
   },
   {
