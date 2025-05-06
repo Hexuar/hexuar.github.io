@@ -5,7 +5,7 @@ function AddToProjectList(project) {
     const clone = template.content.cloneNode(true);
 
     let div = clone.querySelector("li");
-    div.href = "./projects/" + project.id + "/index.html";
+    div.href = "./project.html?id=" + project.id;
     div.onclick = function () {
         location.href = this.href;
     };
