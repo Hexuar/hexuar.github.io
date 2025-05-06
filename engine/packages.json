@@ -2,7 +2,9 @@
   "packageGroup": "Engine",
   "packageDirectory": "../../engine/",
   "packages": [
+    "math.js",
     "vector2.js",
+    "svg.js",
     "draw.js",
     "canvas.js",
     "input.js"

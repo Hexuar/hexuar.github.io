@@ -167,3 +167,28 @@ function FillText(pos, text, size, style, font = "monospace") {
 
   ctx.fillText(text, pos.x, pos.y);
 }
+
+function StrokeVector(vector, pos = new Vector2(), style, size = 5) {
+    let u = vector.normalize()
+
+    // Calculates positions
+    let posB = Vector2.add(pos, vector);
+    let posC = Vector2.add(Vector2.add(pos, Vector2.subtract(vector, Vector2.multiply(u, 2 * size))), Vector2.multiply(u.normal(), size));
+    let posD = Vector2.subtract(Vector2.add(pos, Vector2.subtract(vector, Vector2.multiply(u, 2 * size))), Vector2.multiply(u.normal(), size));
+
+    // Line
+    ctx.strokeStyle = style;
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y);
+    ctx.lineTo(posB.x, posB.y);
+    ctx.stroke();
+    
+    // Triangle
+    ctx.fillStyle = style;
+    ctx.beginPath();
+    ctx.moveTo(posB.x, posB.y);
+    ctx.lineTo(posC.x, posC.y);
+    ctx.lineTo(posD.x, posD.y);
+    ctx.lineTo(posB.x, posB.y);
+    ctx.fill();
+}
