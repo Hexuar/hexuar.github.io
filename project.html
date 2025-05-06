@@ -1,19 +1,16 @@
 <!DOCTYPE html>
 
 <head>
-    <style>
-        .project {
-            width: 100%;
-            height: 100vh;
-            top: 0px;
-            left: 0px;
-            position: absolute;
-            border: none; 
-            z-index: 0;
-        }
-    </style>
+    <link rel="stylesheet" href="styles/project.css" />
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
 </head>
 
 <body>
+    <div id="infoBox" class="info-box">
+        <button onclick="this.parentElement.hidden = true">x</button>
+        <p style="font-weight: bold; font-size: 15px;"></p>
+        <p></p>
+    </div>
+
     <script src="./scripts/loadproject.js"></script>
 </body>

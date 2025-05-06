@@ -3,12 +3,14 @@
     "id": "beige_balls",
     "title": "Beige Balls",
     "description": "A simple ball collision simulator.",
+    "info": "Press <b>left click</b> to spawn a ball or hold <b>right click</b> to spawn multiple.",
     "created": "2025-04-25"
   },
   {
     "id": "map_renderer",
     "title": "Map Renderer",
     "description": "Renders the Europa Universalis IV map.",
+    "info": "Use <b>WASD</b> to move and <b>scroll</b> to zoom.",
     "created": "2023-07-08"
   },
   {
@@ -33,12 +35,14 @@
     "id": "dungeon_generator",
     "title": "Dungeon Generator",
     "description": "Generates dungeons with a random walk algorithm.",
+    "info": "Reload the page to generate a new dungeon.",
     "created": "2024-11-25"
   },
   {
     "id": "solar_system",
     "title": "Solar System",
     "description": "A scaled down solar system to explore.",
+    "info": "Use <b>WASD</b> to move, <b>left click</b> and <b>right click</b> to zoom in and out.",
     "created": "2024-07-16"
   },
   {
@@ -51,18 +55,21 @@
     "id": "raycasting",
     "title": "Raycasting",
     "description": "Raycast 2D lighting.",
+    "info": "<b>Left click</b> and drag to create rectangles, <b>right click</b> to place circles and use <b>up/down arrows</b> to increase/decrease circle radius.",
     "created": "2022-10-26"
   },
   {
     "id": "gravity_simulator",
     "title": "Gravity Simulator",
     "description": "A 2D gravity simulator.",
+    "info": "Use <b>up/down</b> to adjust the particle mass, <b>left/right</b> to adjust particle size and <b>WASD</b> to set the particle force, then press <b>left click</b> to spawn the particle.",
     "created": "2022-10-18"
   },
   {
     "id": "division_engine",
     "title": "Particle Ball",
     "description": "A particle-emitting ball.",
+    "info": "Use <b>WASD</b> to move around.",
     "created": "2022-09-19"
   },
   {
@@ -75,6 +82,7 @@
     "id": "voronoi",
     "title": "Voronoi",
     "description": "Generate a voronoi pattern from some points.",
+    "info": "<b>Left click</b> to place a point or right click to randomly place points and then press <b>space</b> to generate the pattern. Press <b>enter</b> to clear the canvas.",
     "created": "2022-04-05"
   }
 ]
