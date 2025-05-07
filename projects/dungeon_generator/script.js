@@ -61,7 +61,7 @@ class Dungeon {
 
 
 
-let dungeon = new Dungeon(new Vector2(canvas.width/2, canvas.height/2), 20, 0.1, 0.25);
+let dungeon = new Dungeon(new Vector2(canvas.center.x, canvas.center.y), 20, 0.1, 0.25);
 dungeon.Generate();
 
 function Update() {
