@@ -35,7 +35,7 @@
     "id": "dungeon_generator",
     "title": "Dungeon Generator",
     "description": "Generates dungeons with a random walk algorithm.",
-    "info": "Reload the page to generate a new dungeon.",
+    "info": "Press <b>space</b> to generate a new dungeon.",
     "created": "2024-11-25"
   },
   {

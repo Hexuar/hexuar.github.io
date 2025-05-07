@@ -1,7 +1,3 @@
-Draw.AddLayer()
-
-
-
 class Room {
     constructor(dir) {
         this.doors = new Map();
@@ -21,7 +17,12 @@ class Dungeon {
     }
 
     Generate() {
+        console.groupCollapsed("Generated Rooms");
+
+        this.rooms = new Map();
         this.AddRoom();
+
+        console.groupEnd();
     }
 
     Draw(size, color) {
@@ -60,24 +61,15 @@ class Dungeon {
 
 
 
-let dungeon = new Dungeon(new Vector2(250, 250), 20, 0.1, 0.25);
+let dungeon = new Dungeon(new Vector2(canvas.width/2, canvas.height/2), 20, 0.1, 0.25);
 dungeon.Generate();
 
 function Update() {
-    dungeon.Draw(20, "black");
-}
+    Fill("white");
 
-// Frame Handling
-let t = 0;
-let FPS = 60;
-
-function Tick() {
-    if(t >= 60 / FPS) {
-        t = 0;
-        Update();
+    if (keyboard.pressed(" ")) {
+        dungeon.Generate();
     }
 
-    t++;
-    requestAnimationFrame(Tick)
+    dungeon.Draw(20, "black");
 }
-Tick();
