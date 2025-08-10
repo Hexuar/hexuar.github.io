@@ -6,6 +6,7 @@ if(id != undefined) {
     const iframe = document.createElement("iframe");
     iframe.src = "./projects/" + id + "/index.html";
     iframe.classList.add("project");
+    iframe.scrolling = "no"; // DEPRECATED!
     document.body.appendChild(iframe);
 }
 
