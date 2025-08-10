@@ -84,5 +84,11 @@
     "description": "Generate a voronoi pattern from some points.",
     "info": "<b>Left click</b> to place a point or right click to randomly place points and then press <b>space</b> to generate the pattern. Press <b>enter</b> to clear the canvas.",
     "created": "2022-04-05"
+  },
+  {
+    "id": "boids",
+    "title": "Boids",
+    "description": "A very simple boid simulation.",
+    "created": "2025-08-10"
   }
 ]

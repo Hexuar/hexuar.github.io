@@ -54,6 +54,7 @@ class Vector2 {
         return new Vector2(-this.y, this.x);
     }
     normalize() {
+        if (this.length() == 0) return new Vector2();
         return Vector2.divide(this, this.length());
     }
     length() {
