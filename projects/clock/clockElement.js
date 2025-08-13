@@ -17,7 +17,7 @@ customElements.define("clock-element", ClockElement, { extends: "canvas" });
 
 
 // Draw
-function DrawClock(pos = new Vector2(50,50), radius = 90, color = "gray", backgroundColor = "lightGray", handleColors = ["green","red","orange","yellow"]) {
+function DrawClock(pos = new Vec2(50,50), radius = 90, color = "gray", backgroundColor = "lightGray", handleColors = ["green","red","orange","yellow"]) {
   let handleWidth = radius / 10;
   let date = new Date();
 
@@ -49,7 +49,7 @@ function UpdateClocks() {
     backgroundColor = clock.getAttribute("backgroundColor") || "lightGray";
     handleColors = [clock.getAttribute("millisecondColor") || "green", clock.getAttribute("secondColor") || "red", clock.getAttribute("minuteColor") || "orange", clock.getAttribute("hourColor") || "yellow"];
 
-    DrawClock(new Vector2(radius,radius), radius * 0.9, color, backgroundColor, handleColors)
+    DrawClock(new Vec2(radius,radius), radius * 0.9, color, backgroundColor, handleColors)
   });
   requestAnimationFrame(UpdateClocks);
 }

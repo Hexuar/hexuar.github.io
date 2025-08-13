@@ -28,16 +28,16 @@ class Dungeon {
     Draw(size, color) {
         this.rooms.forEach((room, pos) => {
             let c = pos.x == pos.y && pos.y == 0 ? "red" : color;
-            let worldCoords = Vector2.add(this.origin, Vector2.multiply(pos, size*6/4));
+            let worldCoords = Vec2.add(this.origin, Vec2.mul(pos, size*6/4));
 
-            FillRectangle(worldCoords, new Vector2(size, size), c);
+            FillRectangle(worldCoords, new Vec2(size, size), c);
             room.doors.forEach((bool, door) => {
-                StrokeLine(Vector2.add(worldCoords, size/2), Vector2.add(Vector2.add(worldCoords, size/2),Vector2.multiply(door, size*3/4)), c, size/2);
+                StrokeLine(Vec2.add(worldCoords, size/2), Vec2.add(Vec2.add(worldCoords, size/2),Vec2.mul(door, size*3/4)), c, size/2);
             });
         });
     }
 
-    AddRoom(pos = new Vector2(0,0), dir = new Vector2(1,0)) {
+    AddRoom(pos = new Vec2(0,0), dir = new Vec2(1,0)) {
         if(this.rooms.size > this.maxSize) return;
         console.log(this.rooms.size + "/" + this.maxSize, pos, dir);
 
@@ -48,10 +48,10 @@ class Dungeon {
         let doorDir = dir;
         let possibleDirections = 3 + (pos.x == pos.y && pos.y == 0)
         for(let i = 0; i < possibleDirections; i++) {
-            doorDir = new Vector2(doorDir.y, -doorDir.x);
+            doorDir = new Vec2(doorDir.y, -doorDir.x);
 
             if(Math.random() < 1 / this.rooms.size + this.spawnChance) {
-                this.AddRoom(Vector2.add(pos, doorDir), Vector2.multiply(doorDir, -1));
+                this.AddRoom(Vec2.add(pos, doorDir), Vec2.mul(doorDir, -1));
                 this.rooms.get(pos).doors.set(doorDir, true);
             }
         }
@@ -61,7 +61,7 @@ class Dungeon {
 
 
 
-let dungeon = new Dungeon(new Vector2(canvas.center.x, canvas.center.y), 20, 0.1, 0.25);
+let dungeon = new Dungeon(new Vec2(canvas.center.x, canvas.center.y), 20, 0.1, 0.25);
 dungeon.Generate();
 
 function Update() {

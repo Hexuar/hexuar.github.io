@@ -3,7 +3,7 @@
   "packageDirectory": "../../engine/",
   "packages": [
     "math.js",
-    "vector2.js",
+    "vec2.js",
     "svg.js",
     "draw.js",
     "canvas.js",

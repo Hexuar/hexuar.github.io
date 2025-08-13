@@ -8,11 +8,8 @@ canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
 function UpdateCanvas() {
-    //if(canvas.width != window.innerWidth) canvas.width = window.innerWidth;
-    //if(canvas.height != window.innerHeight) canvas.height = window.innerHeight;
-
-    canvas.size = new Vector2(canvas.width, canvas.height);
-    canvas.center = new Vector2.divide(canvas.size, 2);
+    canvas.size = new Vec2(canvas.width, canvas.height);
+    canvas.center = new Vec2.div(canvas.size, 2);
 
     if (window.Update != undefined) window.Update();
     requestAnimationFrame(UpdateCanvas);
