@@ -7,11 +7,18 @@ canvas.height = window.innerHeight;
 
 document.body.appendChild(canvas);
 
+let oldTime = 0;
+let time;
+
 function UpdateCanvas() {
     canvas.size = new Vec2(canvas.width, canvas.height);
     canvas.center = new Vec2.div(canvas.size, 2);
 
-    if (window.Update != undefined) window.Update();
+    let time = new Date().getTime();
+    let deltaTime = (time - oldTime)/1000;
+    oldTime = time;
+
+    if (window.Update != undefined) window.Update(deltaTime);
     requestAnimationFrame(UpdateCanvas);
 }
 UpdateCanvas();

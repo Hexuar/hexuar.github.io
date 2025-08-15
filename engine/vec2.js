@@ -146,7 +146,7 @@ Vec2.sum = function(vectors) {
     return sum;
 }
 Vec2.normalize = function(u) {
-    return u.div(u.length);
+    return Vec2.div(u, u.length);
 }
 Vec2.distance = function(u, v) {
     return new Vec2.sub(u, v).length;
