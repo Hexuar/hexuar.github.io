@@ -1,4 +1,4 @@
-const WAVE_SPEED = 200;
+const WAVE_SPEED = 400;
 const MAX_WAVE_RADIUS = Vec2(canvas.width, canvas.height).length;
 
 
@@ -93,30 +93,51 @@ class Detector {
 
 
 
-new Source(Vec2(300, 200), 1, 10);
-let A = new Detector(Vec2(200, 200));
-let B = new Detector(Vec2(800, 200));
-let C = new Vec2();
+//new Source(Vec2(700, 600), 1, 1);
+
+let O = Vec2(500, 500), R = Vec2(0, -300);
+let A = new Detector(Vec2.add(O, R));
+R.theta += 2*Math.PI/3;
+let B = new Detector(Vec2.add(O, R));
+R.theta += 2 * Math.PI / 3;
+let C = new Detector(Vec2.add(O, R));
+
+let p1 = new Vec2(), p2 = new Vec2(), p3 = new Vec2();
+let lA = new Vec2(), lB = new Vec2(), lC = new Vec2(), lD = new Vec2(), lE = new Vec2(), lF = new Vec2();
 
 
 function handleData() {
-    if(A.detections.length != 0 && B.detections.length != 0) {
+    if(A.detections.length != 0 && B.detections.length != 0 && C.detections.length != 0) {
         let a = A.detections[0];
         let b = B.detections[0];
+        let c = C.detections[0];
 
-        let dt = (b - a)/1000;
-        let dd = dt * WAVE_SPEED;
         let ab = Vec2.sub(A.position, B.position);
-        let p = Vec2.sum([B.position, Vec2.div(ab, 2), Vec2.mul(Vec2.normalize(ab), dd/2)]);
+        let ac = Vec2.sub(A.position, C.position);
+        let bc = Vec2.sub(B.position, C.position);
 
-        C = p;
-        if(Math.abs(dd - ab.length) < 1) C = new Vec2();
+        let d1 = (b - a)/1000 * WAVE_SPEED;
+        p1 = new Vec2.sum([B.position, Vec2.div(ab, 2), Vec2.mul(Vec2.normalize(ab), d1/2)]);
 
-        lineA = Vec2.add(p, Vec2.mul(ab.left, 1000));
-        lineB = Vec2.add(p, Vec2.mul(ab.left, -1000))
+        let d2 = (c - a)/1000 * WAVE_SPEED;
+        p2 = new Vec2.sum([C.position, Vec2.div(ac, 2), Vec2.mul(Vec2.normalize(ac), d2/2)]);
+
+        let d3 = (c - b)/1000 * WAVE_SPEED;
+        p3 = new Vec2.sum([C.position, Vec2.div(bc, 2), Vec2.mul(Vec2.normalize(bc), d3/2)]);
+
+        ab.normalize();
+        ac.normalize();
+
+        lA = Vec2(ab.dot(p1) / ab.x, 0);
+        lB = Vec2((ab.dot(p1) - ab.y * canvas.height) / ab.x, canvas.height);
+        lC = Vec2(ac.dot(p2) / ac.x, 0);
+        lD = Vec2((ac.dot(p2) - ac.y * canvas.height) / ac.x, canvas.height);
+        lE = Vec2(bc.dot(p3) / bc.x, 0);
+        lF = Vec2((bc.dot(p3) - bc.y * canvas.height) / bc.x, canvas.height);
 
         A.detections.shift();
         B.detections.shift();
+        C.detections.shift();
     }
 }
 
@@ -124,7 +145,15 @@ function handleData() {
 function Update(deltaTime) {
     Fill("white");
 
-    FillCircle(C, 5, "green");
+    FillCircle(p1, 5, "red");
+    FillCircle(p2, 5, "green");
+    FillCircle(p3, 5, "blue");
+
+    StrokeLine(lA, lB, "red");
+    StrokeLine(lC, lD, "green");
+    StrokeLine(lE, lF, "blue");
+
+    if (mouse.pressed(0)) new Wave(mouse.pos, 1);
 
     sources.forEach(source => {
         source.Update();
