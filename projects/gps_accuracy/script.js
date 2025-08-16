@@ -5,8 +5,7 @@ const data = [];
 if("geolocation" in navigator) {
     navigator.geolocation.watchPosition((position) => {
         data.push(Math.round(position.coords.accuracy));
-        console.log(position.coords.accuracy);
-        p.textContent = data;
+        p.textContent = "{" + data + "}";
     });
 }
 else {
