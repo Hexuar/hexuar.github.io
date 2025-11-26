@@ -18,31 +18,33 @@ const PATTERN = CreatePattern((canvas, context) => {
 
 
 function PositionNode() {
-    this.parent.offset = Vec2.sub(mouse.pos, this.offset());
+    this.parent.offset = Vec2.sub(mouse.pos, this.offset);
 }
 
 function RadiusNode() {
     this.parent.radius = Vec2.sub(mouse.pos, this.parent.pos).length;
-    //this.offset = Vec2.sub(mouse.pos, this.parent.pos);
+    this.offset = Vec2.sub(mouse.pos, this.parent.pos);
 }
 
 function ScaleNode() {
-    let d = Vec2.sub(Vec2.sub(this.parent.offset, this.offset(this)), mouse.pos);
+    let d = Vec2.sub(Vec2.sub(this.parent.offset, this.offset), mouse.pos);
     this.parent.size = Vec2.abs(d);
     this.parent.offset = Vec2.add(mouse.pos, Vec2.div(d, 2));
+    this.parent.RecalculateNodeOffsets();
 }
 
 class Node {
-    constructor(parent, offset, behaviour, style = DRAW_COLOR) {
+    constructor(parent, RecalculateOffset, behaviour, style = DRAW_COLOR) {
         this.parent = parent;
-        this.offset = offset;
+        this.RecalculateOffset = RecalculateOffset;
+        this.offset = RecalculateOffset(this);
         this.behaviour = behaviour;
         this.selected = false;
 
         this.style = style;
     }
     get pos() {
-        return Vec2.add(this.parent.pos, this.offset(this));
+        return Vec2.add(this.parent.pos, this.offset);
     }
     Update(visible) {
         if (this.selected) {
@@ -89,6 +91,11 @@ class Obj {
     UpdateNodes() {
         for(const [key, node] of Object.entries(this.nodes)) {
             node.Update(this.IsInside(mouse.pos));
+        }
+    }
+    RecalculateNodeOffsets() {
+        for(const [key, node] of Object.entries(this.nodes)) {
+            node.offset = node.RecalculateOffset(node);
         }
     }
 }
