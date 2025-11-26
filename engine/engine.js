@@ -13,7 +13,7 @@ function loadScript(path) {
 
         script.src = path;
         script.type = "text/javascript";
-        document.body.appendChild(script);
+        document.head.appendChild(script);
 
         console.log(path);
     });

@@ -1,0 +1,19 @@
+:root {
+    --draw-color: rgb(60, 60, 60);
+}
+
+button {
+    position: relative;
+    z-index: 1;
+    border-style: none;
+    background-color: wheat;
+    color: var(--draw-color);
+    box-shadow: 2px 2px var(--draw-color);
+    transition-duration: 0.4s;
+    font-size: 15px;
+}
+
+button:hover {
+    background-color: tan;
+    color: white;
+}

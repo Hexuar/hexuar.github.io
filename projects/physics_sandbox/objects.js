@@ -1,6 +1,6 @@
 const BACKGROUND_COLOR = "beige";
 const DRAW_COLOR = "rgb(60,60,60)";
-const TEXT_SIZE = 10;
+const TEXT_SIZE = 12;
 const TEXT_OFFSET = TEXT_SIZE / 2;
 const NODE_RADIUS = 6;
 const NODE_RANGE = NODE_RADIUS;
@@ -34,25 +34,20 @@ function ScaleNode() {
 }
 
 class Node {
-    constructor(parent, RecalculateOffset, behaviour, style = DRAW_COLOR) {
+    constructor(parent, RecalculateOffset, behaviour, selected = false, style = DRAW_COLOR) {
         this.parent = parent;
         this.RecalculateOffset = RecalculateOffset;
         this.offset = RecalculateOffset();
         this.behaviour = behaviour;
-        this.selected = false;
-
+        this.selected = selected;
         this.style = style;
     }
     get pos() {
         return Vec2.add(this.parent.pos, this.offset);
     }
     Update(visible) {
-        if (this.selected) {
-            if (mouse.pressed(0)) this.selected = false;
-        }
-        else {
-            if (this.IsInRange(mouse.pos) && mouse.pressed(0)) this.selected = true;
-        }
+        if (this.selected && mouse.released(0)) this.selected = false;
+        else if (this.IsInRange(mouse.pos) && mouse.pressed(0)) this.selected = true;
         if (this.selected && this.behaviour != undefined) this.behaviour();
 
         if (this.IsInRange(mouse.pos)) this.Draw(true);
@@ -72,10 +67,13 @@ class Node {
     }
 }
 
+const objects = [];
 class Obj {
     constructor(label = "", anchor) {
         this.label = label;
-        this.anchor = anchor
+        this.anchor = anchor;
+
+        objects.push(this);
     }
     get pos() {
         if (this.anchor != undefined) return Vec2.add(this.anchor.pos, this.offset);
@@ -85,6 +83,9 @@ class Obj {
         this.Draw();
         this.DrawLabel();
         if(this.nodes != undefined) this.UpdateNodes();
+        if(this.IsInside(mouse.pos) && mouse.pressed(1)) {
+            this.label = prompt("Set object label: ");
+        }
     }
     Draw() {}
     DrawLabel() {}
@@ -98,10 +99,13 @@ class Obj {
             node.offset = node.RecalculateOffset();
         }
     }
+    IsInside() {
+        return false;
+    }
 }
 
 class Box extends Obj {
-    constructor(pos = Vec2(), size = Vec2(), label = "") {
+    constructor(pos = Vec2(), size = Vec2(), label = "", selected = false) {
         super(label);
         this.offset = Vec2.add(pos, Vec2.div(size, 2));
         this.size = size;
@@ -110,7 +114,7 @@ class Box extends Obj {
             a: new Node(this, () => { return Vec2.div(this.size, -2) }, ScaleNode),
             b: new Node(this, () => { return Vec2(this.size.x/2, -this.size.y/2) }, ScaleNode),
             c: new Node(this, () => { return Vec2(-this.size.x/2, this.size.y/2) }, ScaleNode),
-            d: new Node(this, () => { return Vec2.div(this.size, 2) }, ScaleNode)
+            d: new Node(this, () => { return Vec2.div(this.size, 2) }, ScaleNode, selected)
         }
     }
     Draw() {
@@ -132,13 +136,13 @@ class Box extends Obj {
 };
 
 class Ball extends Obj {
-    constructor(pos = Vec2(), radius = 0, label = "") {
+    constructor(pos = Vec2(), radius = 0, label = "", selected = false) {
         super(label);
         this.offset = pos;
         this.radius = radius;
         this.nodes = {
             center: new Node(this, () => { return Vec2() }, PositionNode),
-            radius: new Node(this, () => { return Vec2(this.radius, 0) }, RadiusNode)
+            radius: new Node(this, () => { return Vec2(this.radius, 0) }, RadiusNode, selected)
         }
     }
     Draw() {
