@@ -1,5 +1,12 @@
 [
   {
+    "id": "physics_sketcher",
+    "title": "Physics Sketcher",
+    "description": "Make some neat sketches!",
+    "info": "Use the buttons to select an element and press <b>right click</b> to place it. Use <b>left click</b> to confirm and/or interact with the nodes of the element, and press <b>middle mouse button</b> to set the object label.",
+    "created": "2025-11-27"
+  },
+  {
     "id": "beige_balls",
     "title": "Beige Balls",
     "description": "A simple ball collision simulator.",

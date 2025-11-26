@@ -1,4 +1,4 @@
-let selected = "vector";
+let selected = "ball";
 
 function Update() {
     Fill(BACKGROUND_COLOR);
