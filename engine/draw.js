@@ -169,7 +169,7 @@ function FillText(pos, text, size, style, font = "monospace") {
 }
 
 function StrokeVector(vector, pos = new Vec2(), style, size = 5) {
-    let u = vector.normalize()
+    let u = Vec2.normalize(vector);
 
     // Calculates positions
     let posB = Vec2.add(pos, vector);
@@ -191,4 +191,11 @@ function StrokeVector(vector, pos = new Vec2(), style, size = 5) {
     ctx.lineTo(posD.x, posD.y);
     ctx.lineTo(posB.x, posB.y);
     ctx.fill();
+}
+
+function CreatePattern(func, mode = "repeat") {
+    const patternCanvas = document.createElement("canvas");
+    const patternContext = patternCanvas.getContext("2d");
+    func(patternCanvas, patternContext);
+    return ctx.createPattern(patternCanvas, mode);
 }
