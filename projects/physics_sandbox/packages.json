@@ -2,6 +2,7 @@
   "packageGroup": "Game",
   "packageDirectory": "",
   "packages": [
+    "objects.js",
     "script.js"
   ]
 }
