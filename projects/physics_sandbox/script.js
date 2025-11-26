@@ -37,7 +37,7 @@ class Node {
     constructor(parent, RecalculateOffset, behaviour, style = DRAW_COLOR) {
         this.parent = parent;
         this.RecalculateOffset = RecalculateOffset;
-        this.offset = RecalculateOffset(this);
+        this.offset = RecalculateOffset();
         this.behaviour = behaviour;
         this.selected = false;
 
@@ -95,7 +95,7 @@ class Obj {
     }
     RecalculateNodeOffsets() {
         for(const [key, node] of Object.entries(this.nodes)) {
-            node.offset = node.RecalculateOffset(node);
+            node.offset = node.RecalculateOffset();
         }
     }
 }
@@ -106,11 +106,11 @@ class Box extends Obj {
         this.offset = Vec2.add(pos, Vec2.div(size, 2));
         this.size = size;
         this.nodes = {
-            center: new Node(this, (node) => { return Vec2() }, PositionNode),
-            a: new Node(this, node => { return Vec2.div(node.parent.size, -2) }, ScaleNode),
-            b: new Node(this, node => { return Vec2(node.parent.size.x/2, -node.parent.size.y/2) }, ScaleNode),
-            c: new Node(this, node => { return Vec2(-node.parent.size.x/2, node.parent.size.y/2) }, ScaleNode),
-            d: new Node(this, node => { return Vec2.div(node.parent.size, 2) }, ScaleNode)
+            center: new Node(this, () => { return Vec2() }, PositionNode),
+            a: new Node(this, () => { return Vec2.div(this.size, -2) }, ScaleNode),
+            b: new Node(this, () => { return Vec2(this.size.x/2, -this.size.y/2) }, ScaleNode),
+            c: new Node(this, () => { return Vec2(-this.size.x/2, this.size.y/2) }, ScaleNode),
+            d: new Node(this, () => { return Vec2.div(this.size, 2) }, ScaleNode)
         }
     }
     Draw() {
@@ -137,8 +137,8 @@ class Ball extends Obj {
         this.offset = pos;
         this.radius = radius;
         this.nodes = {
-            center: new Node(this, (node) => { return Vec2() }, PositionNode),
-            radius: new Node(this, (node) => { return Vec2(node.parent.radius, 0) }, RadiusNode)
+            center: new Node(this, () => { return Vec2() }, PositionNode),
+            radius: new Node(this, () => { return Vec2(this.radius, 0) }, RadiusNode)
         }
     }
     Draw() {
