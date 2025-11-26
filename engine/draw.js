@@ -168,16 +168,17 @@ function FillText(pos, text, size, style, font = "monospace") {
   ctx.fillText(text, pos.x, pos.y);
 }
 
-function StrokeVector(vector, pos = new Vec2(), style, size = 5) {
+function StrokeVector(vector, pos = new Vec2(), style, size = 2) {
     let u = Vec2.normalize(vector);
 
     // Calculates positions
     let posB = Vec2.add(pos, vector);
-    let posC = Vec2.add(Vec2.add(pos, Vec2.sub(vector, Vec2.mul(u, 2 * size))), Vec2.mul(u.left, size));
-    let posD = Vec2.sub(Vec2.add(pos, Vec2.sub(vector, Vec2.mul(u, 2 * size))), Vec2.mul(u.left, size));
+    let posC = Vec2.add(Vec2.add(pos, Vec2.sub(vector, Vec2.mul(u, 4 * size))), Vec2.mul(u.left, 2 * size));
+    let posD = Vec2.sub(Vec2.add(pos, Vec2.sub(vector, Vec2.mul(u, 4 * size))), Vec2.mul(u.left, 2 * size));
 
     // Line
     ctx.strokeStyle = style;
+    ctx.lineWidth = size;
     ctx.beginPath();
     ctx.moveTo(pos.x, pos.y);
     ctx.lineTo(posB.x, posB.y);

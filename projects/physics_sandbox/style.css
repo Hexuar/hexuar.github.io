@@ -11,6 +11,7 @@ button {
     box-shadow: 2px 2px var(--draw-color);
     transition-duration: 0.4s;
     font-size: 15px;
+    margin-right: 4px;
 }
 
 button:hover {

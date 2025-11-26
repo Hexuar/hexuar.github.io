@@ -1,4 +1,4 @@
-let selected = "box";
+let selected = "vector";
 
 function Update() {
     Fill(BACKGROUND_COLOR);
@@ -10,6 +10,9 @@ function Update() {
                 break;
             case "box":
                 new Box(mouse.pos, Vec2(), "", true);
+                break;
+            case "vector":
+                new Vector(mouse.pos, Vec2(), "", true);
                 break;
         }
     }

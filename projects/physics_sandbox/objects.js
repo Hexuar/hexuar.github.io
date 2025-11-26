@@ -1,5 +1,6 @@
 const BACKGROUND_COLOR = "beige";
 const DRAW_COLOR = "rgb(60,60,60)";
+const LINE_WIDTH = 2;
 const TEXT_SIZE = 12;
 const TEXT_OFFSET = TEXT_SIZE / 2;
 const NODE_RADIUS = 6;
@@ -10,6 +11,8 @@ const PATTERN = CreatePattern((canvas, context) => {
     canvas.height = 10;
     context.lineWidth = 1;
     context.strokeStyle = DRAW_COLOR;
+    context.fillStyle = "rgba(60, 60, 60, 0.1)";
+    context.fillRect(0, 0, 10, 10);
     context.beginPath();
     context.moveTo(0, 0);
     context.lineTo(10, 10);
@@ -30,6 +33,11 @@ function ScaleNode() {
     let d = Vec2.sub(Vec2.sub(this.parent.offset, this.offset), mouse.pos);
     this.parent.size = Vec2.abs(d);
     this.parent.offset = Vec2.add(mouse.pos, Vec2.div(d, 2));
+    this.parent.RecalculateNodeOffsets();
+}
+
+function DirectionNode() {
+    this.parent.dir = Vec2.sub(mouse.pos, this.parent.pos);
     this.parent.RecalculateNodeOffsets();
 }
 
@@ -118,7 +126,7 @@ class Box extends Obj {
         }
     }
     Draw() {
-        StrokeRectangle(this.nodes.a.pos, this.size, DRAW_COLOR, 2);
+        StrokeRectangle(this.nodes.a.pos, this.size, DRAW_COLOR, LINE_WIDTH);
         FillRectangle(this.nodes.a.pos, this.size, PATTERN);
     }
     DrawLabel() {
@@ -146,7 +154,7 @@ class Ball extends Obj {
         }
     }
     Draw() {
-        StrokeCircle(this.pos, this.radius, DRAW_COLOR, 2);
+        StrokeCircle(this.pos, this.radius, DRAW_COLOR, LINE_WIDTH);
         FillCircle(this.pos, this.radius, PATTERN);
     }
     DrawLabel() {
@@ -160,18 +168,30 @@ class Ball extends Obj {
 }
 
 class Vector extends Obj {
-    constructor(pos = Vec2(), dir = Vec2(), label = "", anchor) {
+    constructor(pos = Vec2(), dir = Vec2(), label = "", selected = false, anchor) {
         super(label, anchor);
         this.offset = pos;
         this.dir = dir;
+        this.nodes = {
+            pos: new Node(this, () => { return Vec2() }, PositionNode),
+            dir: new Node(this, () => { return this.dir }, DirectionNode, selected)
+        }
     }
     Draw() {
-        StrokeVector(this.dir, this.pos, DRAW_COLOR);
+        StrokeVector(this.dir, this.pos, DRAW_COLOR, LINE_WIDTH);
         this.DrawLabel();
     }
     DrawLabel() {
         if (this.label == "") return;
         let labelPosition = Vec2.sub(Vec2.add(this.pos, Vec2.div(this.dir, 2)), Vec2(ctx.measureText(this.label).width/2, TEXT_OFFSET));
         FillText(labelPosition, this.label, TEXT_SIZE, DRAW_COLOR);
+    }
+    IsInside(point) {
+        if (point.x > Math.max(this.pos.x, this.pos.x + this.dir.x)) return false;
+        if (point.x < Math.min(this.pos.x, this.pos.x + this.dir.x)) return false;
+        if (point.y > Math.max(this.pos.y, this.pos.y + this.dir.y)) return false;
+        if (point.y < Math.min(this.pos.y, this.pos.y + this.dir.y)) return false;
+        let d = Math.abs(Vec2.cross(Vec2.sub(this.pos, point), Vec2.normalize(this.dir)));
+        return d < NODE_RANGE;
     }
 }

@@ -138,6 +138,9 @@ Vec2.div = function(u, v) {
 Vec2.dot = function(u, v) {
     return u.x * v.x + u.y * v.y;
 }
+Vec2.cross = function(u, v) {
+    return u.x * v.y - u.y * v.x;
+}
 Vec2.sum = function(vectors) {
     let sum = new Vec2();
     vectors.forEach(vector => {
