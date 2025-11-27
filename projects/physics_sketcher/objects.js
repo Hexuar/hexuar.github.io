@@ -20,13 +20,12 @@ function DirectionNode() {
 }
 
 class Node {
-    constructor(parent, RecalculateOffset, behaviour, selected = false, style = DRAW_COLOR) {
+    constructor(parent, RecalculateOffset, behaviour, selected = false) {
         this.parent = parent;
         this.RecalculateOffset = RecalculateOffset;
         this.offset = RecalculateOffset();
         this.behaviour = behaviour;
         this.selected = selected;
-        this.style = style;
     }
     get pos() {
         return Vec2.add(this.parent.pos, this.offset);
@@ -42,10 +41,10 @@ class Node {
     Draw(state) {
         if(state) {
             let d = Vec2.distance(this.pos, mouse.pos);
-            FillCircle(this.pos, NODE_RADIUS * (1 - d / (2 * NODE_RADIUS)), this.style);
+            FillCircle(this.pos, NODE_RADIUS * (1 - d / (2 * NODE_RADIUS)), DRAW_COLOR);
         }
         else {
-            FillCircle(this.pos, NODE_INACTIVE_RADIUS, this.style);
+            FillCircle(this.pos, NODE_INACTIVE_RADIUS, DRAW_COLOR);
         }
     }
     IsInRange(pos) {

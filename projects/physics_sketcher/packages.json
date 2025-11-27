@@ -2,7 +2,7 @@
   "packageGroup": "Game",
   "packageDirectory": "",
   "packages": [
-    "constants.js",
+    "get_css_variables.js",
     "objects.js",
     "script.js"
   ]
