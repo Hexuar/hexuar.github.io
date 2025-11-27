@@ -2,25 +2,14 @@
 const canvas = document.getElementById('mainCanvas');
 const ctx = canvas.getContext('2d');
 
-// Set Canvas Size
-canvas.width = provinceMap.width;
-canvas.height = provinceMap.height;
-
-var movementSpeedSlider = document.getElementById('movementSpeedSlider');
-movementSpeedSlider.oninput = function() {
-    movementSpeed = parseInt(this.value) / canvasScale;
-}
 
 let canvasPos = {x:0, y:0};
 let canvasScale = 1;
 let maxCanvasScale = 10;
 let minCanvasScale = 0.25;
 let zoomMultiplier = 20;
+let movementSpeedSlider = document.getElementById('movementSpeedSlider');
 let movementSpeed = parseInt(movementSpeedSlider.value);
-
-
-
-
 
 
 // Draw Modes
@@ -31,6 +20,14 @@ let drawShadows = true;
 let drawBorders = false;
 
 
+function load() {
+    canvas.width = provinceMap.width;
+    canvas.height = provinceMap.height;
+
+    drawMap();
+}
+
+
 function drawMap() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -39,7 +36,7 @@ function drawMap() {
     if(drawTerrain) ctx.drawImage(waterMap, 0, 0);
     if(drawTerrain) ctx.drawImage(landColorMap, 0, 0);
     if(drawSimpleTerrain) ctx.drawImage(terrainMap, 0, 0);
-    
+
     ctx.filter = 'none';
 
     if(drawProvinces) ctx.drawImage(provinceMap, 0, 0);

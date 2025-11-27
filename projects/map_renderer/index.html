@@ -6,20 +6,20 @@
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <canvas id="mainCanvas"></canvas>
+        <canvas id="mainCanvas" width=0 height=0></canvas>
 
         <div id="ui">
-            <button onclick="drawTerrain = !drawTerrain; drawSimpleTerrain = false; drawProvinces = false; drawMap()">Terrain</button> 
-            <button onclick="drawSimpleTerrain = !drawSimpleTerrain; drawTerrain = false; drawProvinces = false; drawMap()">Simple Terrain</button> 
-            <button onclick="drawProvinces = !drawProvinces; drawTerrain = false; drawSimpleTerrain = false; drawMap()">Provinces</button> 
+            <button onclick="drawTerrain = !drawTerrain; drawSimpleTerrain = false; drawProvinces = false; drawMap()">Terrain</button>
+            <button onclick="drawSimpleTerrain = !drawSimpleTerrain; drawTerrain = false; drawProvinces = false; drawMap()">Simple Terrain</button>
+            <button onclick="drawProvinces = !drawProvinces; drawTerrain = false; drawSimpleTerrain = false; drawMap()">Provinces</button>
             <button onclick="drawShadows = !drawShadows; drawMap();">Shadows</button>
             <button onclick="drawBorders = !drawBorders; drawMap()">Borders</button>
             <div class="tooltip">
-                <input type="range" min="1" max="21" value="11" class="slider" id="movementSpeedSlider">
+                <input type="range" min="1" max="21" value="11" class="slider" id="movementSpeedSlider", oninput="movementSpeed = parseInt(this.value) / canvasScale;">
                 <span class="tooltiptext">Movement Speed</span>
             </div>
         </div>
-        
+
         <script src="scripts/input.js"></script>
         <script src="scripts/image_processing.js"></script>
         <script src="scripts/load_images.js"></script>

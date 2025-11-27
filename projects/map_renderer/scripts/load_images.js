@@ -1,47 +1,46 @@
-// Load Maps
-const normalMap = new Image();
-normalMap.src = 'maps/world_normal.png';
+function LoadImage(src) {
+    return new Promise((resolve, reject) => {
+        let img = new Image();
+        img.onload = () => {
+            console.log("Loaded '" + src + "':", img);
+            resolve(img);
+        };
+        img.onerror = () => {
+            console.log("Error loading '" + src + "':", img);
+            reject();
+        };
+        img.src = src;
+    });
+}
 
-const provinceMap = new Image();
-provinceMap.src = 'maps/provinces.png';
+let normalMap;
+let provinceMap;
+let terrainMap;
+let heightMap;
+let waterColorMap;
+let riverMap;
+let summerColorMap;
+let borderMap = new Image();
+let shadeMap = new Image();
+let waterMap = new Image();
+let riverMask = new Image();
+let landColorMap = new Image();
 
-const terrainMap = new Image();
-terrainMap.src = 'maps/terrain.png';
+async function LoadMaps() {
+    normalMap = await LoadImage('maps/world_normal.png');
+    provinceMap = await LoadImage('maps/provinces.png');
+    terrainMap = await LoadImage('maps/terrain.png');
+    heightMap = await LoadImage('maps/heightmap.png');
+    waterColorMap = await LoadImage('maps/colormap_water.png');
+    riverMap = await LoadImage('maps/rivers.png');
+    summerColorMap = await LoadImage('maps/colormap_summer.png');
 
-const heightMap = new Image();
-heightMap.src = 'maps/heightmap.png';
-
-const waterColorMap = new Image();
-waterColorMap.src = 'maps/colormap_water.png';
-
-const riverMap = new Image();
-riverMap.src = 'maps/rivers.png';
-
-const summerColorMap = new Image();
-summerColorMap.src = 'maps/colormap_summer.png';
-
-const borderMap = new Image();
-const shadeMap = new Image();
-const waterMap = new Image();
-const riverMask = new Image();
-const landColorMap = new Image();
-
-// Load Function
-window.addEventListener('load', function() {
-
-    console.log(summerColorMap)
-    
     borderMap.src = generateColorBorders(provinceMap, {r:0, g:0, b:0, a:128});
     shadeMap.src = generateShadeMap(normalMap, terrainMap, 1.5, false);
     waterMap.src = blurImage(waterColorMap, 3);
     riverMask.src = removeGrays(riverMap);
+    landColorMap.src = generateLandColorMap(summerColorMap, terrainMap, riverMask);
 
-    riverMask.addEventListener('load', function() {
-        
-        landColorMap.src = generateLandColorMap(summerColorMap, terrainMap, riverMask);
-
-        landColorMap.addEventListener('load', function() {
-            drawMap();
-        });
-    });
-});
+    load();
+}
+LoadMaps();
