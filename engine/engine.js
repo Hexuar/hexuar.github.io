@@ -14,8 +14,6 @@ function loadScript(path) {
         script.src = path;
         script.type = "text/javascript";
         document.head.appendChild(script);
-
-        console.log(path);
     });
 }
 
@@ -23,7 +21,8 @@ function loadScript(path) {
 async function loadScripts(dir, files, groupName) {
     if (groupName != undefined) console.groupCollapsed(groupName);
     for(const file of files) {
-        await loadScript(dir + file);
+        await loadScript(dir + "/" + file);
+        console.log(file);
     }
     if (groupName != undefined) console.groupEnd();
 }

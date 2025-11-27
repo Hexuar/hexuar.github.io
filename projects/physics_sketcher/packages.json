@@ -1,6 +1,6 @@
 {
-  "packageGroup": "Game",
-  "packageDirectory": "",
+  "packageGroup": "Application",
+  "packageDirectory": "src",
   "packages": [
     "get_css_variables.js",
     "node.js",
