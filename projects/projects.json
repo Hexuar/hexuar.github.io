@@ -3,7 +3,7 @@
     "id": "physics_sketcher",
     "title": "Physics Sketcher",
     "description": "Make some neat sketches!",
-    "info": "Use the buttons to select an element and press <b>right click</b> to place it. Use <b>left click</b> to confirm and/or interact with the nodes of the element, and press <b>middle mouse button</b> to set the object label.",
+    "info": "Use the buttons to select an element and press <b>left click</b> to place it. You can then interact with its nodes using <b>left click</b> or set its label using <b>right click</b>.",
     "created": "2025-11-27"
   },
   {

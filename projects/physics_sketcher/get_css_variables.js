@@ -1,5 +1,4 @@
-let root = document.querySelector(":root");
-let rootStyle = getComputedStyle(root);
+let rootStyle = getComputedStyle(document.querySelector(":root"));
 function getCSSVariable(name) {
     let value = rootStyle.getPropertyValue(name);
     if (!isNaN(Number(value))) return Number(value);
@@ -23,18 +22,15 @@ DefineCSSGlobal("TEXT_SIZE", "--text-size");
 DefineCSSGlobal("NODE_RADIUS", "--node-radius");
 
 DefineGlobalGetter("PATTERN", () => {
-    return CreatePattern((canvas, context) => {
-        canvas.width = 10;
-        canvas.height = 10;
-        context.lineWidth = 1;
-        context.strokeStyle = DRAW_COLOR;
-        context.fillStyle = Color.setAlpha(DRAW_COLOR, 0.1);
-        context.fillRect(0, 0, 10, 10);
-        context.beginPath();
-        context.moveTo(0, 0);
-        context.lineTo(10, 10);
-        context.stroke();
+    let pattern = svgCanvas.getElementsByTagName("pattern")[0];
+    if (pattern != null) pattern.remove();
+    CreateSVGPattern(svgCanvas, "pattern", 10, 10, (pattern) => {
+        CreateSVGRect(pattern, Vec2(), Vec2(10, 10), Vec2(), Color.setAlpha(DRAW_COLOR, 0.1));
+        CreateSVGLine(pattern, Vec2(0, 0), Vec2(10, 10), DRAW_COLOR, 1);
+        CreateSVGLine(pattern, Vec2(-10, 0), Vec2(10, 20), DRAW_COLOR, 1);
+        CreateSVGLine(pattern, Vec2(0, -10), Vec2(20, 10), DRAW_COLOR, 1);
     });
+    return "url(#pattern)";
 });
 
 const TEXT_OFFSET = TEXT_SIZE / 4 + LINE_WIDTH;

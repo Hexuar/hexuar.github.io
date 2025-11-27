@@ -3,7 +3,7 @@
   "packageDirectory": "",
   "packages": [
     "get_css_variables.js",
-    "objects.js",
+    "node.js",
     "script.js"
   ]
 }

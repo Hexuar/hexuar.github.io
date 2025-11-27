@@ -1,3 +1,7 @@
+function Clear() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
 function StrokeLine(posA, posB, style, lineWidth, lineCap) {
     ctx.strokeStyle = style;
     ctx.lineWidth = lineWidth;

@@ -5,8 +5,12 @@
 </head>
 <body>
     <div class="ui">
-        <button onclick="selected='ball'"> Ball </button>
-        <button onclick="selected='box'"> Box </button>
-        <button onclick="selected='vector'"> Vector </button>
+        <button onclick="mode='ball'" onmouseenter="mouseActivated = false" onmouseleave="mouseActivated = true"> Ball </button>
+        <button onclick="mode='box'" onmouseenter="mouseActivated = false" onmouseleave="mouseActivated = true"> Box </button>
+        <button onclick="mode='line'" onmouseenter="mouseActivated = false" onmouseleave="mouseActivated = true"> Line </button>
     </div>
+    <dialog id="interactionDialog">
+        <input type="text" onmouseenter="mouseActivated = false; console.log('ENTERED')" onmouseleave="mouseActivated = true">
+    </dialog>
+
 </body>
