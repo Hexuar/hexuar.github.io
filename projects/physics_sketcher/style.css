@@ -1,20 +1,28 @@
 :root {
+    --background-color: beige;
     --draw-color: rgb(60, 60, 60);
+    --ui-color: wheat;
+    --ui-color-dark: tan;
+    --text-size: 12;
+    --line-width: 2;
+    --node-radius: 6;
 }
 
-button {
+.ui {
     position: relative;
     z-index: 1;
-    border-style: none;
-    background-color: wheat;
+}
+
+.ui > button {
     color: var(--draw-color);
+    background-color: var(--ui-color);
+    border-style: none;
     box-shadow: 2px 2px var(--draw-color);
-    transition-duration: 0.4s;
+    transition-duration: 0.2s;
     font-size: 15px;
     margin-right: 4px;
 }
 
-button:hover {
-    background-color: tan;
-    color: white;
+.ui > button:hover {
+    background-color: var(--ui-color-dark);
 }

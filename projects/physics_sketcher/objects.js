@@ -1,25 +1,3 @@
-const BACKGROUND_COLOR = "beige";
-const DRAW_COLOR = "rgb(60,60,60)";
-const LINE_WIDTH = 2;
-const TEXT_SIZE = 12;
-const TEXT_OFFSET = TEXT_SIZE / 2;
-const NODE_RADIUS = 6;
-const NODE_RANGE = NODE_RADIUS;
-const NODE_INACTIVE_RADIUS = NODE_RADIUS / 3;
-const PATTERN = CreatePattern((canvas, context) => {
-    canvas.width = 10;
-    canvas.height = 10;
-    context.lineWidth = 1;
-    context.strokeStyle = DRAW_COLOR;
-    context.fillStyle = "rgba(60, 60, 60, 0.1)";
-    context.fillRect(0, 0, 10, 10);
-    context.beginPath();
-    context.moveTo(0, 0);
-    context.lineTo(10, 10);
-    context.stroke();
-});
-
-
 function PositionNode() {
     this.parent.offset = Vec2.sub(mouse.pos, this.offset);
 }
@@ -64,14 +42,14 @@ class Node {
     Draw(state) {
         if(state) {
             let d = Vec2.distance(this.pos, mouse.pos);
-            FillCircle(this.pos, NODE_RADIUS * (1 - d / (2 * NODE_RANGE)), this.style);
+            FillCircle(this.pos, NODE_RADIUS * (1 - d / (2 * NODE_RADIUS)), this.style);
         }
         else {
             FillCircle(this.pos, NODE_INACTIVE_RADIUS, this.style);
         }
     }
     IsInRange(pos) {
-        return Vec2.distance(pos, this.pos) < NODE_RANGE;
+        return Vec2.distance(pos, this.pos) < NODE_RADIUS;
     }
 }
 
@@ -192,6 +170,6 @@ class Vector extends Obj {
         if (point.y > Math.max(this.pos.y, this.pos.y + this.dir.y)) return false;
         if (point.y < Math.min(this.pos.y, this.pos.y + this.dir.y)) return false;
         let d = Math.abs(Vec2.cross(Vec2.sub(this.pos, point), Vec2.normalize(this.dir)));
-        return d < NODE_RANGE;
+        return d < LINE_WIDTH;
     }
 }

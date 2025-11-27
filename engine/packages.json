@@ -4,6 +4,7 @@
   "packages": [
     "math.js",
     "vec2.js",
+    "color.js",
     "svg.js",
     "draw.js",
     "canvas.js",
