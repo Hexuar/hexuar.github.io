@@ -4,6 +4,6 @@
   "packages": [
     "get_css_variables.js",
     "node.js",
-    "script.js"
+    "main.js"
   ]
 }
