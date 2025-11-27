@@ -34,6 +34,14 @@ function CreateSVGElement(parent = document.body, attributes) {
   return CreateSVGObject(parent, "svg", attributes);
 }
 
+function CreateViewBox(parent, x, y, width, height, attributes) {
+    return CreateSVGElement(parent, {...{viewBox: x + "," + y + "," + width + "," + height }, ...attributes});
+}
+
+function CreateSVGCanvas(attributes) {
+    return CreateViewBox(undefined, 0, 0, canvas.width, canvas.height, {...{ style: "position: absolute; top:0px; left:0px;" }, ...attributes});
+}
+
 function CreateSVGLine(parent, posA, posB, stroke, strokeWidth, attributes = {}) {
   attributes.x1 = posA.x;
   attributes.y1 = posA.y;
