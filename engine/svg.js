@@ -35,11 +35,11 @@ function CreateSVGElement(parent = document.body, attributes) {
 }
 
 function CreateViewBox(parent, x, y, width, height, attributes) {
-    return CreateSVGElement(parent, {...{viewBox: x + "," + y + "," + width + "," + height }, ...attributes});
+    return CreateSVGElement(parent, {...{viewBox: x + "," + y + "," + width + "," + height}, ...attributes});
 }
 
-function CreateSVGCanvas(attributes) {
-    return CreateViewBox(undefined, 0, 0, canvas.width, canvas.height, {...{ style: "position: absolute; top:0px; left:0px;" }, ...attributes});
+function CreateSVGCanvas(parent, attributes) {
+    return CreateViewBox(parent, 0, 0, canvas.width, canvas.height, {...{ style: "position: absolute; top:0px; left:0px;", width:canvas.width, height:canvas.height}, ...attributes});
 }
 
 function CreateSVGLine(parent, posA, posB, stroke, strokeWidth, attributes = {}) {
@@ -57,6 +57,16 @@ function CreateSVGCircle(parent, pos, radius, fill, attributes = {}) {
   attributes.cy = pos.y;
   attributes.r = radius;
   attributes.fill = fill;
+  return CreateSVGObject(parent, "circle", attributes);
+}
+
+function CreateSVGRing(parent, pos, radius, stroke, lineWidth, attributes = {}) {
+  attributes.cx = pos.x;
+  attributes.cy = pos.y;
+  attributes.r = radius;
+  attributes.fill = "none";
+  attributes.stroke = stroke;
+  attributes["stroke-width"] = lineWidth;
   return CreateSVGObject(parent, "circle", attributes);
 }
 
