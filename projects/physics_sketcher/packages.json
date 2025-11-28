@@ -1,6 +1,6 @@
 {
   "packageGroup": "Application",
-  "packageDirectory": "src",
+  "packageDirectory": "src/",
   "packages": [
     "get_css_variables.js",
     "node.js",

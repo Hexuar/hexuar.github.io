@@ -9,7 +9,7 @@ When including **engine.js** into your HTML document, it will automatically load
 {
   "packageGroup": "Application",  // The console group to log in once loaded.
   "collapseGroup": false,         // Whether or not to collapse the log group (default = false).
-  "packageDirectory": "src",      // The directory containing the below source files.
+  "packageDirectory": "src/",     // The directory containing the below source files.
   "packages": [                   // A list of all included source files.
     "get_css_variables.js",
     "node.js",

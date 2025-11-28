@@ -21,7 +21,7 @@ function loadScript(path) {
 async function loadScripts(dir, files, groupName, collapsed) {
     if (groupName != undefined) collapsed ? console.groupCollapsed(groupName) : console.group(groupName);
     for(const file of files) {
-        await loadScript(dir + "/" + file);
+        await loadScript(dir + file);
         console.log(file);
     }
     if (groupName != undefined) console.groupEnd();

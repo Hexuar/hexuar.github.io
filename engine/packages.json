@@ -1,7 +1,7 @@
 {
   "packageGroup": "Engine",
   "collapseGroup": true,
-  "packageDirectory": "../../engine",
+  "packageDirectory": "../../engine/",
   "packages": [
     "math.js",
     "vec2.js",
