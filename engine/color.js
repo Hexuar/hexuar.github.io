@@ -1,5 +1,5 @@
-let colorDiv = document.createElement("div");
-document.head.appendChild(colorDiv);
+Color.colorConvertionElement = document.createElement("div");
+document.head.appendChild(Color.colorConvertionElement);
 
 function Color(r = 0, g = 0, b = 0, a = 1) {
     if (!(this instanceof Color)) return new Color(r, g, b, a);
@@ -21,9 +21,9 @@ Color.setAlpha = function(color, a) {
 }
 
 Color.fromString = function(color) {
-    colorDiv.style.color = color;
+    Color.colorConvertionElement.style.color = color;
 
-    let rgb_string = window.getComputedStyle(colorDiv).color;
+    let rgb_string = window.getComputedStyle(Color.colorConvertionElement).color;
     rgb_string = rgb_string.substring(4, rgb_string.length - 1);
     rgb_string = rgb_string.replaceAll(' ', '');
 

@@ -18,8 +18,8 @@ function loadScript(path) {
 }
 
 // Loads entire list of scripts sequentially
-async function loadScripts(dir, files, groupName) {
-    if (groupName != undefined) console.groupCollapsed(groupName);
+async function loadScripts(dir, files, groupName, collapsed) {
+    if (groupName != undefined) collapsed ? console.groupCollapsed(groupName) : console.group(groupName);
     for(const file of files) {
         await loadScript(dir + "/" + file);
         console.log(file);
@@ -32,12 +32,12 @@ fetch("../../engine/packages.json")
     .then((result) => (data = result.json()))
     .then((data) => {
         console.group("Loaded Packages");
-        loadScripts(data.packageDirectory, data.packages, data.packageGroup)
+        loadScripts(data.packageDirectory, data.packages, data.packageGroup, data.collapseGroup)
         .then(() => {
             fetch("packages.json")
                 .then((result) => (data = result.json()))
                 .then((data) => {
-                    loadScripts(data.packageDirectory, data.packages, data.packageGroup)
+                    loadScripts(data.packageDirectory, data.packages, data.packageGroup, data.collapseGroup)
                         .then(() => console.groupEnd());
                 });
         });

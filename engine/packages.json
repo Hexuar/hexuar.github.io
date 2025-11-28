@@ -1,5 +1,6 @@
 {
   "packageGroup": "Engine",
+  "collapseGroup": true,
   "packageDirectory": "../../engine",
   "packages": [
     "math.js",
