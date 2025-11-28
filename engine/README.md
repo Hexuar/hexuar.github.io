@@ -35,7 +35,7 @@ Extends **Math** with a few useful functions.
 ```JS
 Math.roundF(x, n = 0);      // Rounds a floating-point number to n digits.
 Math.distance(a, b);        // Distance between points a & b.
-Math.sq(x);                 // Square root.
+Math.sq(x);                 // Square.
 ```
 
 ### **color.js**
