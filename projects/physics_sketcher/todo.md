@@ -5,3 +5,4 @@
 - [ ] Coordinate axles
 - [ ] Measuring
 - [ ] Formulae rendering
+- [ ] Fix input

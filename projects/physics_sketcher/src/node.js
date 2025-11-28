@@ -98,8 +98,11 @@ class Shape extends Node {
     }
     CreateShape() { }
     UpdateShape() {
-        svgCanvas.removeChild(this.shape);
+        this.RemoveShape();
         this.shape = this.CreateShape();
+    }
+    RemoveShape() {
+        svgCanvas.removeChild(this.shape);
     }
     RecalculateNodeOffsets() {
         this.children.forEach(child => {
@@ -198,7 +201,6 @@ class Line extends Shape {
             let transform = "rotate(" + this.dir.theta * (180 / Math.PI) + " " + Vec2.add(this.pos, Vec2.div(this.dir, 2)).x + " " + Vec2.add(this.pos, Vec2.div(this.dir, 2)).y + ")";
             CreateSVGText(shape, labelPosition, TEXT_SIZE, this.label, DRAW_COLOR, undefined, undefined, {transform:transform});
         }
-
         return shape;
     }
 }

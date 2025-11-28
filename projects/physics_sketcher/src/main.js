@@ -12,10 +12,19 @@ const root = new Node();
 
 
 function HandleInput() {
-    if(mouse.pressed(0)|| keyboard.pressed("Escape") || keyboard.pressed("Enter")) {
-        if(selectedShape != null) {
+    if(selectedShape != null) {
+        if(mouse.pressed(0)|| keyboard.pressed("Escape") || keyboard.pressed("Enter")) {
             if(keyboard.pressed("Enter")) selectedShape.label = interactionTextInput.value;
             selectedShape.UpdateShape();
+            selectedShape = null;
+            interactionDialog.close();
+            return;
+        }
+
+        if(keyboard.pressed("Delete")) {
+            let index = selectedShape.parent.children.indexOf(selectedShape);
+            selectedShape.parent.children.splice(index);
+            selectedShape.RemoveShape();
             selectedShape = null;
             interactionDialog.close();
             return;
@@ -51,14 +60,16 @@ function HandleInput() {
     }
 
     if(mouse.pressed(2)) {
-        shapes.forEach(shape => {
-            if(!shape.IsInside(mouse.pos)) return;
-            interactionDialog.show();
-            interactionDialog.style.left = mouse.pos.x + 5 + "px";
-            interactionDialog.style.top = mouse.pos.y - 30 + "px";
-            interactionTextInput.value = shape.label;
-            selectedShape = shape;
-        });
+        if (selectedNode == null) {
+            shapes.forEach(shape => {
+                if(!shape.IsInside(mouse.pos)) return;
+                interactionDialog.show();
+                interactionDialog.style.left = mouse.pos.x + 5 + "px";
+                interactionDialog.style.top = mouse.pos.y - 30 + "px";
+                interactionTextInput.value = shape.label;
+                selectedShape = shape;
+            });
+        }
     }
 }
 
