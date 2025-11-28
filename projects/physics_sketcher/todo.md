@@ -1,0 +1,7 @@
+- [x] Vectors
+- [x] Restructuring
+- [x] svg
+- [ ] Snapping
+- [ ] Coordinate axles
+- [ ] Measuring
+- [ ] Formulae rendering
