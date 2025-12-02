@@ -32,25 +32,31 @@ function HandleInput() {
     }
 
     if(mouse.pressed(0)) {
-        if (selectedNode != null) return;
         interactionNodes.forEach(node => {
-            if (!node.IsInRange(mouse.pos) || selectedNode != null) return;
+            if (node == selectedNode) return;
+            if (!node.IsInRange(mouse.pos)) return;
+            if (selectedNode != null) return;
             node.selected = true;
             selectedNode = node;
         });
 
         if (selectedNode != null) return;
+        let s;
         switch(mode) {
             case "ball":
-                new Ball(root, mouse.pos, 0, true);
+                s = new Ball(root, mouse.pos, 0, true);
                 break;
             case "box":
-                new Box(root, mouse.pos, Vec2(), true);
+                s = new Box(root, mouse.pos, Vec2(), true);
                 break;
             case "line":
-                new Line(root, mouse.pos, Vec2(), true);
+                s = new Line(root, mouse.pos, Vec2(), true);
                 break;
         }
+        s.children.forEach(node => {
+            if (!(node instanceof InteractionNode)) return;
+            if (node.selected) selectedNode = node;
+        });
     }
 
     if(mouse.released(0)) {
@@ -60,16 +66,15 @@ function HandleInput() {
     }
 
     if(mouse.pressed(2)) {
-        if (selectedNode == null) {
-            shapes.forEach(shape => {
-                if(!shape.IsInside(mouse.pos)) return;
-                interactionDialog.show();
-                interactionDialog.style.left = mouse.pos.x + 5 + "px";
-                interactionDialog.style.top = mouse.pos.y - 30 + "px";
-                interactionTextInput.value = shape.label;
-                selectedShape = shape;
-            });
-        }
+        if (selectedNode != null) return;
+        shapes.forEach(shape => {
+            if(!shape.IsInside(mouse.pos)) return;
+            interactionDialog.show();
+            interactionDialog.style.left = mouse.pos.x + 5 + "px";
+            interactionDialog.style.top = mouse.pos.y - 30 + "px";
+            interactionTextInput.value = shape.label;
+            selectedShape = shape;
+        });
     }
 }
 
