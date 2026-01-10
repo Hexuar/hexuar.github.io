@@ -48,7 +48,14 @@ console.log("color: " + green); //> "color: rgb(0,255,0,1)"
 ```
 
 ### **canvas.js**
-Creates a viewport-stretching canvas ready to use out of the box. Should you not want to use the canvas, it can of course be removed from the document in post:
+Creates a viewport-stretching canvas ready to use out of the box, as well as as a user-defined Update function.
+```JS
+function Update() {
+    // Code to run every frame
+}
+```
+
+Should you not want to use the canvas, it can of course be removed from the document in post:
 ```JS
 document.body.removeChild(canvas);
 ```
