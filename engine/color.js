@@ -16,10 +16,12 @@ Color.prototype = {
     }
 }
 
+// Set transparency
 Color.setAlpha = function(color, a) {
     return new Color(color.r, color.g, color.b, a);
 }
 
+// Get color from a html color string value
 Color.fromString = function(color) {
     Color.colorConvertionElement.style.color = color;
 

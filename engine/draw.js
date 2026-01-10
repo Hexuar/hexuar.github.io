@@ -1,7 +1,16 @@
+// Clears the canvas
 function Clear() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
+// Fills the canvas
+function Fill(style) {
+    ctx.fillStyle = style;
+
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+// Draws a line from posA to posB
 function StrokeLine(posA, posB, style, lineWidth, lineCap) {
     ctx.strokeStyle = style;
     ctx.lineWidth = lineWidth;
@@ -13,6 +22,7 @@ function StrokeLine(posA, posB, style, lineWidth, lineCap) {
     ctx.stroke();
 }
 
+// Draws an arc of at the given position
 function StrokeArc(pos, radius, startAngle, endAngle, style, lineWidth, lineCap) {
     ctx.strokeStyle = style;
     ctx.lineWidth = lineWidth;
@@ -23,6 +33,7 @@ function StrokeArc(pos, radius, startAngle, endAngle, style, lineWidth, lineCap)
     ctx.stroke();
 }
 
+// Draws a filled arc of at the given position
 function FillArc(pos, radius, startAngle, endAngle, style) {
     ctx.fillStyle = style;
 
@@ -31,6 +42,7 @@ function FillArc(pos, radius, startAngle, endAngle, style) {
     ctx.fill();
 }
 
+// Draws a ring of at the given position
 function StrokeCircle(pos, radius, style, lineWidth, lineCap) {
     ctx.strokeStyle = style;
     ctx.lineWidth = lineWidth;
@@ -41,6 +53,7 @@ function StrokeCircle(pos, radius, style, lineWidth, lineCap) {
     ctx.stroke();
 }
 
+// Draws a filled circle at the given position
 function FillCircle(pos, radius, style) {
     ctx.fillStyle = style;
 
@@ -49,6 +62,7 @@ function FillCircle(pos, radius, style) {
     ctx.fill();
 }
 
+// Draws the outline of a triangle between posA, posB and posC
 function StrokeTriangle(posA, posB, posC, style, lineWidth) {
     ctx.strokeStyle = style;
 
@@ -60,6 +74,7 @@ function StrokeTriangle(posA, posB, posC, style, lineWidth) {
     ctx.stroke();
 }
 
+// Draws a filled-in triangle between posA, posB and posC
 function FillTriangle(posA, posB, posC, style) {
     ctx.fillStyle = style;
 
@@ -71,6 +86,7 @@ function FillTriangle(posA, posB, posC, style) {
     ctx.fill();
 }
 
+// Draws the outline of a rectangle with a corner at the given position
 function StrokeRectangle(pos, size, style, lineWidth, lineCap) {
     ctx.strokeStyle = style;
     ctx.lineWidth = lineWidth;
@@ -80,18 +96,14 @@ function StrokeRectangle(pos, size, style, lineWidth, lineCap) {
     ctx.strokeRect(pos.x, pos.y, size.x, size.y);
 }
 
+// Draws a filled-in rectangle with a corner at the given position
 function FillRectangle(pos, size, style) {
     ctx.fillStyle = style;
 
     ctx.fillRect(pos.x, pos.y, size.x, size.y);
 }
 
-function Fill(style) {
-    ctx.fillStyle = style;
-
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-}
-
+// Draws the outline of a polygon with vertices in the points vector
 function StrokePolygon(points, style, lineWidth, lineCap) {
     ctx.strokeStyle = style;
     ctx.lineWidth = lineWidth;
@@ -107,6 +119,7 @@ function StrokePolygon(points, style, lineWidth, lineCap) {
     ctx.stroke();
 }
 
+// Fills a polygon with vertices in the points vector
 function FillPolygon(points, style) {
     ctx.fillStyle = style;
 
@@ -120,6 +133,7 @@ function FillPolygon(points, style) {
     ctx.fill();
 }
 
+// Draws the outline of a regular polygon at the given position
 function StrokeRegularPolygon(pos, corners, size, style, lineWidth, lineCap) {
     ctx.strokeStyle = style;
     ctx.lineWidth = lineWidth;
@@ -139,6 +153,7 @@ function StrokeRegularPolygon(pos, corners, size, style, lineWidth, lineCap) {
     ctx.stroke();
 }
 
+// Draws a filled-in regular polygon at the given position
 function FillRegularPolygon(pos, corners, size, style) {
     ctx.fillStyle = style;
 
@@ -156,6 +171,7 @@ function FillRegularPolygon(pos, corners, size, style) {
     ctx.fill();
 }
 
+// Draws the outline of text
 function StrokeText(pos, text, size, style, lineWidth, lineCap, font = "monospace") {
   ctx.strokeStyle = style;
   ctx.lineWidth = lineWidth;
@@ -165,6 +181,7 @@ function StrokeText(pos, text, size, style, lineWidth, lineCap, font = "monospac
   ctx.strokeText(text, pos.x, pos.y);
 }
 
+// Draws text
 function FillText(pos, text, size, style, font = "monospace") {
   ctx.fillStyle = style;
   ctx.font = size + "px " + font;
@@ -172,6 +189,7 @@ function FillText(pos, text, size, style, font = "monospace") {
   ctx.fillText(text, pos.x, pos.y);
 }
 
+// Draws a vector
 function StrokeVector(vector, pos = new Vec2(), style, size = 2) {
     let u = Vec2.normalize(vector);
 
@@ -198,6 +216,7 @@ function StrokeVector(vector, pos = new Vec2(), style, size = 2) {
     ctx.fill();
 }
 
+// Creates a pattern using a specified function
 function CreatePattern(func, mode = "repeat") {
     const patternCanvas = document.createElement("canvas");
     const patternContext = patternCanvas.getContext("2d");
