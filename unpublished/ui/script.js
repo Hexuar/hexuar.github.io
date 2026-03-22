@@ -29,11 +29,14 @@ class Node {
 }
 
 
+const balls = [];
 class Ball extends Node {
   constructor(pos, radius = BALL_RADIUS, color = BALL_COLOR, mass = 1, immovable = false) {
     super(pos, mass, immovable);
     this.radius = radius;
     this.color = color;
+
+    balls.push(this);
   }
 
   Update() {
@@ -46,10 +49,19 @@ class Ball extends Node {
     }
 
     // Handle dynamics
+    balls.forEach(ball => {
+      if (ball == this) return;
+      let l = Vec2.distance(ball.pos, this.pos) - (ball.radius + this.radius);
+      if (l < 0) {
+        let f = Vec2.sub(ball.pos, this.pos).normalize().mul(l);
+        this.forces.add(f);
+      }
+    });
     if (this.held) {
       this.pos = mouse.pos;
       this.forces = Vec2();
     }
+
     super.Update();
   }
 
@@ -91,8 +103,9 @@ class Spring {
 let nodeA = new Ball(Vec2(200, 200));
 let nodeB = new Ball(Vec2(400, 200));
 let nodeC = new Ball(Vec2(300, 300));
-new Spring(nodeA, nodeB, 0.1, 50);
-new Spring(nodeB, nodeC, 0.1, 100);
+new Spring(nodeA, nodeB, 0.5, 100);
+new Spring(nodeB, nodeC, 0.5, 100);
+new Spring(nodeA, nodeC, 0.5, 100);
 
 
 function Update() {
