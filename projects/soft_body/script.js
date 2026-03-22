@@ -118,12 +118,14 @@ class Rectangle {
   Draw() {
     FillTriangle(this.vertices[0].pos, this.vertices[1].pos, this.vertices[2].pos, this.color);
     FillTriangle(this.vertices[2].pos, this.vertices[3].pos, this.vertices[0].pos, this.color);
+    FillTriangle(this.vertices[1].pos, this.vertices[2].pos, this.vertices[3].pos, this.color);
+    FillTriangle(this.vertices[3].pos, this.vertices[0].pos, this.vertices[1].pos, this.color);
     StrokeTriangle(this.vertices[0].pos, this.vertices[1].pos, this.vertices[2].pos, this.color, 1);
     StrokeTriangle(this.vertices[2].pos, this.vertices[3].pos, this.vertices[0].pos, this.color, 1);
   }
 }
 
-new Rectangle(Vec2(500, 200), Vec2(100, 200), 0.5, "red");
+new Rectangle(Vec2(500, 200), Vec2(100, 200), 0.05, "red");
 
 function Update() {
   Clear();

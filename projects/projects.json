@@ -1,5 +1,12 @@
 [
   {
+    "id": "soft_body",
+    "title": "Soft Body Physics",
+    "description": "A rudimentary soft body physics engine.",
+    "info": "Press <b>left click</b> on a vertex of the rectangle and move the mouse pointer to move it.",
+    "created": "2026-03-22"
+  },
+  {
     "id": "physics_sketcher",
     "title": "Physics Sketcher",
     "description": "Make some neat sketches!",
