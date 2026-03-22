@@ -1,8 +1,8 @@
 const FRICTION = 0.05;
-const BALL_RADIUS = 8;
-const BALL_COLOR = "teal";
+const BALL_RADIUS = 5;
+const BALL_COLOR = Color(32, 32, 32);
 const SPRING_WIDTH = 2;
-const SPRING_COLOR = "black";
+const SPRING_COLOR = Color(32, 32, 32);
 
 
 const nodes = [];
@@ -95,37 +95,47 @@ class Spring {
 
 const rectangles = [];
 class Rectangle {
-  constructor(pos, size, k, color) {
-    let a = new Ball(pos);
-    let b = new Ball(Vec2.add(pos, Vec2(size.x, 0)));
-    let c = new Ball(Vec2.add(pos, size));
-    let d = new Ball(Vec2.add(pos, Vec2(0, size.y)));
-
-    this.vertices = [a, b, c, d];
-    this.springs = [
-      new Spring(a, b, k, size.x),
-      new Spring(b, c, k, size.y),
-      new Spring(a, c, k, size.length),
-      new Spring(a, d, k, size.y),
-      new Spring(b, d, k, size.length),
-      new Spring(c, d, k, size.x),
-    ];
+  constructor(pos, cellSize, size = Vec2(1, 1), k = 0.5, color = "black") {
+    this.vertices = [];
+    this.springs = [];
+    this.size = size;
     this.color = color;
+
+    for (let y = 0; y < size.y + 1; y++) {
+      for (let x = 0; x < size.x + 1; x++) {
+        let ball = new Ball(Vec2.add(pos, Vec2(x * cellSize.x, y * cellSize.y)));
+        this.vertices.push(ball);
+      }
+    }
+
+    for (let i = 0; i < this.vertices.length - 1; i++) {
+      if (i % (size.x + 1) != size.x) this.springs.push(new Spring(this.vertices[i], this.vertices[i + 1], k, cellSize.x));
+      if (i + size.x + 1 < this.vertices.length) this.springs.push(new Spring(this.vertices[i], this.vertices[i + size.x + 1], k, cellSize.y));
+      if (i % (size.x + 1) != size.x && i + size.x + 2 < this.vertices.length) this.springs.push(new Spring(this.vertices[i], this.vertices[i + size.x + 2], k, cellSize.length));
+      if (i % (size.x + 1) != size.x && i - size.x > 0) this.springs.push(new Spring(this.vertices[i], this.vertices[i - size.x], k, cellSize.length));
+    }
 
     rectangles.push(this);
   }
 
   Draw() {
-    FillTriangle(this.vertices[0].pos, this.vertices[1].pos, this.vertices[2].pos, this.color);
-    FillTriangle(this.vertices[2].pos, this.vertices[3].pos, this.vertices[0].pos, this.color);
-    FillTriangle(this.vertices[1].pos, this.vertices[2].pos, this.vertices[3].pos, this.color);
-    FillTriangle(this.vertices[3].pos, this.vertices[0].pos, this.vertices[1].pos, this.color);
-    StrokeTriangle(this.vertices[0].pos, this.vertices[1].pos, this.vertices[2].pos, this.color, 1);
-    StrokeTriangle(this.vertices[2].pos, this.vertices[3].pos, this.vertices[0].pos, this.color, 1);
+    for (let i = 0; i < this.vertices.length; i++) {
+      if (i % (this.size.x + 1) != this.size.x && i < this.vertices.length - this.size.x - 1) {
+        FillTriangle(this.vertices[i].pos, this.vertices[i + 1].pos, this.vertices[i + this.size.x + 1].pos, this.color);
+        FillTriangle(this.vertices[i + 1].pos, this.vertices[i + this.size.x + 1].pos, this.vertices[i + this.size.x + 2].pos, this.color);
+      }
+    }
   }
 }
 
-new Rectangle(Vec2(500, 200), Vec2(100, 200), 0.05, "red");
+
+
+//let r1 = new Rectangle(Vec2(500, 200), Vec2(100, 200), Vec2(1, 1), 0.5, "red");
+//let r2 = new Rectangle(Vec2(700, 200), Vec2(100, 200), Vec2(1, 1), 0.5, "blue");
+
+//new Rectangle(Vec2(100, 100), Vec2(80, 100), Vec2(3, 3), 0.5, "red");
+
+new Rectangle(Vec2(1000, 0), Vec2(150, 150), Vec2(4, 4), 0.5, "red");
 
 function Update() {
   Clear();
@@ -137,4 +147,6 @@ function Update() {
   springs.forEach(spring => spring.Update());
 
   rectangles.forEach(rectangle => rectangle.Draw());
+  springs.forEach(spring => spring.Draw());
+  balls.forEach(ball => ball.Draw());
 }
