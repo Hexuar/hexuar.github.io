@@ -1,4 +1,4 @@
-const FRICTION = 0.2;
+const FRICTION = 0.05;
 const BALL_RADIUS = 8;
 const BALL_COLOR = "teal";
 const SPRING_WIDTH = 2;
@@ -44,22 +44,18 @@ class Ball extends Node {
     if (mouse.pressed(0) && Vec2.distance(mouse.pos, this.pos) < this.radius) {
       this.held = true;
     }
+    if (this.held) {
+      this.pos = mouse.pos;
+      this.forces = Vec2();
+    }
     if (mouse.released(0) && this.held) {
       this.held = false;
     }
 
-    // Handle dynamics
-    balls.forEach(ball => {
-      if (ball == this) return;
-      let l = Vec2.distance(ball.pos, this.pos) - (ball.radius + this.radius);
-      if (l < 0) {
-        let f = Vec2.sub(ball.pos, this.pos).normalize().mul(l);
-        this.forces.add(f);
-      }
-    });
-    if (this.held) {
-      this.pos = mouse.pos;
-      this.forces = Vec2();
+    // Ground collision
+    if (this.pos.y > canvas.size.y) {
+      let f = Vec2(0, canvas.size.y - this.pos.y);
+      this.forces.add(f);
     }
 
     super.Update();
@@ -92,28 +88,51 @@ class Spring {
   }
 
   Draw() {
-    StrokeLine(this.A.pos, this.B.pos, SPRING_WIDTH, SPRING_COLOR);
+    StrokeLine(this.A.pos, this.B.pos, SPRING_COLOR, SPRING_WIDTH);
   }
 }
 
 
+const rectangles = [];
+class Rectangle {
+  constructor(pos, size, k, color) {
+    let a = new Ball(pos);
+    let b = new Ball(Vec2.add(pos, Vec2(size.x, 0)));
+    let c = new Ball(Vec2.add(pos, size));
+    let d = new Ball(Vec2.add(pos, Vec2(0, size.y)));
 
+    this.vertices = [a, b, c, d];
+    this.springs = [
+      new Spring(a, b, k, size.x),
+      new Spring(b, c, k, size.y),
+      new Spring(a, c, k, size.length),
+      new Spring(a, d, k, size.y),
+      new Spring(b, d, k, size.length),
+      new Spring(c, d, k, size.x),
+    ];
+    this.color = color;
 
+    rectangles.push(this);
+  }
 
-let nodeA = new Ball(Vec2(200, 200));
-let nodeB = new Ball(Vec2(400, 200));
-let nodeC = new Ball(Vec2(300, 300));
-new Spring(nodeA, nodeB, 0.5, 100);
-new Spring(nodeB, nodeC, 0.5, 100);
-new Spring(nodeA, nodeC, 0.5, 100);
+  Draw() {
+    FillTriangle(this.vertices[0].pos, this.vertices[1].pos, this.vertices[2].pos, this.color);
+    FillTriangle(this.vertices[2].pos, this.vertices[3].pos, this.vertices[0].pos, this.color);
+    StrokeTriangle(this.vertices[0].pos, this.vertices[1].pos, this.vertices[2].pos, this.color, 1);
+    StrokeTriangle(this.vertices[2].pos, this.vertices[3].pos, this.vertices[0].pos, this.color, 1);
+  }
+}
 
+new Rectangle(Vec2(500, 200), Vec2(100, 200), 0.5, "red");
 
 function Update() {
   Clear();
 
-  nodes.forEach(node => node.Update());
+  nodes.forEach(node => {
+    node.forces.add(Vec2(0, 0.98 * node.mass));
+    node.Update();
+  });
   springs.forEach(spring => spring.Update());
 
-  springs.forEach(spring => spring.Draw());
-  nodes.forEach(node => node.Draw());
+  rectangles.forEach(rectangle => rectangle.Draw());
 }
