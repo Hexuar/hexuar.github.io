@@ -1,17 +1,39 @@
-const FRICTION = 0.85;
+const FRICTION = 0.2;
+const BALL_RADIUS = 8;
+const BALL_COLOR = "teal";
+const SPRING_WIDTH = 2;
+const SPRING_COLOR = "black";
 
-class Ball {
-  constructor(origin, k, radius, color) {
-    this.origin = origin;
-    this.pos = origin;
-    this.radius = radius;
-    this.color = color;
-    this.k = k
 
+const nodes = [];
+class Node {
+  constructor(pos, mass = 1, immovable = false) {
+    this.forces = Vec2();
     this.acc = Vec2();
     this.vel = Vec2();
-
+    this.pos = pos;
+    this.mass = mass;
+    this.immovable = immovable;
     this.held = false;
+
+    nodes.push(this);
+  }
+
+  Update() {
+    if (!this.immovable) this.acc = this.forces.div(this.mass);
+    this.vel.add(this.acc);
+    this.pos.add(this.vel);
+    this.vel.mul(1 - FRICTION);
+    this.forces = Vec2();
+  }
+}
+
+
+class Ball extends Node {
+  constructor(pos, radius = BALL_RADIUS, color = BALL_COLOR, mass = 1, immovable = false) {
+    super(pos, mass, immovable);
+    this.radius = radius;
+    this.color = color;
   }
 
   Update() {
@@ -25,33 +47,60 @@ class Ball {
 
     // Handle dynamics
     if (this.held) {
-      b.pos = mouse.pos;
+      this.pos = mouse.pos;
+      this.forces = Vec2();
     }
-    else {
-      let d = Vec2.sub(this.origin, this.pos);
-      let l = d.length * this.k;
-
-      if(l != 0) this.acc = d.normalize().mul(l);
-      this.vel.add(this.acc);
-      this.pos.add(this.vel);
-      this.vel.mul(FRICTION);
-    }
-
-    // Draw
-    this.Draw();
+    super.Update();
   }
 
   Draw() {
-    StrokeLine(this.origin, this.pos, 2, "black");
     FillCircle(this.pos, this.radius, this.color);
   }
 }
 
-let b = new Ball(canvas.size.div(2), 0.08, 20, "red");
+
+const springs = [];
+class Spring {
+  constructor(A = new Node(), B = new Node(), k = 1, l = 0) {
+    this.A = A;
+    this.B = B;
+    this.k = k;
+    this.l = l;
+
+    springs.push(this);
+  }
+
+  Update() {
+    let l = Vec2.distance(this.A.pos, this.B.pos) - this.l;
+    if (l != this.l) {
+      let f = Vec2.sub(this.A.pos, this.B.pos).normalize().mul(this.k * l);
+      this.A.forces.sub(f);
+      this.B.forces.add(f);
+    }
+  }
+
+  Draw() {
+    StrokeLine(this.A.pos, this.B.pos, SPRING_WIDTH, SPRING_COLOR);
+  }
+}
+
+
+
+
+
+let nodeA = new Ball(Vec2(200, 200));
+let nodeB = new Ball(Vec2(400, 200));
+let nodeC = new Ball(Vec2(300, 300));
+new Spring(nodeA, nodeB, 0.1, 50);
+new Spring(nodeB, nodeC, 0.1, 100);
 
 
 function Update() {
   Clear();
 
-  b.Update();
+  nodes.forEach(node => node.Update());
+  springs.forEach(spring => spring.Update());
+
+  springs.forEach(spring => spring.Draw());
+  nodes.forEach(node => node.Draw());
 }
