@@ -1,0 +1,7 @@
+{
+  "packageGroup": "Game",
+  "packageDirectory": "",
+  "packages": [
+    "script.js"
+  ]
+}
