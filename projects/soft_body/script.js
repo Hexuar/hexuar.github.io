@@ -135,13 +135,13 @@ class Rectangle {
 
 //new Rectangle(Vec2(100, 100), Vec2(80, 100), Vec2(3, 3), 0.5, "red");
 
-new Rectangle(Vec2(1000, 0), Vec2(150, 150), Vec2(4, 4), 0.5, "red");
+new Rectangle(Vec2(canvas.width/2, 0), Vec2(canvas.width/15, canvas.width/15), Vec2(4, 4), 0.5, "red");
 
 function Update() {
   Clear();
 
   nodes.forEach(node => {
-    node.forces.add(Vec2(0, 0.98 * node.mass));
+    node.forces.add(Vec2(0, canvas.height * 0.001 * node.mass));
     node.Update();
   });
   springs.forEach(spring => spring.Update());

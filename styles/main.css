@@ -17,7 +17,7 @@ body {
 }
 
 /* Pages */
-div.project-list {
+div.panel {
     text-align: center;
     border: 2px dashed rgba(0, 0, 0, 0.2);
     margin: 10px;
@@ -25,29 +25,30 @@ div.project-list {
     margin-right: 100px;
     padding-left: 10px;
     padding-right: 10px;
+    background-color: rgb(0,0,0,0.2);
 }
-ul.project-list {
+#projectList {
     list-style-type: none;
     padding: 0;
 }
 
-.project-list li {
+#projectList li {
     border: 5px inset rgba(0, 0, 0, 0.4);
     background-color: rgba(0, 0, 0, 0.4);
     margin-top: 10px;
 }
-.project-list li:hover {
+#projectList li:hover {
     border: 5px outset rgba(0, 0, 0, 0.4);
     background-color: rgba(128, 128, 128, 0.1);
     cursor: pointer;
 }
-.project-list li p.project-title {
+#projectList li p.project-title {
     font-weight: bold;
 }
-.project-list li p.project-timestamp {
+#projectList li p.project-timestamp {
     text-align: right;
 }
-.project-list li p {
+#projectList li p {
     margin: 5px;
 }
 
