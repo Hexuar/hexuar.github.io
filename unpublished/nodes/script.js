@@ -1,4 +1,11 @@
-COLORS = ["#826C7F", "#5D4E60"];
+PALETTES = [
+  ["#826C7F", "#5D4E60"],
+  ["#181f1c", "#274029"],
+  ["#eae0cc", "#c9ada1"],
+  ["#93b5c6", "#ddedaa"],
+  ["#433a3f", "#3d5a6c"]
+];
+COLORS = PALETTES[Math.floor(Math.random() * PALETTES.length)];
 
 
 const nodeSlider = document.querySelector("#nodeSlider");
