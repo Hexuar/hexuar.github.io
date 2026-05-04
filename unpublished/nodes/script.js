@@ -1,13 +1,9 @@
-PALETTES = [
-  ["#826C7F", "#5D4E60"],
-  ["#181f1c", "#274029"],
-  ["#eae0cc", "#c9ada1"],
-  ["#93b5c6", "#ddedaa"],
-  ["#433a3f", "#3d5a6c"]
-];
-COLORS = PALETTES[Math.floor(Math.random() * PALETTES.length)];
+// Random Palette
+let hue = 360 * Math.random();
+const COLORS = ["hsl("+ hue + " 20% 25%)", "hsl(" + (hue + 180) + " 20% 50%)"]
 
 
+// UI
 const nodeSlider = document.querySelector("#nodeSlider");
 const numberSlider = document.querySelector("#numberSlider");
 
@@ -17,6 +13,7 @@ nodeSlider.addEventListener("input", () => {
 });
 
 
+// Update
 function Update() {
   Fill(COLORS[0]);
 
