@@ -1,8 +1,3 @@
-// Random Palette
-let hue = 360 * Math.random();
-const COLORS = ["hsl("+ hue + " 20% 25%)", "hsl(" + (hue + 180) + " 20% 50%)"]
-
-
 // UI
 const nodeSlider = document.querySelector("#nodeSlider");
 const numberSlider = document.querySelector("#numberSlider");
@@ -11,6 +6,20 @@ numberSlider.max = Math.pow(2, nodeSlider.value) - 1;
 nodeSlider.addEventListener("input", () => {
   numberSlider.max = Math.pow(2, nodeSlider.value) - 1;
 });
+
+
+function RandomizeValues() {
+  let hue = 360 * Math.random();
+  COLORS = ["hsl("+ hue + " 20% 25%)", "hsl(" + (hue + 180) + " 20% 50%)"]
+
+  nodeSlider.value = Math.randInt(nodeSlider.max - 2) + 3;
+  numberSlider.max = Math.pow(2, nodeSlider.value) - 1;
+  numberSlider.value = Math.randInt(numberSlider.max) + 1;
+}
+document.addEventListener("keydown", (event) => {
+  if (event.key === " ") RandomizeValues();
+});
+RandomizeValues();
 
 
 // Update

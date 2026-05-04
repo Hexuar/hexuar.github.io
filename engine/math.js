@@ -13,3 +13,8 @@ Math.distance = function(posA, posB) {
 Math.sq = function(x) {
     return Math.pow(x, 2);
 }
+
+// Random integer
+Math.randInt = function(n) {
+  return Math.floor(Math.random() * n);
+}
