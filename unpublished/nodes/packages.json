@@ -2,6 +2,7 @@
   "packageGroup": "Game",
   "packageDirectory": "",
   "packages": [
+    "number_slider.js",
     "script.js"
   ]
 }

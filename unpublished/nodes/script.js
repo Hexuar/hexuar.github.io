@@ -1,28 +1,12 @@
 COLORS = ["#826C7F", "#5D4E60"];
 
-// Node Slider
-const nodeSlider = document.getElementById("nodeSlider");
-const nodeSliderValue = document.getElementById("nodeSliderValue");
 
-nodeSliderValue.innerHTML = nodeSlider.value;
-nodeSlider.addEventListener("input", (e) => {
-  nodeSliderValue.innerHTML = nodeSlider.value;
-});
-
-
-// Number Slider
-const numberSlider = document.getElementById("numberSlider");
-const numberSliderValue = document.getElementById("numberSliderValue");
+const nodeSlider = document.querySelector("#nodeSlider");
+const numberSlider = document.querySelector("#numberSlider");
 
 numberSlider.max = Math.pow(2, nodeSlider.value) - 1;
-nodeSlider.addEventListener("input", (e) => {
+nodeSlider.addEventListener("input", () => {
   numberSlider.max = Math.pow(2, nodeSlider.value) - 1;
-  numberSliderValue.innerHTML = numberSlider.value;
-});
-
-numberSliderValue.innerHTML = numberSlider.value;
-numberSlider.addEventListener("input", (e) => {
-  numberSliderValue.innerHTML = numberSlider.value;
 });
 
 
