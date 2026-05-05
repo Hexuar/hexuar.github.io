@@ -12,27 +12,27 @@ number-slider {
 
 number-slider input[type = "range"] {
     appearance: none;
-    height: 6.67px;
+    height: 3.33px;
     margin: 5px;
     background: var(--foreground);
 }
 
 number-slider input[type = "range"]::-webkit-slider-thumb {
-    width: 20px;
-    height: 20px;
+    width: 20px - 6.66px;
+    height: 20px - 6.66px;
     border-radius: 50%;
     cursor: pointer;
-    background: var(--foreground);
-    border: none;
+    background: var(--background);
+    border: 3.33px solid var(--foreground);
 }
 
 number-slider input[type = "range"]::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
+    width: 20px - 6.66px;
+    height: 20px - 6.66px;
     border-radius: 50%;
     cursor: pointer;
-    background: var(--foreground);
-    border: none;
+    background: var(--background);
+    border: 3.33px solid var(--foreground);
 }
 
 number-slider input[type = "number"] {
@@ -42,7 +42,6 @@ number-slider input[type = "number"] {
     margin: 0px;
     font-weight: bold;
     font-family: monospace;
-    webkit-appearance: textfield;
     -moz-appearance: textfield;
     appearance: textfield;
 }
