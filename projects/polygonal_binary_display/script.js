@@ -15,6 +15,11 @@ function RandomizeValues() {
   nodeSlider.value = Math.randInt(nodeSlider.max - 2) + 3;
   numberSlider.max = Math.pow(2, nodeSlider.value) - 1;
   numberSlider.value = Math.randInt(numberSlider.max) + 1;
+
+  nodeSlider.style.setProperty("--background", COLORS[0]);
+  numberSlider.style.setProperty("--background", COLORS[0]);
+  nodeSlider.style.setProperty("--foreground", COLORS[1]);
+  numberSlider.style.setProperty("--foreground", COLORS[1]);
 }
 document.addEventListener("keydown", (event) => {
   if (event.key === " ") RandomizeValues();

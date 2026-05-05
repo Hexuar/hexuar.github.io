@@ -1,6 +1,53 @@
+::root {
+    --background: red;
+    --foreground: red;
+}
+
 number-slider {
     position: relative;
     z-index: 1;
     display: flex;
     font-family: monospace;
+}
+
+number-slider input[type = "range"] {
+    appearance: none;
+    height: 6.67px;
+    margin: 5px;
+    background: var(--foreground);
+}
+
+number-slider input[type = "range"]::-webkit-slider-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+    background: var(--foreground);
+    border: none;
+}
+
+number-slider input[type = "range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+    background: var(--foreground);
+    border: none;
+}
+
+number-slider input[type = "number"] {
+    background: var(--background);
+    color: var(--foreground);
+    border: none;
+    margin: 0px;
+    font-weight: bold;
+    font-family: monospace;
+    webkit-appearance: textfield;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+number-slider input[type=number]::-webkit-inner-spin-button,
+number-slider input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
 }
