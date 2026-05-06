@@ -11,6 +11,7 @@ number-slider {
 }
 
 number-slider input[type = "range"] {
+    width: 20%;
     appearance: none;
     height: 3.33px;
     margin: 5px;

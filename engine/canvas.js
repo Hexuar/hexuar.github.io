@@ -11,6 +11,8 @@ let oldTime = 0;
 let time;
 
 function UpdateCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
     canvas.size = new Vec2(canvas.width, canvas.height);
     canvas.center = new Vec2.div(canvas.size, 2);
 
