@@ -45,6 +45,7 @@ number-slider input[type = "number"] {
     font-family: monospace;
     -moz-appearance: textfield;
     appearance: textfield;
+    width: 40px;;
 }
 
 number-slider input[type=number]::-webkit-inner-spin-button,
