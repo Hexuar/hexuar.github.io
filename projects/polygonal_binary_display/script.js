@@ -52,6 +52,9 @@ nodeSlider.addEventListener("input", () => {
 document.addEventListener("keydown", (event) => {
   if (event.key === " ") RandomizeValues();
 });
+document.addEventListener("touchstart", () => {
+  RandomizeValues();
+});
 RandomizeValues();
 
 
