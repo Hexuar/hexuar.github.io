@@ -63,8 +63,8 @@ function Update() {
   Fill(COLORS[0]);
 
   N = nodeSlider.value;
-  nodeRadius = canvas.height / 40;
   size = Math.min(canvas.width, canvas.height);
+  nodeRadius = size / 40;
 
   for (i = 0; i < kValues.length; i++) {
     k = kValues[i];
