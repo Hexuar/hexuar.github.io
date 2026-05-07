@@ -11,8 +11,17 @@ function setNumberSliderMax() {
 
 function setKValues() {
   kValues = [1];
-  for (i = 2; i < nodeSlider.value / 2; i++) {
-    if (nodeSlider.value % i != 0) kValues.push(i);
+  for (k = 2; k < nodeSlider.value / 2; k++) {
+    if (nodeSlider.value % k != 0) {
+      passed = true;
+      for (x = 1; x < k; x++) {
+        if (Number.isInteger(nodeSlider.value / k * x) && nodeSlider.value / k * x < nodeSlider.value) {
+          passed = false;
+          break;
+        }
+      }
+      if (passed) kValues.push(k);
+    }
   }
 }
 
