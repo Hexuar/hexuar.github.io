@@ -52,8 +52,8 @@ nodeSlider.addEventListener("input", () => {
 document.addEventListener("keydown", (event) => {
   if (event.key === " ") RandomizeValues();
 });
-document.addEventListener("touchstart", () => {
-  RandomizeValues();
+document.addEventListener("touchstart", (event) => {
+  if (event.touches.length == 2) RandomizeValues();
 });
 RandomizeValues();
 
@@ -64,6 +64,7 @@ function Update() {
 
   N = nodeSlider.value;
   nodeRadius = canvas.height / 40;
+  size = Math.min(canvas.width, canvas.height);
 
   for (i = 0; i < kValues.length; i++) {
     k = kValues[i];
@@ -75,14 +76,14 @@ function Update() {
 
     for (j = 0; j < N; j++) {
       if (numberString[j] == "1") {
-        StrokeLine(Vec2.add(canvas.center, Vec2(canvas.height / 3, 2 * Math.PI / N * k * j - Math.PI / 2, true)), Vec2.add(canvas.center, Vec2(canvas.height / 3, 2 * Math.PI / N * k * (j + 1) - Math.PI / 2, true)), COLORS[1], 0.33 * nodeRadius);
+        StrokeLine(Vec2.add(canvas.center, Vec2(size / 3, 2 * Math.PI / N * k * j - Math.PI / 2, true)), Vec2.add(canvas.center, Vec2(size / 3, 2 * Math.PI / N * k * (j + 1) - Math.PI / 2, true)), COLORS[1], 0.33 * nodeRadius);
       }
     }
   }
 
   // Vertices
   for (i = 0; i < N; i++) {
-    FillCircle(Vec2.add(canvas.center, Vec2(canvas.height / 3, 2 * Math.PI / N * i - Math.PI / 2, true)), nodeRadius, COLORS[1]);
+    FillCircle(Vec2.add(canvas.center, Vec2(size / 3, 2 * Math.PI / N * i - Math.PI / 2, true)), nodeRadius, COLORS[1]);
   }
-  FillCircle(Vec2.add(canvas.center, Vec2(0, -canvas.height / 3)), 0.67 * nodeRadius, COLORS[0])
+  FillCircle(Vec2.add(canvas.center, Vec2(0, -size / 3)), 0.67 * nodeRadius, COLORS[0])
 }
