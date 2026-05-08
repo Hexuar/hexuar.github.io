@@ -26,16 +26,17 @@ function qerp(a, b, t) {
 }
 
 
-function Update() {
+function Update(deltaTime) {
   Fill("hsl(209.77485402423108 20% 25%)");
 
   if (t < 1 && t > 0) {
-    t += 0.01;
+    t += deltaTime;
   }
+  if (t > 1) t = 1;
 
   let A = Vec2(0.1 * canvas.width, canvas.height / 2);
   let B = Vec2(0.9 * canvas.width, canvas.height / 2);
 
-  FillCircle(qerp(A, B, t), 25, color);
+  FillCircle(smerp(A, B, t), 25, color);
   StrokeLine(A, B, color, 10, "round");
 }
