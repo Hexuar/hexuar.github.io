@@ -1,6 +1,8 @@
 // UI
 const nodeSlider = document.querySelector("#nodeSlider");
 const numberSliders = document.querySelector("#numberSliders").querySelectorAll("number-slider");
+const lightDir = Vec2(0.5, 0.5);
+let shadowsEnabled = false;
 
 
 function setNumberSliderMax() {
@@ -34,7 +36,7 @@ function setNumberSliderDisplay() {
 
 function RandomizeValues() {
   let hue = 360 * Math.random();
-  COLORS = ["hsl(" + hue + " 20% 25%)", "hsl(" + (hue + 180) + " 20% 50%)"];
+  COLORS = ["hsl(" + hue + " 20% 25%)", "hsl(" + (hue + 180) + " 20% 50%)", "hsl(" + hue + " 20% 15%)"];
 
   nodeSlider.value = Math.randInt(nodeSlider.max - 2) + 3;
   nodeSlider.style.setProperty("--background", COLORS[0]);
@@ -51,6 +53,22 @@ function RandomizeValues() {
   setNumberSliderDisplay();
 }
 
+function DrawNode(pos, hollow = false) {
+  FillCircle(pos, nodeRadius, COLORS[1]);
+  if (hollow) FillCircle(pos, 0.67 * nodeRadius, COLORS[0]);
+}
+function DrawNodeShadow(pos, hollow = false) {
+  FillCircle(Vec2.add(pos, Vec2.mul(lightDir, nodeRadius)), nodeRadius, COLORS[2]);
+  if (hollow) FillCircle(Vec2.add(pos, Vec2.mul(lightDir, nodeRadius)), 0.67 * nodeRadius, COLORS[0]);
+}
+
+function DrawLine(a, b) {
+  StrokeLine(a, b, COLORS[1], 0.33 * nodeRadius);
+}
+function DrawLineShadow(a, b) {
+  StrokeLine(Vec2.add(a, Vec2.mul(lightDir, nodeRadius)), Vec2.add(b, Vec2.mul(lightDir, nodeRadius)), COLORS[2], 0.33 * nodeRadius);
+}
+
 
 // Init
 nodeSlider.addEventListener("input", () => {
@@ -60,6 +78,7 @@ nodeSlider.addEventListener("input", () => {
 });
 document.addEventListener("keydown", (event) => {
   if (event.key === " ") RandomizeValues();
+  if (event.key === "s") shadowsEnabled = !shadowsEnabled;
 });
 document.addEventListener("touchstart", (event) => {
   if (event.touches.length == 2) RandomizeValues();
@@ -69,12 +88,38 @@ RandomizeValues();
 
 // Update
 function Update() {
+  Clear();
   Fill(COLORS[0]);
 
   N = nodeSlider.value;
   size = Math.min(canvas.width, canvas.height);
   nodeRadius = size / 40;
 
+
+  if (shadowsEnabled) {
+    // Line shadows
+    for (i = 0; i < kValues.length; i++) {
+      k = kValues[i];
+
+      numberString = parseInt(numberSliders[i].value).toString(2);
+      for (j = 0; numberString.length < N; j++) {
+        numberString = "0" + numberString;
+      }
+
+      for (j = 0; j < N; j++) {
+        if (numberString[j] == "1") {
+          DrawLineShadow(Vec2.add(canvas.center, Vec2(size / 3, 2 * Math.PI / N * k * j - Math.PI / 2, true)), Vec2.add(canvas.center, Vec2(size / 3, 2 * Math.PI / N * k * (j + 1) - Math.PI / 2, true)));
+        }
+      }
+    }
+
+    // Node shadows
+    for (i = 0; i < N; i++) {
+      DrawNodeShadow(Vec2.add(canvas.center, Vec2(size / 3, 2 * Math.PI / N * i - Math.PI / 2, true)), i == 0);
+    }
+  }
+
+  // Lines
   for (i = 0; i < kValues.length; i++) {
     k = kValues[i];
 
@@ -85,14 +130,13 @@ function Update() {
 
     for (j = 0; j < N; j++) {
       if (numberString[j] == "1") {
-        StrokeLine(Vec2.add(canvas.center, Vec2(size / 3, 2 * Math.PI / N * k * j - Math.PI / 2, true)), Vec2.add(canvas.center, Vec2(size / 3, 2 * Math.PI / N * k * (j + 1) - Math.PI / 2, true)), COLORS[1], 0.33 * nodeRadius);
+        DrawLine(Vec2.add(canvas.center, Vec2(size / 3, 2 * Math.PI / N * k * j - Math.PI / 2, true)), Vec2.add(canvas.center, Vec2(size / 3, 2 * Math.PI / N * k * (j + 1) - Math.PI / 2, true)));
       }
     }
   }
 
-  // Vertices
+  // Nodes
   for (i = 0; i < N; i++) {
-    FillCircle(Vec2.add(canvas.center, Vec2(size / 3, 2 * Math.PI / N * i - Math.PI / 2, true)), nodeRadius, COLORS[1]);
+    DrawNode(Vec2.add(canvas.center, Vec2(size / 3, 2 * Math.PI / N * i - Math.PI / 2, true)), i == 0);
   }
-  FillCircle(Vec2.add(canvas.center, Vec2(0, -size / 3)), 0.67 * nodeRadius, COLORS[0])
 }
