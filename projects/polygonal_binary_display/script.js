@@ -63,7 +63,7 @@ function SetColors() {
 // Randomises colours and slider values
 function RandomizeValues() {
     // Colors
-    targetHue = 360 * Math.random();
+    targetHue = hue + 60 * Math.random();
 
     // Sliders
     nodeSlider.value = Math.randInt(nodeSlider.max - 2) + 3;
