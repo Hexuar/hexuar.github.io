@@ -96,7 +96,7 @@ RandomizeValues();
 
 // Update
 let nodePositions = [];
-function Update() {
+function Update(deltaTime) {
     Clear();
     Clear(1);
     Fill(COLORS[0]);
@@ -108,7 +108,7 @@ function Update() {
 
     for (i = 0; i < N; i++) {
         let target = Vec2.add(canvas.center, Vec2(size / 3, - 2 * Math.PI / N * i - Math.PI / 2, true));
-        nodePositions[i] = nodePositions[i] == undefined ? target : lerp(nodePositions[i], target, 0.3);
+        nodePositions[i] = nodePositions[i] == undefined ? target : lerp(nodePositions[i], target, 10 * deltaTime);
     }
 
 
