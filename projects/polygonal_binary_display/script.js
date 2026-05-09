@@ -1,8 +1,10 @@
+const uiContainer = document.querySelector("#ui");
 const nodeSlider = document.querySelector("#nodeSlider");
 const numberSliders = document.querySelector("#numberSliders").querySelectorAll("number-slider");
 
 const lightDir = Vec2(0.5, 0.5);
 let shadowsEnabled = true;
+let uiVisible = true;
 let nodeRadius = 0;
 let nodePositions = [];
 let kValues = [];
@@ -90,7 +92,16 @@ nodeSlider.addEventListener("input", () => {
 });
 document.addEventListener("keydown", (event) => {
     if (event.key === " ") RandomizeValues();
-    if (event.key === "s") shadowsEnabled = !shadowsEnabled;
+    if (event.key === "s") {
+        shadowsEnabled = !shadowsEnabled;
+        if (shadowsEnabled) document.body.style.setProperty("--lightDir", "5px 5px");
+        else document.body.style.setProperty("--lightDir", "0px 0px");
+    }
+    if (event.key === "h") {
+        uiVisible = !uiVisible;
+        if (uiVisible) uiContainer.style.display = "block";
+        else uiContainer.style.display = "none";
+    }
 });
 document.addEventListener("touchstart", (event) => {
     if (event.touches.length == 2) RandomizeValues();
