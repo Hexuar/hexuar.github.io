@@ -149,8 +149,9 @@ function Update(deltaTime) {
     nodeRadius = size / 40;
 
     // Set node positions
+    nodePositions = nodePositions.slice(0, nodeSlider.value);
     for (i = 0; i < nodeSlider.value; i++) {
-        let target = Vec2.add(canvas.center, Vec2(size / 3, - 2 * Math.PI / nodeSlider.value * i - Math.PI / 2, true));
+        let target = Vec2.add(canvas.center, Vec2(size / 3, -2 * Math.PI / nodeSlider.value * i - Math.PI / 2, true));
         nodePositions[i] = nodePositions[i] == undefined ? target : lerp(nodePositions[i], target, 10 * deltaTime);
     }
 
@@ -164,7 +165,7 @@ function Update(deltaTime) {
         }
 
         for (j = 0; j < nodeSlider.value; j++) {
-            if (numberString[j] == "1") {
+            if (numberString[nodeSlider.value - 1 - j] == "1") {
                 DrawLine(nodePositions[(k * j) % nodeSlider.value], nodePositions[(k * (j + 1)) % nodeSlider.value]);
             }
         }
