@@ -2,7 +2,7 @@
 const nodeSlider = document.querySelector("#nodeSlider");
 const numberSliders = document.querySelector("#numberSliders").querySelectorAll("number-slider");
 const lightDir = Vec2(0.5, 0.5);
-let shadowsEnabled = false;
+let shadowsEnabled = true;
 
 
 function setNumberSliderMax() {
@@ -54,19 +54,21 @@ function RandomizeValues() {
 }
 
 function DrawNode(pos, hollow = false) {
-  FillCircle(pos, nodeRadius, COLORS[1]);
-  if (hollow) FillCircle(pos, 0.67 * nodeRadius, COLORS[0]);
+  if (hollow) StrokeCircle(pos, 0.835 * nodeRadius, COLORS[1], 0.33 * nodeRadius);
+  else FillCircle(pos, nodeRadius, COLORS[1]);
 }
 function DrawNodeShadow(pos, hollow = false) {
-  FillCircle(Vec2.add(pos, Vec2.mul(lightDir, nodeRadius)), nodeRadius, COLORS[2]);
-  if (hollow) FillCircle(Vec2.add(pos, Vec2.mul(lightDir, nodeRadius)), 0.67 * nodeRadius, COLORS[0]);
+  if (hollow) StrokeCircle(Vec2.add(pos, Vec2.mul(lightDir, nodeRadius)), 0.835 * nodeRadius, COLORS[3], 0.33 * nodeRadius);
+    else FillCircle(Vec2.add(pos, Vec2.mul(lightDir, nodeRadius)), nodeRadius, COLORS[2]);
 }
 
 function DrawLine(a, b) {
-  StrokeLine(a, b, COLORS[1], 0.33 * nodeRadius);
+  let d = Vec2.normalize(Vec2.sub(b, a)).mul(nodeRadius - 1)
+  StrokeLine(Vec2.add(a, d), Vec2.sub(b, d), COLORS[1], 0.33 * nodeRadius);
 }
 function DrawLineShadow(a, b) {
-  StrokeLine(Vec2.add(a, Vec2.mul(lightDir, nodeRadius)), Vec2.add(b, Vec2.mul(lightDir, nodeRadius)), COLORS[2], 0.33 * nodeRadius);
+  let d = Vec2.normalize(Vec2.sub(b, a)).mul(nodeRadius - 1)
+  StrokeLine(Vec2.add(a, Vec2.mul(lightDir, nodeRadius)).add(d), Vec2.add(b, Vec2.mul(lightDir, nodeRadius)).sub(d), COLORS[2], 0.33 * nodeRadius);
 }
 
 
