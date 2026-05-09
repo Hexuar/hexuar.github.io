@@ -73,6 +73,10 @@ function DrawLine(a, b) {
     if(shadowsEnabled) StrokeLine(Vec2.add(a, Vec2.mul(lightDir, nodeRadius)).add(d), Vec2.add(b, Vec2.mul(lightDir, nodeRadius)).sub(d), COLORS[2], 0.33 * nodeRadius);
 }
 
+function lerp(a, b, t) {
+  return Vec2.add(Vec2.mul(a, 1 - t), Vec2.mul(b, t));
+}
+
 
 // Init
 nodeSlider.addEventListener("input", () => {
@@ -91,6 +95,7 @@ RandomizeValues();
 
 
 // Update
+let nodePositions = [];
 function Update() {
     Clear();
     Clear(1);
@@ -101,9 +106,9 @@ function Update() {
     let size = Math.min(canvas.width, canvas.height);
     nodeRadius = size / 40;
 
-    let nodes = [];
     for (i = 0; i < N; i++) {
-        nodes[i] = Vec2.add(canvas.center, Vec2(size / 3, 2 * Math.PI / N * i - Math.PI / 2, true));
+        let target = Vec2.add(canvas.center, Vec2(size / 3, - 2 * Math.PI / N * i - Math.PI / 2, true));
+        nodePositions[i] = nodePositions[i] == undefined ? target : lerp(nodePositions[i], target, 0.3);
     }
 
 
@@ -118,7 +123,7 @@ function Update() {
 
         for (j = 0; j < N; j++) {
             if (numberString[j] == "1") {
-                DrawLine(nodes[(k * j) % N], nodes[(k * (j + 1)) % N]);
+                DrawLine(nodePositions[(k * j) % N], nodePositions[(k * (j + 1)) % N]);
             }
         }
     }
@@ -126,6 +131,6 @@ function Update() {
 
     // Nodes
     for (i = 0; i < N; i++) {
-        DrawNode(nodes[i], i == 0);
+        DrawNode(nodePositions[i], i == 0);
     }
 }
