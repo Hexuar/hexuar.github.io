@@ -10,6 +10,14 @@ number-slider {
     font-family: monospace;
 }
 
+#nodeSlider input[type = "range"] {
+    width: 23%;
+    appearance: none;
+    height: 3.33px;
+    margin: 5px;
+    background: var(--foreground);
+}
+
 number-slider input[type = "range"] {
     width: 20%;
     appearance: none;

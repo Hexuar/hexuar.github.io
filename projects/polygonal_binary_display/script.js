@@ -57,21 +57,20 @@ function RandomizeValues() {
 }
 
 function DrawNode(pos, hollow = false) {
-    if (hollow) StrokeCircle(pos, 0.835 * nodeRadius, COLORS[1], 0.33 * nodeRadius, "round", 1);
-    else FillCircle(pos, nodeRadius, COLORS[1], 1);
-}
-function DrawNodeShadow(pos, hollow = false) {
-    if (hollow) StrokeCircle(Vec2.add(pos, Vec2.mul(lightDir, nodeRadius)), 0.835 * nodeRadius, COLORS[3], 0.33 * nodeRadius);
-    else FillCircle(Vec2.add(pos, Vec2.mul(lightDir, nodeRadius)), nodeRadius, COLORS[2]);
+    if (hollow) {
+        StrokeCircle(pos, 0.835 * nodeRadius, COLORS[1], 0.33 * nodeRadius, "round", 1);
+        if (shadowsEnabled) StrokeCircle(Vec2.add(pos, Vec2.mul(lightDir, nodeRadius)), 0.835 * nodeRadius, COLORS[3], 0.33 * nodeRadius);
+    }
+    else {
+        FillCircle(pos, nodeRadius, COLORS[1], 1);
+        if (shadowsEnabled) FillCircle(Vec2.add(pos, Vec2.mul(lightDir, nodeRadius)), nodeRadius, COLORS[2]);
+    }
 }
 
 function DrawLine(a, b) {
     let d = Vec2.normalize(Vec2.sub(b, a)).mul(nodeRadius - 1)
     StrokeLine(Vec2.add(a, d), Vec2.sub(b, d), COLORS[1], 0.33 * nodeRadius, "round", 1);
-}
-function DrawLineShadow(a, b) {
-    let d = Vec2.normalize(Vec2.sub(b, a)).mul(nodeRadius - 1)
-    StrokeLine(Vec2.add(a, Vec2.mul(lightDir, nodeRadius)).add(d), Vec2.add(b, Vec2.mul(lightDir, nodeRadius)).sub(d), COLORS[2], 0.33 * nodeRadius);
+    if(shadowsEnabled) StrokeLine(Vec2.add(a, Vec2.mul(lightDir, nodeRadius)).add(d), Vec2.add(b, Vec2.mul(lightDir, nodeRadius)).sub(d), COLORS[2], 0.33 * nodeRadius);
 }
 
 
@@ -120,7 +119,6 @@ function Update() {
         for (j = 0; j < N; j++) {
             if (numberString[j] == "1") {
                 DrawLine(nodes[(k * j) % N], nodes[(k * (j + 1)) % N]);
-                if(shadowsEnabled) DrawLineShadow(nodes[(k * j) % N], nodes[(k * (j + 1)) % N]);
             }
         }
     }
@@ -129,6 +127,5 @@ function Update() {
     // Nodes
     for (i = 0; i < N; i++) {
         DrawNode(nodes[i], i == 0);
-        if(shadowsEnabled) DrawNodeShadow(nodes[i], i == 0);
     }
 }
