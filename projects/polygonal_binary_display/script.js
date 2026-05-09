@@ -152,7 +152,7 @@ function Update(deltaTime) {
     nodePositions = nodePositions.slice(0, nodeSlider.value);
     for (i = 0; i < nodeSlider.value; i++) {
         let target = Vec2.add(canvas.center, Vec2(size / 3, -2 * Math.PI / nodeSlider.value * i - Math.PI / 2, true));
-        nodePositions[i] = nodePositions[i] == undefined ? target : lerp(nodePositions[i], target, 10 * deltaTime);
+        nodePositions[i] = nodePositions[i] == undefined ? canvas.center : lerp(nodePositions[i], target, 10 * deltaTime);
     }
 
     // Lines
