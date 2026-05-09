@@ -1,6 +1,8 @@
-::root {
-    --background: red;
-    --foreground: red;
+:root {
+    --background: null;
+    --foreground: null;
+    --lightDir: 0px 0px;
+    --shadow: rgba(0,0,0,0.5);
 }
 
 number-slider {
@@ -8,14 +10,11 @@ number-slider {
     z-index: 1;
     display: flex;
     font-family: monospace;
+    box-shadow: var(--shadowDistance) 5px rgba(0,0,0,0.5);
 }
 
 #nodeSlider input[type = "range"] {
     width: 23%;
-    appearance: none;
-    height: 3.33px;
-    margin: 5px;
-    background: var(--foreground);
 }
 
 number-slider input[type = "range"] {
@@ -24,6 +23,7 @@ number-slider input[type = "range"] {
     height: 3.33px;
     margin: 5px;
     background: var(--foreground);
+    box-shadow: var(--lightDir) var(--shadow);
 }
 
 number-slider input[type = "range"]::-webkit-slider-thumb {
@@ -33,6 +33,7 @@ number-slider input[type = "range"]::-webkit-slider-thumb {
     cursor: pointer;
     background: var(--background);
     border: 3.33px solid var(--foreground);
+    box-shadow: var(--lightDir) *  var(--shadow);
 }
 
 number-slider input[type = "range"]::-moz-range-thumb {
@@ -42,6 +43,7 @@ number-slider input[type = "range"]::-moz-range-thumb {
     cursor: pointer;
     background: var(--background);
     border: 3.33px solid var(--foreground);
+    box-shadow: var(--lightDir) var(--shadow);
 }
 
 number-slider input[type = "number"] {
@@ -53,7 +55,8 @@ number-slider input[type = "number"] {
     font-family: monospace;
     -moz-appearance: textfield;
     appearance: textfield;
-    width: 40px;;
+    width: 40px;
+    text-shadow: var(--lightDir) var(--shadow);
 }
 
 number-slider input[type=number]::-webkit-inner-spin-button,

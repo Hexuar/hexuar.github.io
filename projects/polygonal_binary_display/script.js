@@ -3,7 +3,8 @@ CreateCanvasLayer();
 // UI
 const nodeSlider = document.querySelector("#nodeSlider");
 const numberSliders = document.querySelector("#numberSliders").querySelectorAll("number-slider");
-const lightDir = Vec2(0.5, 0.5);
+const uiShadowAmplitude = 5;
+let lightDir = Vec2(0.5, 0.5);
 let shadowsEnabled = true;
 let nodeRadius = 0;
 
@@ -42,14 +43,13 @@ function RandomizeValues() {
     COLORS = ["hsl(" + hue + " 20% 25%)", "hsl(" + (hue + 180) + " 20% 50%)", "hsl(" + hue + " 20% 15%)"];
 
     nodeSlider.value = Math.randInt(nodeSlider.max - 2) + 3;
-    nodeSlider.style.setProperty("--background", COLORS[0]);
-    nodeSlider.style.setProperty("--foreground", COLORS[1]);
+    document.body.style.setProperty("--background", COLORS[0]);
+    document.body.style.setProperty("--foreground", COLORS[1]);
+    document.body.style.setProperty("--shadow", COLORS[2]);
 
     numberSliders.forEach(slider => {
         slider.max = Math.pow(2, nodeSlider.value) - 1;
         slider.value = Math.randInt(slider.max) + 1;
-        slider.style.setProperty("--background", COLORS[0]);
-        slider.style.setProperty("--foreground", COLORS[1]);
     });
 
     SetKValues();
@@ -105,6 +105,7 @@ function Update(deltaTime) {
     let N = nodeSlider.value;
     let size = Math.min(canvas.width, canvas.height);
     nodeRadius = size / 40;
+    document.body.style.setProperty("--lightDir", uiShadowAmplitude * lightDir.x + "px " + uiShadowAmplitude * lightDir.y + "px")
 
     for (i = 0; i < N; i++) {
         let target = Vec2.add(canvas.center, Vec2(size / 3, - 2 * Math.PI / N * i - Math.PI / 2, true));
