@@ -33,16 +33,16 @@ function DrawClock(pos = new Vec2(50,50), radius = 90, color = "gray", backgroun
   angles.forEach((angle, index) => {
     StrokeArc(pos, radius - handleWidth * (index+1), 0, angle, handleColors[index], handleWidth * 1.05);
   });
-  FillCircle(pos, radius - handleWidth * 4.5, color, handleWidth + 1);
+  FillCircle(pos, radius - handleWidth * 4.5, color);
 }
 
 
 // Update
+let canvasLayers = [];
 function UpdateClocks() {
-  let clocks = document.querySelectorAll('canvas[is="clock-element"]');
-  clocks.forEach(clock => {
-    window.canvas = clock;
-    window.ctx = clock.getContext("2d");
+    let clocks = document.querySelectorAll('canvas[is="clock-element"]');
+    clocks.forEach(clock => {
+    canvasLayers = [clock];
 
     radius = clock.getAttribute("radius");
     color = clock.getAttribute("color") || "gray";

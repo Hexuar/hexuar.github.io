@@ -1,4 +1,4 @@
-let canvasList = [];
+let canvasLayers = [];
 function CreateCanvasLayer() {
     let canvas = document.createElement("canvas");
 
@@ -7,7 +7,7 @@ function CreateCanvasLayer() {
     canvas.height = window.innerHeight;
 
     document.body.appendChild(canvas);
-    canvasList.push(canvas);
+    canvasLayers.push(canvas);
     return canvas;
 }
 
@@ -23,7 +23,7 @@ let oldTime = 0;
 let time;
 
 function UpdateCanvas() {
-    canvasList.forEach(canvas => {
+    canvasLayers.forEach(canvas => {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         canvas.size = new Vec2(canvas.width, canvas.height);

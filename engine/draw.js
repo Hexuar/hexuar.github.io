@@ -1,12 +1,12 @@
 // Clears the canvas
 function Clear(layer = 0) {
-    ctx = canvasList[layer].getContext("2d");
+    ctx = canvasLayers[layer].getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 // Fills the canvas
 function Fill(style, layer = 0) {
-    ctx = canvasList[layer].getContext("2d");
+    ctx = canvasLayers[layer].getContext("2d");
 
     ctx.fillStyle = style;
 
@@ -15,7 +15,7 @@ function Fill(style, layer = 0) {
 
 // Draws a line from posA to posB
 function StrokeLine(posA, posB, style, lineWidth, lineCap, layer = 0) {
-    ctx = canvasList[layer].getContext("2d");
+    ctx = canvasLayers[layer].getContext("2d");
 
     ctx.strokeStyle = style;
     ctx.lineWidth = lineWidth;
@@ -29,7 +29,7 @@ function StrokeLine(posA, posB, style, lineWidth, lineCap, layer = 0) {
 
 // Draws an arc of at the given position
 function StrokeArc(pos, radius, startAngle, endAngle, style, lineWidth, lineCap, layer = 0) {
-    ctx = canvasList[layer].getContext("2d");
+    ctx = canvasLayers[layer].getContext("2d");
 
     ctx.strokeStyle = style;
     ctx.lineWidth = lineWidth;
@@ -42,7 +42,7 @@ function StrokeArc(pos, radius, startAngle, endAngle, style, lineWidth, lineCap,
 
 // Draws a filled arc of at the given position
 function FillArc(pos, radius, startAngle, endAngle, style, layer = 0) {
-    ctx = canvasList[layer].getContext("2d");
+    ctx = canvasLayers[layer].getContext("2d");
 
     ctx.fillStyle = style;
 
@@ -53,7 +53,7 @@ function FillArc(pos, radius, startAngle, endAngle, style, layer = 0) {
 
 // Draws a ring of at the given position
 function StrokeCircle(pos, radius, style, lineWidth, lineCap, layer = 0) {
-    ctx = canvasList[layer].getContext("2d");
+    ctx = canvasLayers[layer].getContext("2d");
 
     ctx.strokeStyle = style;
     ctx.lineWidth = lineWidth;
@@ -66,7 +66,7 @@ function StrokeCircle(pos, radius, style, lineWidth, lineCap, layer = 0) {
 
 // Draws a filled circle at the given position
 function FillCircle(pos, radius, style, layer = 0) {
-    ctx = canvasList[layer].getContext("2d");
+    ctx = canvasLayers[layer].getContext("2d");
 
     ctx.fillStyle = style;
 
@@ -77,7 +77,7 @@ function FillCircle(pos, radius, style, layer = 0) {
 
 // Draws the outline of a triangle between posA, posB and posC
 function StrokeTriangle(posA, posB, posC, style, lineWidth, layer = 0) {
-    ctx = canvasList[layer].getContext("2d");
+    ctx = canvasLayers[layer].getContext("2d");
 
     ctx.strokeStyle = style;
     ctx.lineWidth = lineWidth;
@@ -92,7 +92,7 @@ function StrokeTriangle(posA, posB, posC, style, lineWidth, layer = 0) {
 
 // Draws a filled-in triangle between posA, posB and posC
 function FillTriangle(posA, posB, posC, style, layer = 0) {
-    ctx = canvasList[layer].getContext("2d");
+    ctx = canvasLayers[layer].getContext("2d");
 
     ctx.fillStyle = style;
 
@@ -106,7 +106,7 @@ function FillTriangle(posA, posB, posC, style, layer = 0) {
 
 // Draws the outline of a rectangle with a corner at the given position
 function StrokeRectangle(pos, size, style, lineWidth, lineCap, layer = 0) {
-    ctx = canvasList[layer].getContext("2d");
+    ctx = canvasLayers[layer].getContext("2d");
 
     ctx.strokeStyle = style;
     ctx.lineWidth = lineWidth;
@@ -118,7 +118,7 @@ function StrokeRectangle(pos, size, style, lineWidth, lineCap, layer = 0) {
 
 // Draws a filled-in rectangle with a corner at the given position
 function FillRectangle(pos, size, style, layer = 0) {
-    ctx = canvasList[layer].getContext("2d");
+    ctx = canvasLayers[layer].getContext("2d");
 
     ctx.fillStyle = style;
 
@@ -127,7 +127,7 @@ function FillRectangle(pos, size, style, layer = 0) {
 
 // Draws the outline of a polygon with vertices in the points vector
 function StrokePolygon(points, style, lineWidth, lineCap, layer = 0) {
-    ctx = canvasList[layer].getContext("2d");
+    ctx = canvasLayers[layer].getContext("2d");
 
     ctx.strokeStyle = style;
     ctx.lineWidth = lineWidth;
@@ -145,7 +145,7 @@ function StrokePolygon(points, style, lineWidth, lineCap, layer = 0) {
 
 // Fills a polygon with vertices in the points vector
 function FillPolygon(points, style, layer = 0) {
-    ctx = canvasList[layer].getContext("2d");
+    ctx = canvasLayers[layer].getContext("2d");
 
     ctx.fillStyle = style;
 
@@ -161,7 +161,7 @@ function FillPolygon(points, style, layer = 0) {
 
 // Draws the outline of a regular polygon at the given position
 function StrokeRegularPolygon(pos, corners, size, style, lineWidth, lineCap, layer = 0) {
-    ctx = canvasList[layer].getContext("2d");
+    ctx = canvasLayers[layer].getContext("2d");
 
     ctx.strokeStyle = style;
     ctx.lineWidth = lineWidth;
@@ -183,7 +183,7 @@ function StrokeRegularPolygon(pos, corners, size, style, lineWidth, lineCap, lay
 
 // Draws a filled-in regular polygon at the given position
 function FillRegularPolygon(pos, corners, size, style, layer = 0) {
-    ctx = canvasList[layer].getContext("2d");
+    ctx = canvasLayers[layer].getContext("2d");
 
     ctx.fillStyle = style;
 
@@ -203,7 +203,7 @@ function FillRegularPolygon(pos, corners, size, style, layer = 0) {
 
 // Draws the outline of text
 function StrokeText(pos, text, size, style, lineWidth, lineCap, font = "monospace", layer = 0) {
-    ctx = canvasList[layer].getContext("2d");
+    ctx = canvasLayers[layer].getContext("2d");
 
     ctx.strokeStyle = style;
     ctx.lineWidth = lineWidth;
@@ -215,7 +215,7 @@ function StrokeText(pos, text, size, style, lineWidth, lineCap, font = "monospac
 
 // Draws text
 function FillText(pos, text, size, style, font = "monospace", layer = 0) {
-    ctx = canvasList[layer].getContext("2d");
+    ctx = canvasLayers[layer].getContext("2d");
 
     ctx.fillStyle = style;
     ctx.font = size + "px " + font;
@@ -225,7 +225,7 @@ function FillText(pos, text, size, style, font = "monospace", layer = 0) {
 
 // Draws a vector
 function StrokeVector(vector, pos = new Vec2(), style, size = 2, layer = 0) {
-    ctx = canvasList[layer].getContext("2d");
+    ctx = canvasLayers[layer].getContext("2d");
 
     let u = Vec2.normalize(vector);
 
@@ -254,7 +254,7 @@ function StrokeVector(vector, pos = new Vec2(), style, size = 2, layer = 0) {
 
 // Creates a pattern using a specified function
 function CreatePattern(func, mode = "repeat", layer = 0) {
-    ctx = canvasList[layer].getContext("2d");
+    ctx = canvasLayers[layer].getContext("2d");
     const patternCanvas = document.createElement("canvas");
     const patternContext = patternCanvas.getContext("2d");
     func(patternCanvas, patternContext);
