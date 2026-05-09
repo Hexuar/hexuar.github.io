@@ -3,15 +3,16 @@ const nodeSlider = document.querySelector("#nodeSlider");
 const numberSliders = document.querySelector("#numberSliders").querySelectorAll("number-slider");
 const lightDir = Vec2(0.5, 0.5);
 let shadowsEnabled = true;
+let nodeRadius = 0;
 
 
-function setNumberSliderMax() {
+function SetNumberSliderMax() {
   numberSliders.forEach(slider => {
     slider.max = Math.pow(2, nodeSlider.value) - 1;
   });
 }
 
-function setKValues() {
+function SetKValues() {
   kValues = [1];
   for (k = 2; k < nodeSlider.value / 2; k++) {
     if (nodeSlider.value % k != 0) {
@@ -27,7 +28,7 @@ function setKValues() {
   }
 }
 
-function setNumberSliderDisplay() {
+function SetNumberSliderDisplay() {
   for (i = 1; i < numberSliders.length; i++) {
     if (i < kValues.length) numberSliders[i].style.display = "block";
     else numberSliders[i].style.display = "none";
@@ -49,8 +50,8 @@ function RandomizeValues() {
     slider.style.setProperty("--foreground", COLORS[1]);
   });
 
-  setKValues();
-  setNumberSliderDisplay();
+  SetKValues();
+  SetNumberSliderDisplay();
 }
 
 function DrawNode(pos, hollow = false) {
@@ -74,9 +75,9 @@ function DrawLineShadow(a, b) {
 
 // Init
 nodeSlider.addEventListener("input", () => {
-  setNumberSliderMax();
-  setKValues();
-  setNumberSliderDisplay();
+  SetNumberSliderMax();
+  SetKValues();
+  SetNumberSliderDisplay();
 });
 document.addEventListener("keydown", (event) => {
   if (event.key === " ") RandomizeValues();
@@ -93,9 +94,14 @@ function Update() {
   Clear();
   Fill(COLORS[0]);
 
-  N = nodeSlider.value;
-  size = Math.min(canvas.width, canvas.height);
+  let N = nodeSlider.value;
+  let size = Math.min(canvas.width, canvas.height);
   nodeRadius = size / 40;
+
+  let nodes = [];
+  for (i = 0; i < N; i++) {
+    nodes[i] = Vec2.add(canvas.center, Vec2(size / 3, 2 * Math.PI / N * i - Math.PI / 2, true));
+  }
 
 
   if (shadowsEnabled) {
@@ -110,14 +116,14 @@ function Update() {
 
       for (j = 0; j < N; j++) {
         if (numberString[j] == "1") {
-          DrawLineShadow(Vec2.add(canvas.center, Vec2(size / 3, 2 * Math.PI / N * k * j - Math.PI / 2, true)), Vec2.add(canvas.center, Vec2(size / 3, 2 * Math.PI / N * k * (j + 1) - Math.PI / 2, true)));
+          DrawLineShadow(nodes[(k * j) % N], nodes[(k * (j + 1)) % N]);
         }
       }
     }
 
     // Node shadows
     for (i = 0; i < N; i++) {
-      DrawNodeShadow(Vec2.add(canvas.center, Vec2(size / 3, 2 * Math.PI / N * i - Math.PI / 2, true)), i == 0);
+      DrawNodeShadow(nodes[i], i == 0);
     }
   }
 
@@ -132,13 +138,13 @@ function Update() {
 
     for (j = 0; j < N; j++) {
       if (numberString[j] == "1") {
-        DrawLine(Vec2.add(canvas.center, Vec2(size / 3, 2 * Math.PI / N * k * j - Math.PI / 2, true)), Vec2.add(canvas.center, Vec2(size / 3, 2 * Math.PI / N * k * (j + 1) - Math.PI / 2, true)));
+        DrawLine(nodes[(k * j) % N], nodes[(k * (j + 1)) % N]);
       }
     }
   }
 
   // Nodes
   for (i = 0; i < N; i++) {
-    DrawNode(Vec2.add(canvas.center, Vec2(size / 3, 2 * Math.PI / N * i - Math.PI / 2, true)), i == 0);
+    DrawNode(nodes[i], i == 0);
   }
 }
