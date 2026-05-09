@@ -8,6 +8,8 @@ let uiVisible = true;
 let nodeRadius = 0;
 let nodePositions = [];
 let kValues = [];
+let hue = 0;
+let targetHue = 0;
 
 
 // Calculates current allowed k values
@@ -37,14 +39,31 @@ function SetSliderVisibility() {
 }
 
 
+// Get color palette
+function GetColor(index) {
+    switch (index) {
+        case 0:
+            return "hsl(" + hue + " 20% 25%)";
+        case 1:
+            return "hsl(" + (hue + 180) + " 20% 50%)";
+        case 2:
+            return "hsl(" + hue + " 20% 15%)";
+    }
+}
+
+
+// Set css color palette
+function SetColors() {
+    document.body.style.setProperty("--background", GetColor(0));
+    document.body.style.setProperty("--foreground", GetColor(1));
+    document.body.style.setProperty("--shadow", GetColor(2));
+}
+
+
 // Randomises colours and slider values
 function RandomizeValues() {
     // Colors
-    let hue = 360 * Math.random();
-    COLORS = ["hsl(" + hue + " 20% 25%)", "hsl(" + (hue + 180) + " 20% 50%)", "hsl(" + hue + " 20% 15%)"];
-    document.body.style.setProperty("--background", COLORS[0]);
-    document.body.style.setProperty("--foreground", COLORS[1]);
-    document.body.style.setProperty("--shadow", COLORS[2]);
+    targetHue = 360 * Math.random();
 
     // Sliders
     nodeSlider.value = Math.randInt(nodeSlider.max - 2) + 3;
@@ -61,24 +80,25 @@ function RandomizeValues() {
 // Drawing functions with shadows if shadowsEnabled == true
 function DrawNode(pos, hollow = false) {
     if (hollow) {
-        StrokeCircle(pos, 0.835 * nodeRadius, COLORS[1], 0.33 * nodeRadius, "round", 1);
-        if (shadowsEnabled) StrokeCircle(Vec2.add(pos, Vec2.mul(lightDir, nodeRadius)), 0.835 * nodeRadius, COLORS[3], 0.33 * nodeRadius);
+        StrokeCircle(pos, 0.835 * nodeRadius, GetColor(1), 0.33 * nodeRadius, "round", 1);
+        if (shadowsEnabled) StrokeCircle(Vec2.add(pos, Vec2.mul(lightDir, nodeRadius)), 0.835 * nodeRadius, GetColor(2), 0.33 * nodeRadius);
     }
     else {
-        FillCircle(pos, nodeRadius, COLORS[1], 1);
-        if (shadowsEnabled) FillCircle(Vec2.add(pos, Vec2.mul(lightDir, nodeRadius)), nodeRadius, COLORS[2]);
+        FillCircle(pos, nodeRadius, GetColor(1), 1);
+        if (shadowsEnabled) FillCircle(Vec2.add(pos, Vec2.mul(lightDir, nodeRadius)), nodeRadius, GetColor(2));
     }
 }
 function DrawLine(a, b) {
     let d = Vec2.normalize(Vec2.sub(b, a)).mul(nodeRadius - 1)
-    StrokeLine(Vec2.add(a, d), Vec2.sub(b, d), COLORS[1], 0.33 * nodeRadius, "round", 1);
-    if(shadowsEnabled) StrokeLine(Vec2.add(a, Vec2.mul(lightDir, nodeRadius)).add(d), Vec2.add(b, Vec2.mul(lightDir, nodeRadius)).sub(d), COLORS[2], 0.33 * nodeRadius);
+    StrokeLine(Vec2.add(a, d), Vec2.sub(b, d), GetColor(1), 0.33 * nodeRadius, "round", 1);
+    if(shadowsEnabled) StrokeLine(Vec2.add(a, Vec2.mul(lightDir, nodeRadius)).add(d), Vec2.add(b, Vec2.mul(lightDir, nodeRadius)).sub(d), GetColor(2), 0.33 * nodeRadius);
 }
 
 
 // Linear interpolation of vectors
 function lerp(a, b, t) {
-  return Vec2.add(Vec2.mul(a, 1 - t), Vec2.mul(b, t));
+    if (a instanceof Vec2) return Vec2.add(Vec2.mul(a, 1 - t), Vec2.mul(b, t));
+    else return (1 - t) * a + t * b;
 }
 
 
@@ -118,7 +138,11 @@ RandomizeValues();
 function Update(deltaTime) {
     // Clear canvas
     Clear(1);
-    Fill(COLORS[0]);
+    Fill(GetColor(0));
+
+    // Interpolate colors
+    hue = lerp(hue, targetHue, 10 * deltaTime);
+    SetColors();
 
     // Calculate size
     let size = Math.min(canvas.width, canvas.height);
