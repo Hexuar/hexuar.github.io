@@ -11,6 +11,7 @@ fetch("./projects/projects.json")
         data.sort(function (a, b) {
             return new Date(b.created) - new Date(a.created);
         });
+        title.href = "./project.html?id=" + data[0].id;
         title.innerHTML = data[0].title;
         desc.innerHTML = data[0].description;
         timestamp.innerHTML = data[0].created;
