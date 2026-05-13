@@ -3,7 +3,7 @@
     "id": "polygonal_binary_display",
     "title": "Polygonal Binary Display",
     "description": "Display numbers in binary on a polygon.",
-    "info": "Use the sliders to adjust the number of vertices and the numbers to display. Press <b>space</b> or <b>double touch</b> to randomise, press <b>s</b> to toggle shadows and press <b>h</b> to toggle UI.",
+    "info": "Use the sliders to adjust the number of vertices and the numbers to display.<br><br> <b>Space</b>: Randomise.<br> <b>Double Touch</b>: Randomise.<br> <b>S</b>: Toggle shadows.<br> <b>H</b>: Toggle UI.<br> <b>C</b>: Toggle palette type.",
     "created": "2026-05-04"
   },
   {

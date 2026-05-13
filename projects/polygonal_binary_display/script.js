@@ -10,6 +10,7 @@ let nodePositions = [];
 let kValues = [];
 let hue = 0;
 let targetHue = 0;
+let complementaryColors = true;
 
 
 // Calculates current allowed k values
@@ -43,14 +44,15 @@ function SetSliderVisibility() {
 function GetColor(index) {
     switch (index) {
         case 0:
-            return "hsl(" + hue + " 20% 25%)";
+            return "oklch(25% 20%" + hue + ")"; //"hsl(" + hue + " 20% 25%)";
         case 1:
-            return "hsl(" + (hue + 180) + " 20% 50%)";
+            h = hue
+            if(complementaryColors) h = hue + 180
+            return "oklch(50% 20%" + h + ")";//"hsl(" + (hue + 180) + " 20% 50%)";
         case 2:
-            return "hsl(" + hue + " 20% 15%)";
+            return "oklch(15% 20%" + hue + ")";//"hsl(" + hue + " 20% 15%)";
     }
 }
-
 
 // Set css color palette
 function SetColors() {
@@ -121,6 +123,9 @@ document.addEventListener("keydown", (event) => {
         uiVisible = !uiVisible;
         if (uiVisible) uiContainer.style.display = "block";
         else uiContainer.style.display = "none";
+    }
+    if (event.key === "c") {
+        complementaryColors = !complementaryColors;
     }
 });
 document.addEventListener("touchstart", (event) => {
