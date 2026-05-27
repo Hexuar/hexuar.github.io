@@ -9,10 +9,10 @@ class Segment {
         this.direction = direction;
     }
     get left() {
-        return Vec2.add(this.position, Vec2(this.radius, this.direction.theta + Math.PI / 2, true));
+        return Vec2.add(this.position, Vec2(this.radius, this.direction.theta - Math.PI / 2, true));
     }
     get right() {
-        return Vec2.add(this.position, Vec2(this.radius, this.direction.theta - Math.PI / 2, true));
+        return Vec2.add(this.position, Vec2(this.radius, this.direction.theta + Math.PI / 2, true));
     }
 }
 
@@ -25,6 +25,25 @@ for (i = 0; i < n; i++) {
 segments[0].direction = Vec2(1, 0);
 
 
+function Spline(points = [], strength = 10, color) {
+    let region = new Path2D();
+    region.moveTo(points[1].x, points[1].y);
+    for (i = 1; i < points.length - 2; i++) {
+        let a1 = Vec2.sub(points[i], points[i - 1]);
+        let b1 = Vec2.sub(points[i], points[i + 1]);
+        let c1 = Vec2.add(points[i], Vec2.sub(a1, b1).normalize().mul(strength));
+        let a2 = Vec2.sub(points[i + 1], points[i]);
+        let b2 = Vec2.sub(points[i + 1], points[i + 2]);
+        let c2 = Vec2.add(points[i + 1], Vec2.sub(b2, a2).normalize().mul(strength));
+        region.bezierCurveTo(c1.x, c1.y, c2.x, c2.y, points[i + 1].x, points[i + 1].y);
+    }
+    region.closePath();
+    ctx.strokeStyle = "black";
+    ctx.fillStyle = color;
+    ctx.fill(region);
+}
+
+
 function Update(deltaTime) {
     Fill("hsl(209.77485402423108 20% 25%)");
 
@@ -33,20 +52,23 @@ function Update(deltaTime) {
     let D = Vec2.sub(mouse.pos, segments[0].position);
     if(D.r > 2) segments[0].position = Vec2.add(segments[0].position, D.div(2));
 
-    for (i = 1; i < n; i++) {
+    for (i = 0; i < n; i++) {
         let s = segments[i];
-        let p = segments[i - 1];
-
-        s.direction = Vec2.sub(p.position, s.position).normalize();
-        s.position = Vec2.sub(p.position, Vec2.mul(s.direction, p.distance));
-
-        if (p != undefined && p.direction != undefined) {
-            StrokeLine(p.right, s.right, color, 2);
-            StrokeLine(p.left, s.left, color, 2);
+        if (i != 0) {
+            let p = segments[i - 1];
+            s.direction = Vec2.sub(p.position, s.position).normalize();
+            s.position = Vec2.sub(p.position, Vec2.mul(s.direction, p.distance));
         }
     }
 
-    StrokeArc(segments[0].position, segments[0].radius, segments[0].direction.theta - Math.PI / 2, segments[0].direction.theta + Math.PI / 2, color, 2);
-    StrokeArc(segments[n-1].position, segments[n-1].radius, segments[n-1].direction.theta + Math.PI / 2, segments[n-1].direction.theta - Math.PI / 2, color, 2);
+    let nodes = [segments[1].right, segments[0].right];
+    for (i = 0; i < n; i++) {
+        nodes.push(segments[i].left);
+    }
+    for (i = n - 1; i >= 0; i--) {
+        nodes.push(segments[i].right);
+    }
+    nodes.push(segments[0].left)
 
+    Spline(nodes, 20, color);
 }
