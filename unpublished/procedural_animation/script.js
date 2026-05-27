@@ -20,21 +20,21 @@ class Segment {
 let n = 20;
 let segments = [];
 for (i = 0; i < n; i++) {
-    segments.push(new Segment(Vec2(200, 200 + 1.5 * 50 * i), n - i + 2, 50));
+    segments.push(new Segment(Vec2(200, 200 + 1.5 * 50 * i), n - i, 50));
 }
 segments[0].direction = Vec2(1, 0);
 
 
-function Spline(points = [], strength = 10, color) {
+function Spline(points = [], strength = 8, color) {
     let region = new Path2D();
     region.moveTo(points[1].x, points[1].y);
     for (i = 1; i < points.length - 2; i++) {
         let a1 = Vec2.sub(points[i], points[i - 1]);
         let b1 = Vec2.sub(points[i], points[i + 1]);
-        let c1 = Vec2.add(points[i], Vec2.sub(a1, b1).normalize().mul(strength));
+        let c1 = Vec2.add(points[i], Vec2.sub(a1, b1).normalize().mul((a1.length + b1.length) / strength));
         let a2 = Vec2.sub(points[i + 1], points[i]);
         let b2 = Vec2.sub(points[i + 1], points[i + 2]);
-        let c2 = Vec2.add(points[i + 1], Vec2.sub(b2, a2).normalize().mul(strength));
+        let c2 = Vec2.add(points[i + 1], Vec2.sub(b2, a2).normalize().mul((a1.length + b1.length) / strength));
         region.bezierCurveTo(c1.x, c1.y, c2.x, c2.y, points[i + 1].x, points[i + 1].y);
     }
     region.closePath();
@@ -70,5 +70,5 @@ function Update(deltaTime) {
     }
     nodes.push(segments[0].left)
 
-    Spline(nodes, 20, color);
+    Spline(nodes, 8, color);
 }
