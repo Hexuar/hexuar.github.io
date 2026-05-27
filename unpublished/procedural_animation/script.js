@@ -17,14 +17,14 @@ class Segment {
 }
 
 
-let speed = 5;
+let speed = 10;
 let turnspeed = 0.03;
 let n = 30;
 let segments = [];
 for (i = 0; i < n; i++) {
     segments.push(new Segment(Vec2(200, 200 + 1.5 * 50 * i), n - i + 5, 50));
 }
-segments[0].direction = Vec2(1, 0);
+segments[0].direction = Vec2(0, -1);
 
 
 function Spline(points = [], color) {
@@ -57,6 +57,12 @@ function Update(deltaTime) {
     if (keyboard.held("d")) segments[0].direction.add(Vec2(turnspeed, 0));
     segments[0].direction.normalize();
     segments[0].position.add(Vec2.mul(segments[0].direction, speed));
+
+    let front = Vec2.add(segments[0].position, Vec2.mul(segments[0].direction, segments[0].radius));
+    if (front.x < 0) segments[0].direction.add(Vec2(0.1, front.y > canvas.center.y ? 0.1 : -0.1));
+    if (front.x > canvas.width) segments[0].direction.add(Vec2(-0.1, front.y > canvas.center.y ? 0.1 : -0.1));
+    if (front.y < 0) segments[0].direction.add(Vec2(front.x > canvas.center.x ? -0.1 : 0.1, 0.1));
+    if (front.y > canvas.height) segments[0].direction.add(Vec2(front.x > canvas.center.x ? -0.1 : 0.1, -0.1));
 
     for (i = 1; i < n; i++) {
         let s = segments[i];
