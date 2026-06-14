@@ -1,24 +1,5 @@
-const particles = [];
-class Particle {
-    constructor(position = Vec2(), type = 0) {
-        this.position = position;
-        this.velocity = Vec2();
-        this.type = type;
-
-        particles.push(this);
-    }
-    GetInteraction(particle) {
-        let f = interactionMatrix[this.type][particle.type];
-        let d = Vec2.sub(particle.position, this.position);
-        return d.normalize().mul(f / Vec2.sub(this.position, particle.position).lengthSquared);
-    }
-    Draw(cameraPos, zoom) {
-        FillCircle(Vec2.add(this.position, cameraPos).mul(zoom).add(canvas.center), 3 * zoom, colors[this.type].toString());
-    }
-}
-
 const SIMULATION_SPEED = 2000;
-const TYPE_COUNT = 3;
+const TYPE_COUNT = 5;
 const PARTICLE_COUNT = 1500;
 const FRICTION = 0.1;
 const CAMERA_SPEED = 1000;
@@ -29,27 +10,27 @@ let cameraPosition = Vec2().sub(canvas.center);
 let zoom = 0.75;
 let colors = [];
 let interactionMatrix = [];
+let t = 0;
 
-for (let i = 0; i < TYPE_COUNT; i++) {
-    colors.push(Color(255 * Math.random(), 255 * Math.random(), 255 * Math.random(), OPACITY));
-}
 
-for (let i = 0; i < TYPE_COUNT; i++) {
-    interactionMatrix.push([]);
-    for (let j = 0; j < TYPE_COUNT; j++) {
-        interactionMatrix[i].push(2 * Math.random() - 1);
+function Init() {
+    for (let i = 0; i < TYPE_COUNT; i++) {
+        colors.push(Color(255 * Math.random(), 255 * Math.random(), 255 * Math.random(), OPACITY));
+    }
+
+    for (let i = 0; i < TYPE_COUNT; i++) {
+        interactionMatrix.push([]);
+        for (let j = 0; j < TYPE_COUNT; j++) {
+            interactionMatrix[i].push(2 * Math.random() - 1);
+        }
+    }
+
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+        new Particle(Vec2(Math.random() * canvas.width, Math.random() * canvas.height), Math.randInt(TYPE_COUNT));
     }
 }
+Init();
 
-console.log(colors);
-console.log(interactionMatrix);
-
-for (let i = 0; i < PARTICLE_COUNT; i++) {
-    new Particle(Vec2(Math.random() * canvas.width, Math.random() * canvas.height), Math.randInt(TYPE_COUNT));
-}
-
-
-let t = 0;
 
 function Update(deltaTime) {
     Fill("black");
@@ -65,6 +46,8 @@ function Update(deltaTime) {
     particles.forEach(p1 => {
         particles.forEach(p2 => {
             if (p1 === p2) return;
+            if (Math.abs(p1.position.x - p2.position.x) > MAX_RADIUS) return;
+            if (Math.abs(p1.position.y - p2.position.y) > MAX_RADIUS) return;
             let d = Vec2.sub(p1.position, p2.position).lengthSquared;
             if (d < MIN_RADIUS || d > MAX_RADIUS) return;
             p1.velocity.add(p1.GetInteraction(p2).mul(SIMULATION_SPEED * deltaTime));

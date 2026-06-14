@@ -2,6 +2,7 @@
   "packageGroup": "Game",
   "packageDirectory": "",
   "packages": [
+    "particle.js",
     "script.js"
   ]
 }
