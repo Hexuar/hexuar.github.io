@@ -1,11 +1,11 @@
 const settings = {
-    simulationSpeed : 5000,
+    simulationSpeed : 1000,
     friction : 0.1,
-    typeCount : 5,
+    typeCount : 10,
     particleCount : 5000,
     minRadius : 20,
     maxRadius : 100,
-    opacity : 0.5,
+    opacity : 0.2,
 }
 
 
