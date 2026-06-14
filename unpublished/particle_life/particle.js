@@ -18,8 +18,8 @@ class Particle {
             Chunks.Add(this, this.GetChunkCoordinates(this));
         }
     }
-    Draw(cameraPos, zoom) {
-        FillCircle(Vec2.sub(this.position, cameraPos).mul(zoom).add(canvas.center), 3 * zoom, colors[this.type].toString());
+    Draw(camera) {
+        FillCircle(camera.WorldToViewport(this.position), 3 * camera.zoom, colors[this.type].toString());
     }
     GetInteraction(particle) {
         let f = interactionMatrix[this.type][particle.type];

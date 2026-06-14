@@ -2,13 +2,11 @@ const SIMULATION_SPEED = 2000;
 const TYPE_COUNT = 5;
 const PARTICLE_COUNT = 2000;
 const FRICTION = 0.1;
-const CAMERA_SPEED = 1000;
 const CHUNK_SIZE = 100;
 const MIN_RADIUS = Math.sq(20);
 const MAX_RADIUS = Math.sq(CHUNK_SIZE);
 const OPACITY = 0.5;
-let cameraPosition = Vec2().add(canvas.center);
-let zoom = 0.75;
+const CAMERA = new Camera(canvas.center, 0.75, 1000, 1);
 let colors = [];
 let interactionMatrix = [];
 let t = 0;
@@ -36,17 +34,16 @@ Init();
 function Update(deltaTime) {
     Fill("black");
 
-    if (keyboard.held("w")) cameraPosition.y -= CAMERA_SPEED * deltaTime;
-    if (keyboard.held("a")) cameraPosition.x -= CAMERA_SPEED * deltaTime;
-    if (keyboard.held("s")) cameraPosition.y += CAMERA_SPEED * deltaTime;
-    if (keyboard.held("d")) cameraPosition.x += CAMERA_SPEED * deltaTime;
-
-    if (keyboard.held("q")) zoom += zoom * deltaTime;
-    if (keyboard.held("e")) zoom -= zoom * deltaTime;
+    if (keyboard.held("w")) CAMERA.position.y -= CAMERA.speed * deltaTime;
+    if (keyboard.held("a")) CAMERA.position.x -= CAMERA.speed * deltaTime;
+    if (keyboard.held("s")) CAMERA.position.y += CAMERA.speed * deltaTime;
+    if (keyboard.held("d")) CAMERA.position.x += CAMERA.speed * deltaTime;
+    if (keyboard.held("q")) CAMERA.zoom += CAMERA.zoomSpeed * CAMERA.zoom * deltaTime;
+    if (keyboard.held("e")) CAMERA.zoom -= CAMERA.zoomSpeed * CAMERA.zoom * deltaTime;
 
     particles.forEach(p1 => {
         p1.Update();
-        p1.Draw(cameraPosition, zoom);
+        p1.Draw(CAMERA);
 
         p1.GetNearbyParticles().forEach(p2 => {
             if (p1 === p2) return;
