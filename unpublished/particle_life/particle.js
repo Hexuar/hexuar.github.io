@@ -22,9 +22,14 @@ class Particle {
         FillCircle(camera.WorldToViewport(this.position), 3 * camera.zoom, colors[this.type].toString());
     }
     GetInteraction(particle) {
-        let f = interactionMatrix[this.type][particle.type];
+        let interactionStrength = interactionMatrix[this.type][particle.type];
+        let minRadius = minRadiusMatrix[this.type][particle.type];
+        let maxRadius = maxRadiusMatrix[this.type][particle.type];
+        
         let d = Vec2.sub(particle.position, this.position);
-        return d.normalize().mul(f / Vec2.sub(this.position, particle.position).lengthSquared);
+        let distance = Vec2.sub(this.position, particle.position).lengthSquared;
+        if(distance < minRadius || distance > maxRadius) return Vec2();
+        return d.normalize().mul(interactionStrength / distance);
     }
     IsWithinChunkBoundaries(chunkPosition) {
         return (Math.floor(this.position.x / CHUNK_SIZE) == chunkPosition.x && Math.floor(this.position.y / CHUNK_SIZE) == chunkPosition.y);

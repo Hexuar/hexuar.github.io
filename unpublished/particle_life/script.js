@@ -1,23 +1,25 @@
 const settings = {
     simulationSpeed : 1000,
-    friction : 0.1,
-    typeCount : 10,
+    friction : 0.3,
+    typeCount : 7,
     particleCount : 5000,
-    minRadius : 20,
-    maxRadius : 100,
-    opacity : 0.2,
+    minRadiusMin : 20,
+    minRadiusMax : 20,
+    maxRadiusMin : 100,
+    maxRadiusMax : 100,
+    opacity : 0.5,
 }
 
+const CHUNK_SIZE = settings.maxRadiusMax;
+const MIN_RADIUS_SQUARED = Math.sq(settings.minRadiusMin);
+const MAX_RADIUS_SQUARED = Math.sq(settings.maxRadiusMax);
+let camera = new Camera(canvas.center, 0.75, 1000, 1);
 
 let t = 0;
 let colors = [];
 let interactionMatrix = [];
-let camera = new Camera(canvas.center, 0.75, 1000, 1);
-const CHUNK_SIZE = settings.maxRadius;
-const MIN_RADIUS_SQUARED = Math.sq(settings.minRadius);
-const MAX_RADIUS_SQUARED = Math.sq(settings.maxRadius);
-
-
+let minRadiusMatrix = [];
+let maxRadiusMatrix = [];
 function Init() {
     for (let i = 0; i < settings.typeCount; i++) {
         colors.push(Color(255 * Math.random(), 255 * Math.random(), 255 * Math.random(), settings.opacity));
@@ -25,8 +27,12 @@ function Init() {
 
     for (let i = 0; i < settings.typeCount; i++) {
         interactionMatrix.push([]);
+        minRadiusMatrix.push([]);
+        maxRadiusMatrix.push([]);
         for (let j = 0; j < settings.typeCount; j++) {
             interactionMatrix[i].push(2 * Math.random() - 1);
+            minRadiusMatrix[i].push(Math.sq((settings.minRadiusMax - settings.minRadiusMin) * Math.random() + settings.minRadiusMin));
+            maxRadiusMatrix[i].push(Math.sq((settings.maxRadiusMax - settings.maxRadiusMin) * Math.random() + settings.maxRadiusMin));
         }
     }
 
@@ -40,10 +46,10 @@ Init();
 function Update(deltaTime) {
     Fill("black");
 
-    if (keyboard.held("w")) camera.position.y -= camera.speed * deltaTime;
-    if (keyboard.held("a")) camera.position.x -= camera.speed * deltaTime;
-    if (keyboard.held("s")) camera.position.y += camera.speed * deltaTime;
-    if (keyboard.held("d")) camera.position.x += camera.speed * deltaTime;
+    if (keyboard.held("w")) camera.position.y -= (1/camera.zoom) * camera.speed * deltaTime;
+    if (keyboard.held("a")) camera.position.x -= (1/camera.zoom) * camera.speed * deltaTime;
+    if (keyboard.held("s")) camera.position.y += (1/camera.zoom) * camera.speed * deltaTime;
+    if (keyboard.held("d")) camera.position.x += (1/camera.zoom) * camera.speed * deltaTime;
     if (keyboard.held("q")) camera.zoom += camera.zoomSpeed * camera.zoom * deltaTime;
     if (keyboard.held("e")) camera.zoom -= camera.zoomSpeed * camera.zoom * deltaTime;
 
