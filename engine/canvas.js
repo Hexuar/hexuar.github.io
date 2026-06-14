@@ -20,9 +20,8 @@ let canvas = CreateCanvasLayer();
 let ctx = canvas.getContext("2d");
 
 let oldTime = 0;
-let time;
 
-function UpdateCanvas() {
+function UpdateCanvas(timestamp) {
     canvasLayers.forEach(canvas => {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -30,9 +29,8 @@ function UpdateCanvas() {
         canvas.center = new Vec2.div(canvas.size, 2);
     });
 
-    let time = new Date().getTime();
-    let deltaTime = (time - oldTime)/1000;
-    oldTime = time;
+    let deltaTime = (timestamp - oldTime)/1000;
+    oldTime = timestamp;
 
     if (window.Update != undefined) window.Update(deltaTime);
     requestAnimationFrame(UpdateCanvas);
