@@ -11,7 +11,7 @@ class Particle {
     }
     Update() {
         this.position.add(this.velocity);
-        this.velocity.mul(1 - FRICTION);
+        this.velocity.mul(1 - settings.friction);
 
         if (!this.IsWithinChunkBoundaries(this.chunkPosition)) {
             Chunks.Remove(this, this.chunkPosition);
