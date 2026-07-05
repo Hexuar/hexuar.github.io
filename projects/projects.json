@@ -1,5 +1,12 @@
 [
   {
+    "id": "particle_life",
+    "title": "Particle Life",
+    "description": "A simple particle life implementation.",
+    "info": "Use <b>WASD</b> to move and <b>q</b>/<b>e</b> to zoom.",
+    "created": "2026-06-14"
+  },
+  {
     "id": "polygonal_binary_display",
     "title": "Polygonal Binary Display",
     "description": "Display numbers in binary on a polygon.",
