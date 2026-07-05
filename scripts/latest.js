@@ -1,9 +1,10 @@
-const title = document.getElementById("latestTitle");
-const desc = document.getElementById("latestDesc");
-const timestamp = document.getElementById("latestTimestamp");
-const iframe = document.getElementById("latestFrame");
-const info = document.getElementById("latestInfo");
-
+let latest = {
+    title: document.getElementById("latestTitle"),
+    desc: document.getElementById("latestDesc"),
+    timestamp: document.getElementById("latestTimestamp"),
+    iframe: document.getElementById("latestFrame"),
+    info: document.getElementById("latestInfo"),
+}
 
 fetch("./projects/projects.json")
     .then((result) => (data = result.json()))
@@ -11,10 +12,10 @@ fetch("./projects/projects.json")
         data.sort(function (a, b) {
             return new Date(b.created) - new Date(a.created);
         });
-        title.href = "./project.html?id=" + data[0].id;
-        title.innerHTML = data[0].title;
-        desc.innerHTML = data[0].description;
-        timestamp.innerHTML = data[0].created;
-        info.innerHTML = data[0].info;
-        iframe.src = "projects/" + data[0].id + "/";
+        latest.title.href = "./project.html?id=" + data[0].id;
+        latest.title.innerHTML = data[0].title;
+        latest.desc.innerHTML = data[0].description;
+        latest.timestamp.innerHTML = data[0].created;
+        latest.info.innerHTML = data[0].info;
+        latest.iframe.src = "projects/" + data[0].id + "/";
     });
