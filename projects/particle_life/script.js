@@ -1,4 +1,5 @@
 const settings = {
+    logFps: false,
     simulationSpeed : 5000,
     friction : 0.3,
     typeCount : 5,
@@ -68,6 +69,6 @@ function Update(deltaTime) {
     t += deltaTime;
     if (t > 0.5) {
         t -= 0.5;
-        console.log("FPS:", Math.round(1 / deltaTime));
+        if(settings.logFps) console.log("FPS:", Math.round(1 / deltaTime));
     }
 }

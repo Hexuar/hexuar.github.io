@@ -10,9 +10,9 @@ fetch("./projects/projects.json")
     .then((result) => (data = result.json()))
     .then((data) => {
         featuredProject = {}
-        for (let i = 0; i < data.length; i++) {
-            if (data[i].id === "polygonal_binary_display") {
-                featuredProject = data[i]
+        for (let i = 0; i < data.projects.length; i++) {
+            if (data.projects[i].id === data.featured) {
+                featuredProject = data.projects[i]
                 break;
             }
         }

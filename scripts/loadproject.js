@@ -14,7 +14,7 @@ const infoBox = document.getElementById("infoBox");
 fetch("./projects/projects.json")
     .then((result) => (data = result.json()))
     .then((data) => {
-        let project = data.find(obj => { return obj.id == id });
+        let project = data.projects.find(obj => { return obj.id == id });
 
         if(project.info == undefined) {
             infoBox.hidden = true;

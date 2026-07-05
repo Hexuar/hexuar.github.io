@@ -22,10 +22,10 @@ function AddToProjectList(project) {
 fetch("./projects/projects.json")
     .then((result) => (data = result.json()))
     .then((data) => {
-        data.sort(function (a, b) {
+        data.projects.sort(function (a, b) {
             return new Date(b.created) - new Date(a.created);
         });
-        data.forEach((project) => {
+        data.projects.forEach((project) => {
             AddToProjectList(project);
         });
     });
