@@ -52,10 +52,8 @@ function fractalC(a = Vec2(), b = Vec2(), color, lineWidth, max, n = 0) {
     fractalC(b, c, color, lineWidth, max, n + 1);
 }
 
-function Update() {
-    Fill("black");
+Fill("black");
 
-    let a = Vec2(400, 400);
-    let b = Vec2.sub(canvas.size, a);
-    fractalC(a, b, "white", 0.5, 15);
-}
+let a = Vec2(400, 400);
+let b = Vec2.sub(canvas.size, a);
+fractalC(a, b, "white", 0.5, 20);
