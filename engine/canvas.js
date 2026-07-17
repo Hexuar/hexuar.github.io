@@ -5,8 +5,6 @@ function CreateCanvasLayer() {
     canvas.style = "position:absolute; top:0px; left:0px";
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    canvas.size = new Vec2(canvas.width, canvas.height);
-    canvas.center = new Vec2.div(canvas.size, 2);
 
     document.body.appendChild(canvas);
     canvasLayers.push(canvas);
@@ -24,10 +22,7 @@ let ctx = canvas.getContext("2d");
 let oldTime = 0;
 
 function UpdateCanvas(timestamp) {
-    if (window.Update == undefined) return;
-
     canvasLayers.forEach(canvas => {
-        if (canvas.width == window.innerWidth || canvas.height == window.innerHeight) return;
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         canvas.size = new Vec2(canvas.width, canvas.height);
@@ -37,7 +32,7 @@ function UpdateCanvas(timestamp) {
     let deltaTime = (timestamp - oldTime)/1000;
     oldTime = timestamp;
 
-    window.Update(deltaTime);
+    if (window.Update != undefined) window.Update(deltaTime);
     requestAnimationFrame(UpdateCanvas);
 }
 UpdateCanvas();
