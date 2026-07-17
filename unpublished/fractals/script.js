@@ -37,10 +37,25 @@ function fractalB(a = Vec2(), b = Vec2(), color, lineWidth, max, n = 0) {
     fractalB(b, c, color, lineWidth, max, n + 1);
 }
 
+function fractalC(a = Vec2(), b = Vec2(), color, lineWidth, max, n = 0) {
+    if(n == 0) {
+        StrokeLine(a, b, color, lineWidth);
+    }
+    if(n >= max) return;
+
+    let c = Vec2.sub(b, a).div(2).left.add(Vec2.add(a, b).div(2));
+
+    StrokeLine(a, c, color, lineWidth);
+    StrokeLine(c, b, color, lineWidth);
+
+    fractalC(a, c, color, lineWidth, max, n + 1);
+    fractalC(b, c, color, lineWidth, max, n + 1);
+}
+
 function Update() {
     Fill("black");
 
     let a = Vec2(400, 400);
     let b = Vec2.sub(canvas.size, a);
-    fractalB(a, b, "white", 0.5, 6);
+    fractalC(a, b, "white", 0.5, 15);
 }
