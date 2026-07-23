@@ -23,6 +23,7 @@ let oldTime = 0;
 
 function UpdateCanvas(timestamp) {
     canvasLayers.forEach(canvas => {
+        if(canvas.resize == false) return;
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         canvas.size = new Vec2(canvas.width, canvas.height);
@@ -32,7 +33,7 @@ function UpdateCanvas(timestamp) {
     let deltaTime = (timestamp - oldTime)/1000;
     oldTime = timestamp;
 
-    if (window.Update != undefined) window.Update(deltaTime);
+   if (window.Update != undefined) window.Update(deltaTime);
     requestAnimationFrame(UpdateCanvas);
 }
 UpdateCanvas();

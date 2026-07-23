@@ -145,6 +145,7 @@ function UpdateInput() {
     if (navigator.getGamepads().length != 0) {
         for (let i = 0; i < navigator.getGamepads().length; i++) {
             const gamepad = navigator.getGamepads()[i];
+            if (gamepad == null) continue;
             HandleGamepadButtons(gamepad.buttons, i);
             HandleGamepadAxes(gamepad.axes, i);
         }
